@@ -13,46 +13,23 @@ import Login from "./components/Login";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import RencanaStudiPage from "./components/RencanaStudi";
+import RencanaStudiStep2 from "./components/RencanaStudiStep2";
+import RencanaStudiStep3 from "./components/RencanaStudiStep3";
+import RencanaStudiStep4 from "./components/RencanaStudiStep4"; // ⬅️ step 4
 
-// Komponen placeholder simple untuk halaman yang belum jadi
-const Placeholder = ({ title }) => {
-  return (
-    <div className="min-h-[calc(100vh-160px)] flex items-center justify-center bg-gray-50 dark:bg-slate-900">
-      <div className="max-w-xl mx-auto text-center px-4">
-        <h1 className="text-2xl md:text-3xl font-bold text-slate-800 dark:text-slate-50 mb-2">
-          {title}
-        </h1>
-        <p className="text-slate-500 dark:text-slate-300 mb-4 text-sm md:text-base">
-          Halaman <span className="font-semibold">{title}</span> masih dalam
-          pengembangan. Nantikan pembaruan berikutnya.
-        </p>
-        <a
-          href="/"
-          className="inline-flex items-center justify-center rounded-full bg-blue-500 px-5 py-2 text-sm font-semibold text-white hover:bg-blue-600 transition-colors"
-        >
-          Kembali ke Beranda
-        </a>
-      </div>
-    </div>
-  );
-};
-
-// Shell yang tau lokasi URL dan mutusin kapan Navbar/Footer ditampilkan
 function AppShell() {
   const location = useLocation();
   const path = location.pathname;
 
-  // true kalau kita TIDAK mau menampilkan Navbar & Footer
+  // Halaman yang TIDAK pakai navbar & footer
   const hideChrome =
     path === "/login" ||
     path.startsWith("/dashboard") ||
-    path.startsWith("/rencana-studi") ||
-    path.startsWith("/riwayat") ||
-    path.startsWith("/profil");
+    path.startsWith("/rencana-studi");
 
   return (
     <div className="relative min-h-screen flex flex-col">
-      {/* Navbar hanya untuk halaman biasa (bukan login/dashboard/dsb) */}
+      {/* Navbar hanya muncul di landing & halaman biasa */}
       {!hideChrome && <Navbar />}
 
       <main className={hideChrome ? "min-h-screen" : "flex-1"}>
@@ -60,26 +37,29 @@ function AppShell() {
           {/* Landing page */}
           <Route path="/" element={<Beranda />} />
 
-          {/* Halaman dengan layout sidebar sendiri (tanpa navbar/footer) */}
+          {/* Dashboard (layout-nya sudah di dalam DashboardPage) */}
           <Route path="/dashboard" element={<DashboardPage />} />
-          <Route path="/rencana-studi" element={<RencanaStudiPage />} />
 
-          {/* Login full screen tanpa navbar/footer */}
+          {/* Login fullscreen */}
           <Route path="/login" element={<Login />} />
 
-          {/* Halaman lain sementara pakai placeholder */}
-          <Route path="/riwayat" element={<Placeholder title="Riwayat" />} />
-          <Route path="/tentang" element={<Placeholder title="Tentang" />} />
+          {/* Rencana Studi – step 1 s/d 4 */}
+          <Route path="/rencana-studi" element={<RencanaStudiPage />} />
+          <Route path="/rencana-studi/step-2" element={<RencanaStudiStep2 />} />
+          <Route path="/rencana-studi/step-3" element={<RencanaStudiStep3 />} />
+          <Route path="/rencana-studi/step-4" element={<RencanaStudiStep4 />} />
 
-          {/* Profil diarahkan ke login (belum ada page) */}
+          {/* Route lain */}
+          <Route path="/riwayat" element={<Navigate to="/dashboard" replace />} />
+          <Route path="/tentang" element={<Navigate to="/" replace />} />
           <Route path="/profil" element={<Navigate to="/login" replace />} />
 
-          {/* Fallback: kalau path nggak dikenal, balik ke beranda */}
+          {/* Fallback: path tidak dikenal balik ke beranda */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
 
-      {/* Footer juga cuma muncul di halaman biasa */}
+      {/* Footer juga cuma muncul di halaman yang pakai navbar */}
       {!hideChrome && <Footer />}
     </div>
   );
