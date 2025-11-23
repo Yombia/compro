@@ -1,150 +1,261 @@
-import Navbar from "./Navbar.jsx";
-import Footer from "./Footer.jsx";
-import { ASSETS } from "../utils/assets";
-
-function CTAButtons() {
-  return (
-    <div className="flex flex-wrap gap-3">
-      <a href="#mulai"
-        className="inline-flex items-center gap-2 bg-white text-blue-700 font-medium px-4 py-2 rounded-full shadow hover:-translate-y-0.5 transition">
-        Mulai Tracking →
-      </a>
-      <a href="#misi"
-        className="inline-flex items-center gap-2 border border-white/60 text-white font-medium px-4 py-2 rounded-full hover:bg-white/10 transition">
-        Pelajari Lebih Lanjut
-      </a>
-    </div>
-  );
-}
-
-function FeatureCard({ icon, title, desc }) {
-  return (
-    <div className="rounded-2xl border-2 border-yellow-400/80 bg-gradient-to-b from-blue-50 to-white p-4 shadow-sm">
-      <div className="flex items-center gap-3">
-        <img src={icon} alt={title} className="w-12 h-12 object-contain" />
-        <div>
-          <div className="font-semibold">{title}</div>
-          <p className="text-xs text-slate-600 mt-1">{desc}</p>
-        </div>
-      </div>
-    </div>
-  );
-}
+// src/components/Dashboard.jsx
+import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "../store/useAuthStore";
+import { useTheme } from "../hooks/useTheme";
 
 export default function DashboardPage() {
+  const navigate = useNavigate();
+  const { logout } = useAuthStore();
+  const { theme, toggleTheme } = useTheme(); // sinkron tema + toggle emoji
+
+  const handleLogout = () => {
+    logout?.();
+    navigate("/");
+  };
+
   return (
-    <div className="bg-slate-50">
-      <Navbar />
-
-      {/* HERO */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-blue-700 via-blue-600 to-blue-500">
-        <div className="mx-auto max-w-6xl px-4 py-16 grid md:grid-cols-2 gap-8 items-center text-white">
+    <main
+      className="min-h-screen flex bg-gradient-to-b from-[#E6F4FF] to-[#F5FAFF] text-slate-900
+                 dark:from-[#020617] dark:via-[#020617] dark:to-[#020617] dark:text-slate-50"
+    >
+      {/* SIDEBAR */}
+      <aside className="w-72 flex flex-col px-4">
+        {/* Kartu biru di dalam sidebar (tidak full tinggi layar) */}
+        <div className="mt-6 mb-6 w-full bg-[#0D3B9A] dark:bg-[#0B1F4B] text-white rounded-[36px] px-6 pt-8 pb-6 shadow-[0_18px_40px_rgba(15,23,42,0.65)] flex flex-col justify-between">
+          {/* Logo + menu */}
           <div>
-            <h1 className="text-4xl md:text-5xl font-extrabold leading-tight">
-              Smart Academic <br /> Planner
-            </h1>
-            <div className="mt-4 text-3xl md:text-4xl font-extrabold text-yellow-300">
-              Siap Bantu <br /> Masa Studi Kuliahmu
+            <div className="mb-10">
+              <p className="text-lg font-bold leading-tight">Smart Academic</p>
+              <p className="text-lg font-bold leading-tight text-[#FACC15]">
+                Planner
+              </p>
             </div>
-            <p className="mt-4 text-white/90 max-w-xl">
-              Sistem rekomendasi rencana studi berbasis nilai & minat. Analisis cerdas untuk saran
-              mata kuliah paling sesuai tiap semester.
-            </p>
-            <div className="mt-6"><CTAButtons /></div>
+
+            <nav className="space-y-4 text-sm font-medium">
+              {/* Beranda (aktif) */}
+              <button
+                type="button"
+                className="w-full flex items-center gap-3 rounded-[999px] bg-[#214A9A] px-4 py-3 shadow-md"
+              >
+                <span className="h-2 w-2 rounded-full bg-yellow-300" />
+                <span>Beranda</span>
+              </button>
+
+              {/* Rencana Studi – Pindah ke halaman rencana studi */}
+              <button
+                type="button"
+                onClick={() => navigate("/rencana-studi")}
+                className="w-full flex items-center gap-3 rounded-[999px] px-4 py-3 text-slate-100/80 hover:bg-[#214A9A] transition"
+              >
+                <span className="h-2 w-2 rounded-full bg-slate-400" />
+                <span>Rencana Studi</span>
+              </button>
+
+              {/* Menu lain (masih dummy, belum ada logika) */}
+              <button
+                type="button"
+                className="w-full flex items-center gap-3 rounded-[999px] px-4 py-3 text-slate-100/80 hover:bg-[#214A9A] transition"
+              >
+                <span className="h-2 w-2 rounded-full bg-slate-400" />
+                <span>Riwayat</span>
+              </button>
+              <button
+                type="button"
+                className="w-full flex items-center gap-3 rounded-[999px] px-4 py-3 text-slate-100/80 hover:bg-[#214A9A] transition"
+              >
+                <span className="h-2 w-2 rounded-full bg-slate-400" />
+                <span>Profil</span>
+              </button>
+            </nav>
           </div>
 
-          <div className="relative">
-            <img src={ASSETS.hero} alt="Hero" className="w-full max-w-md mx-auto drop-shadow-xl" />
-            {/* dekor gelombang */}
-            <img src={ASSETS.cloud} alt="" className="pointer-events-none select-none absolute -bottom-10 -left-16 w-56 opacity-60" />
-            <img src={ASSETS.cloud} alt="" className="pointer-events-none select-none absolute -bottom-14 right-0 w-72 opacity-40" />
+          {/* Bawah: tombol keluar + toggle tema emoji */}
+          <div className="mt-10 flex items-center justify-between">
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="text-sm text-slate-100/90 hover:text-white flex items-center gap-2"
+            >
+              <span className="text-lg">↩</span>
+              <span>Keluar Akun</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={toggleTheme}
+              aria-label={
+                theme === "dark" ? "Ubah ke mode terang" : "Ubah ke mode gelap"
+              }
+              className="h-11 w-11 rounded-full bg-[#FACC15] shadow-[0_12px_30px_rgba(0,0,0,0.45)] flex items-center justify-center text-xl hover:scale-105 transition-transform"
+            >
+              {theme === "dark" ? "🌙" : "☀️"}
+            </button>
           </div>
         </div>
+      </aside>
 
-        {/* wave footer hero */}
-        <svg className="text-slate-50" viewBox="0 0 1440 90" preserveAspectRatio="none">
-          <path fill="currentColor" d="M0,64L60,74.7C120,85,240,107,360,112C480,117,600,107,720,96C840,85,960,75,1080,69.3C1200,64,1320,64,1380,64L1440,64L1440,0L1380,0C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0L0,0Z"/>
-        </svg>
-      </section>
-
-      {/* MISI KAMI */}
-      <section id="misi" className="mx-auto max-w-6xl px-4 py-12 grid md:grid-cols-[320px_1fr] gap-8">
-        <div className="flex items-center justify-center">
-          <img src={ASSETS.target} alt="Target" className="w-72 drop-shadow-lg" />
-        </div>
-        <div>
-          <h2 className="text-3xl font-bold text-blue-800 mb-3">Misi Kami !</h2>
-          <p className="text-slate-700 leading-relaxed">
-            Smart Academic Planner adalah sistem rekomendasi berbasis data yang membantu mahasiswa
-            menentukan mata kuliah terbaik untuk semester berikutnya berdasarkan performa akademik
-            dan minat yang dimiliki.
+      {/* KONTEN UTAMA */}
+      <section className="flex-1 px-10 py-8 overflow-y-auto">
+        {/* Halo Pengguna */}
+        <header className="mb-6">
+          <p className="text-sm text-slate-500 dark:text-slate-300">
+            Halo,{" "}
+            <span className="font-semibold text-[#FBBF24]">Pengguna!</span>
           </p>
+          <h1 className="text-lg md:text-xl font-semibold mt-1">
+            Selamat datang di Smart Academic Planner
+          </h1>
+        </header>
 
-          <div className="mt-6 grid md:grid-cols-3 gap-4">
-            <FeatureCard
-              icon={ASSETS.people}
-              title="Rekomendasi Otomatis"
-              desc="Menganalisis nilai & minat untuk memberi saran rencana studi yang pas."
-            />
-            <FeatureCard
-              icon={ASSETS.chart}
-              title="Visualisasi Performa"
-              desc="Grafik perkembangan akademik agar mudah memantau hasil belajarmu."
-            />
-            <FeatureCard
-              icon={ASSETS.heroAlt}
-              title="Panduan Akademik"
-              desc="Tips memilih mata kuliah sesuai kemampuan dan tujuan."
-            />
+        {/* Kartu ringkasan (Total SKS, IPK, Periode) */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+          <div className="rounded-2xl bg-[#165DFF] text-white px-5 py-4 shadow-lg">
+            <p className="text-xs uppercase tracking-wide text-blue-100">
+              Total SKS
+            </p>
+            <p className="mt-2 text-3xl font-bold">50</p>
+          </div>
+          <div className="rounded-2xl bg-[#165DFF] text-white px-5 py-4 shadow-lg">
+            <p className="text-xs uppercase tracking-wide text-blue-100">IPK</p>
+            <p className="mt-2 text-3xl font-bold">3.89</p>
+          </div>
+          <div className="rounded-2xl bg-[#165DFF] text-white px-5 py-4 shadow-lg">
+            <p className="text-xs uppercase tracking-wide text-blue-100">
+              Periode Semester
+            </p>
+            <p className="mt-2 text-lg font-semibold">Semester 2 (2023)</p>
           </div>
         </div>
+
+        {/* Tabel riwayat semester lalu */}
+        <section className="bg-white dark:bg-slate-900 rounded-2xl shadow-lg border border-slate-200/70 dark:border-slate-700 mb-8">
+          <div className="px-5 py-3 border-b border-slate-200 dark:border-slate-700 flex items-center gap-2">
+            <span className="h-4 w-4 rounded-full border border-slate-400 flex items-center justify-center text-[10px]">
+              i
+            </span>
+            <p className="text-sm font-semibold">Semester 1 (2023)</p>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="min-w-full text-xs md:text-sm">
+              <thead className="bg-slate-100 dark:bg-slate-800">
+                <tr className="text-left">
+                  <th className="px-4 py-2">No</th>
+                  <th className="px-4 py-2">Kode</th>
+                  <th className="px-4 py-2">Mata Kuliah</th>
+                  <th className="px-4 py-2">SKS</th>
+                  <th className="px-4 py-2">Nilai</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="border-t border-slate-100 dark:border-slate-800">
+                  <td className="px-4 py-2">1</td>
+                  <td className="px-4 py-2">AZK2AAB3</td>
+                  <td className="px-4 py-2">Probabilitas dan Statistika</td>
+                  <td className="px-4 py-2">3</td>
+                  <td className="px-4 py-2">A</td>
+                </tr>
+                <tr className="border-t border-slate-100 dark:border-slate-800">
+                  <td className="px-4 py-2">2</td>
+                  <td className="px-4 py-2">AZK2CAB3</td>
+                  <td className="px-4 py-2">Persamaan Diferensial</td>
+                  <td className="px-4 py-2">3</td>
+                  <td className="px-4 py-2">AB</td>
+                </tr>
+                <tr className="border-t border-slate-100 dark:border-slate-800">
+                  <td className="px-4 py-2">3</td>
+                  <td className="px-4 py-2">AZK2EAB3</td>
+                  <td className="px-4 py-2">Elektromagnetika</td>
+                  <td className="px-4 py-2">3</td>
+                  <td className="px-4 py-2">A</td>
+                </tr>
+                <tr className="border-t border-slate-100 dark:border-slate-800">
+                  <td className="px-4 py-2">4</td>
+                  <td className="px-4 py-2">ABK2AAB3</td>
+                  <td className="px-4 py-2">Rangkaian Listrik 2</td>
+                  <td className="px-4 py-2">3</td>
+                  <td className="px-4 py-2">A</td>
+                </tr>
+                <tr className="border-t border-slate-100 dark:border-slate-800">
+                  <td className="px-4 py-2">5</td>
+                  <td className="px-4 py-2">ABK2BAB1</td>
+                  <td className="px-4 py-2">Praktikum Rangkaian Listrik</td>
+                  <td className="px-4 py-2">1</td>
+                  <td className="px-4 py-2">AB</td>
+                </tr>
+                <tr className="border-t border-slate-200 dark:border-slate-700 bg-slate-50/70 dark:bg-slate-900/60 font-semibold">
+                  <td className="px-4 py-2" colSpan={3}>
+                    Jumlah SKS
+                  </td>
+                  <td className="px-4 py-2">13</td>
+                  <td className="px-4 py-2">3.8</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        {/* TEKS judul + bar biru kecil */}
+        <section className="mb-8">
+          <p className="text-sm md:text-base">
+            Bingung Mau Ambil Mata Kuliah Apa?{" "}
+            <span className="bg-[#1D4ED8] text-white px-3 py-1 rounded-md">
+              Dapatkan rekomendasi yang sesuai dengan minatmu
+            </span>
+          </p>
+        </section>
+
+        {/* KARTU REKOMENDASI */}
+        <section className="grid gap-6 md:grid-cols-3 mb-10">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-lg border border-slate-200/70 dark:border-slate-700 px-6 py-7 text-center">
+            <div className="mx-auto mb-4 h-14 w-14 rounded-2xl bg-blue-50 flex items-center justify-center">
+              <span className="text-2xl">📊</span>
+            </div>
+            <h3 className="font-semibold mb-2">Rekomendasi Akurat</h3>
+            <p className="text-xs md:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+              Sistem memproses IPK, nilai setiap mata kuliah, serta beban SKS
+              untuk menyusun rekomendasi yang sesuai kemampuan akademikmu.
+            </p>
+          </div>
+
+          <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-lg border border-slate-200/70 dark:border-slate-700 px-6 py-7 text-center">
+            <div className="mx-auto mb-4 h-14 w-14 rounded-2xl bg-blue-50 flex items-center justify-center">
+              <span className="text-2xl">🎯</span>
+            </div>
+            <h3 className="font-semibold mb-2">Tepat Sasaran</h3>
+            <p className="text-xs md:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+              Rekomendasi dibangun berdasarkan minat dan tujuan karier yang
+              kamu pilih, sehingga rencana studimu tetap on track.
+            </p>
+          </div>
+
+          <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-lg border border-slate-200/70 dark:border-slate-700 px-6 py-7 text-center">
+            <div className="mx-auto mb-4 h-14 w-14 rounded-2xl bg-blue-50 flex items-center justify-center">
+              <span className="text-2xl">⚡</span>
+            </div>
+            <h3 className="font-semibold mb-2">Efisien & Terarah</h3>
+            <p className="text-xs md:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+              Membantumu menyusun rencana studi yang optimal setiap semester
+              dengan jalur studi yang lebih terarah.
+            </p>
+          </div>
+        </section>
+
+        {/* CTA: tombol bawah */}
+        <section className="mt-4">
+          <p className="text-sm md:text-base mb-4">
+            Buat Rencana Studi Kamu Sekarang!
+          </p>
+          <div className="flex flex-col md:flex-row gap-4">
+            <button className="flex-1 rounded-full bg-[#165DFF] text-white py-3 text-sm md:text-base font-semibold shadow-[0_10px_30px_rgba(37,99,235,0.6)] hover:brightness-110 transition">
+              Mulai Rencana Studi Baru
+            </button>
+            <button className="flex-1 rounded-full border border-slate-300 dark:border-slate-600 py-3 text-sm md:text-base font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+              Lihat Riwayat Studi
+            </button>
+          </div>
+        </section>
       </section>
-
-      {/* CARA KERJA */}
-      <section className="bg-gradient-to-br from-blue-600 to-blue-700 text-white">
-        <div className="mx-auto max-w-6xl px-4 py-12">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-center mb-8">
-            Ketahui Cara Kerja Kami
-          </h2>
-
-          <div className="grid md:grid-cols-2 gap-8 items-center mb-8">
-            <img src={ASSETS.heroAlt} alt="" className="w-64 md:justify-self-end drop-shadow-xl" />
-            <div>
-              <h3 className="text-xl font-semibold">Isi Data Nilai dan Minat</h3>
-              <p className="text-white/90 mt-1">
-                Inputkan nilai akademik dari semester sebelumnya serta pilih bidang minat yang ingin
-                dikembangkan sebagai dasar analisis.
-              </p>
-            </div>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-8 items-center mb-8">
-            <div className="order-2 md:order-1">
-              <h3 className="text-xl font-semibold">Sistem Menganalisis Profil Kamu</h3>
-              <p className="text-white/90 mt-1">
-                Algoritma cerdas mengenali pola kemampuan & preferensi belajar untuk tiap mahasiswa.
-              </p>
-            </div>
-            <img src={ASSETS.people} alt="" className="order-1 md:order-2 w-64 md:justify-self-start drop-shadow-xl" />
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            <img src={ASSETS.gift} alt="" className="w-64 md:justify-self-end drop-shadow-xl" />
-            <div>
-              <h3 className="text-xl font-semibold">Terima Rencana Studi</h3>
-              <p className="text-white/90 mt-1">
-                Rekomendasi mata kuliah paling sesuai lengkap dengan alasan & tingkat relevansinya
-                terhadap profilmu.
-              </p>
-              <a href="#mulai" className="inline-block mt-3 px-4 py-2 rounded bg-yellow-300 text-blue-900 font-semibold hover:bg-yellow-200">
-                Riwayat Rencana Studi
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <Footer />
-    </div>
+    </main>
   );
 }
