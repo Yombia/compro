@@ -13,6 +13,18 @@ export default function DashboardPage() {
     navigate("/");
   };
 
+  const handleGoRencanaStudi = () => {
+    navigate("/rencana-studi");
+  };
+
+  const handleGoRiwayat = () => {
+    navigate("/riwayat");
+  };
+
+  const handleGoProfil = () => {
+    navigate("/profil");
+  };
+
   return (
     <main
       className="min-h-screen flex bg-gradient-to-b from-[#E6F4FF] to-[#F5FAFF] text-slate-900
@@ -41,26 +53,30 @@ export default function DashboardPage() {
                 <span>Beranda</span>
               </button>
 
-              {/* Rencana Studi – Pindah ke halaman rencana studi */}
+              {/* Rencana Studi */}
               <button
                 type="button"
-                onClick={() => navigate("/rencana-studi")}
+                onClick={handleGoRencanaStudi}
                 className="w-full flex items-center gap-3 rounded-[999px] px-4 py-3 text-slate-100/80 hover:bg-[#214A9A] transition"
               >
                 <span className="h-2 w-2 rounded-full bg-slate-400" />
                 <span>Rencana Studi</span>
               </button>
 
-              {/* Menu lain (masih dummy, belum ada logika) */}
+              {/* Riwayat */}
               <button
                 type="button"
+                onClick={handleGoRiwayat}
                 className="w-full flex items-center gap-3 rounded-[999px] px-4 py-3 text-slate-100/80 hover:bg-[#214A9A] transition"
               >
                 <span className="h-2 w-2 rounded-full bg-slate-400" />
                 <span>Riwayat</span>
               </button>
+
+              {/* Profil */}
               <button
                 type="button"
+                onClick={handleGoProfil}
                 className="w-full flex items-center gap-3 rounded-[999px] px-4 py-3 text-slate-100/80 hover:bg-[#214A9A] transition"
               >
                 <span className="h-2 w-2 rounded-full bg-slate-400" />
@@ -247,10 +263,18 @@ export default function DashboardPage() {
             Buat Rencana Studi Kamu Sekarang!
           </p>
           <div className="flex flex-col md:flex-row gap-4">
-            <button className="flex-1 rounded-full bg-[#165DFF] text-white py-3 text-sm md:text-base font-semibold shadow-[0_10px_30px_rgba(37,99,235,0.6)] hover:brightness-110 transition">
+            <button
+              type="button"
+              onClick={handleGoRencanaStudi}
+              className="flex-1 rounded-full bg-[#165DFF] text-white py-3 text-sm md:text-base font-semibold shadow-[0_10px_30px_rgba(37,99,235,0.6)] hover:brightness-110 transition"
+            >
               Mulai Rencana Studi Baru
             </button>
-            <button className="flex-1 rounded-full border border-slate-300 dark:border-slate-600 py-3 text-sm md:text-base font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+            <button
+              type="button"
+              onClick={handleGoRiwayat}
+              className="flex-1 rounded-full border border-slate-300 dark:border-slate-600 py-3 text-sm md:text-base font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+            >
               Lihat Riwayat Studi
             </button>
           </div>

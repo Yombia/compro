@@ -29,7 +29,7 @@ export default function Beranda() {
 
   return (
     <main
-      className="min-h-screen bg-gradient-to-b from-[#021D4A] via-[#0A4EC0] to-[#E6F4FF] text-slate-900
+      className="relative min-h-screen bg-gradient-to-b from-[#021D4A] via-[#0A4EC0] to-[#E6F4FF] text-slate-900
                  dark:from-[#020617] dark:via-[#020617] dark:to-[#020617] dark:text-slate-50"
     >
       {/* HERO SECTION */}
@@ -53,7 +53,7 @@ export default function Beranda() {
                 <br />
                 <span className="relative inline-block mt-1">
                   <span className="relative z-10">Planner</span>
-                  {/* underline highlight, biru di light, kuning di dark */}
+                  {/* underline highlight */}
                   <span className="absolute -bottom-1 left-0 h-2 w-full bg-sky-300/90 rounded-full -z-0 dark:bg-[#FDBA4D]" />
                 </span>
               </h1>
@@ -86,13 +86,13 @@ export default function Beranda() {
                   alt="Smart planner"
                   className="absolute inset-0 w-full h-full object-contain"
                 />
-                {/* jam besar & agak ke tengah */}
+                {/* jam */}
                 <img
                   src={heroClock}
                   alt="Clock"
                   className="absolute left-[-10px] md:left-0 bottom-4 md:bottom-8 w-44 md:w-60 drop-shadow-[0_22px_48px_rgba(0,0,0,0.5)]"
                 />
-                {/* checklist besar & ke kanan atas */}
+                {/* checklist */}
                 <img
                   src={heroList}
                   alt="Checklist"
@@ -102,35 +102,6 @@ export default function Beranda() {
             </div>
           </div>
         </div>
-
-        {/* OVERLAY PERINGATAN LOGIN */}
-        {showLoginAlert && (
-          <div className="absolute inset-0 z-20 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm">
-            <div className="w-[90%] max-w-3xl bg-white/90 rounded-3xl shadow-2xl px-6 py-10 text-center">
-              <div className="mx-auto mb-6 flex items-center justify-center h-24 w-24 rounded-full border-[6px] border-amber-400 text-6xl text-amber-500 bg-amber-50">
-                !
-              </div>
-              <p className="text-xl md:text-3xl font-semibold text-slate-800 mb-6">
-                Silahkan Masuk Terlebih Dahulu!
-              </p>
-              <div className="flex flex-wrap justify-center gap-4">
-                <Link
-                  to="/login"
-                  className="inline-flex items-center justify-center rounded-full bg-sky-500 px-6 py-2 text-sm md:text-base font-semibold text-white hover:bg-sky-600 transition-colors"
-                >
-                  Pergi ke Halaman Masuk
-                </Link>
-                <button
-                  type="button"
-                  onClick={() => setShowLoginAlert(false)}
-                  className="inline-flex items-center justify-center rounded-full border border-slate-300 px-6 py-2 text-sm md:text-base font-semibold text-slate-700 hover:bg-slate-100 transition-colors"
-                >
-                  Tutup
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
       </section>
 
       {/* SECTION: MISI / FTE / KEUNGGULAN */}
@@ -138,7 +109,7 @@ export default function Beranda() {
         <div className="max-w-6xl mx-auto">
           {/* row 1 */}
           <div className="grid gap-4 md:grid-cols-4 text-sm">
-            {/* Misi Kami - card lebar */}
+            {/* Misi Kami */}
             <div
               className="relative bg-[#E7F2FF]/90 rounded-[32px] shadow-[0_18px_40px_rgba(0,62,150,0.18)] p-6 md:p-7 border border-sky-100 col-span-2
                          dark:bg-slate-800/90 dark:border-slate-700/80 dark:shadow-[0_22px_60px_rgba(15,23,42,0.9)]"
@@ -173,7 +144,7 @@ export default function Beranda() {
               />
             </div>
 
-            {/* Keunggulan – Rekomendasi Otomatis */}
+            {/* Keunggulan – rekomendasi otomatis */}
             <div
               className="relative bg-[#E7F2FF]/90 rounded-[32px] shadow-[0_18px_40px_rgba(0,62,150,0.18)] p-6 md:p-7 border border-sky-100
                          dark:bg-slate-800/90 dark:border-slate-700/80 dark:shadow-[0_22px_60px_rgba(15,23,42,0.9)]"
@@ -195,7 +166,7 @@ export default function Beranda() {
 
           {/* row 2 */}
           <div className="grid gap-4 mt-4 md:grid-cols-4 text-sm">
-            {/* Keunggulan lain – Panduan akademik */}
+            {/* Keunggulan lain – panduan akademik */}
             <div
               className="relative bg-[#E7F2FF]/90 rounded-[32px] shadow-[0_18px_40px_rgba(0,62,150,0.18)] p-6 md:p-7 border border-sky-100 md:col-span-2
                          dark:bg-slate-800/90 dark:border-slate-700/80 dark:shadow-[0_22px_60px_rgba(15,23,42,0.9)]"
@@ -209,7 +180,7 @@ export default function Beranda() {
               </p>
             </div>
 
-            {/* Visualisasi Performa */}
+            {/* Visualisasi performa */}
             <div
               className="relative bg-[#E7F2FF]/90 rounded-[32px] shadow-[0_18px_40px_rgba(0,62,150,0.18)] p-6 md:p-7 border border-sky-100 md:col-span-2
                          dark:bg-slate-800/90 dark:border-slate-700/80 dark:shadow-[0_22px_60px_rgba(15,23,42,0.9)]"
@@ -244,7 +215,7 @@ export default function Beranda() {
             </h2>
           </div>
 
-          {/* Wrapper cards dengan glow */}
+          {/* Wrapper cards */}
           <div
             className="mt-10 md:mt-12 rounded-[40px] bg-[#CBE7FF]/85 shadow-[0_22px_60px_rgba(39,119,255,0.45)] px-4 py-8 md:px-10 md:py-10
                        dark:bg-[#04142E] dark:shadow-[0_30px_90px_rgba(37,99,235,0.8)]"
@@ -255,7 +226,6 @@ export default function Beranda() {
                 className="relative bg-white rounded-[32px] border border-sky-50 shadow-[0_16px_40px_rgba(39,119,255,0.25)] px-6 py-7 flex flex-col items-center text-center
                            dark:bg-[#071427] dark:border-sky-700/70 dark:shadow-[0_18px_50px_rgba(15,23,42,0.9)]"
               >
-                {/* dekor sudut */}
                 <img
                   src={cornerDecor}
                   alt=""
@@ -353,6 +323,35 @@ export default function Beranda() {
           </div>
         </div>
       </section>
+
+      {/* OVERLAY PERINGATAN LOGIN */}
+      {showLoginAlert && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm">
+          <div className="w-[90%] max-w-3xl bg-white/90 rounded-3xl shadow-2xl px-6 py-10 text-center">
+            <div className="mx-auto mb-6 flex items-center justify-center h-24 w-24 rounded-full border-[6px] border-amber-400 text-6xl text-amber-500 bg-amber-50">
+              !
+            </div>
+            <p className="text-xl md:text-3xl font-semibold text-slate-800 mb-6">
+              Silahkan Masuk Terlebih Dahulu!
+            </p>
+            <div className="flex flex-wrap justify-center gap-4">
+              <Link
+                to="/login"
+                className="inline-flex items-center justify-center rounded-full bg-sky-500 px-6 py-2 text-sm md:text-base font-semibold text-white hover:bg-sky-600 transition-colors"
+              >
+                Pergi ke Halaman Masuk
+              </Link>
+              <button
+                type="button"
+                onClick={() => setShowLoginAlert(false)}
+                className="inline-flex items-center justify-center rounded-full border border-slate-300 px-6 py-2 text-sm md:text-base font-semibold text-slate-700 hover:bg-slate-100 transition-colors"
+              >
+                Tutup
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
