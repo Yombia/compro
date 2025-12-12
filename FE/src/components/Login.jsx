@@ -8,9 +8,9 @@ import * as z from "zod";
 import heroLogin from "../assets/PROPLOG.png";
 import cloud from "../assets/white-cloud 5.png";
 import { useAuthStore } from "../store/useAuthStore";
-import { useTheme } from "../hooks/useTheme"; // sinkronkan tema dari landing
+import { useTheme } from "../hooks/useTheme"; // sync theme from landing
 
-// Schema sederhana untuk validasi form
+// Simple schema for form validation
 const loginSchema = z.object({
   email: z
     .string()
@@ -20,11 +20,11 @@ const loginSchema = z.object({
 });
 
 export default function Login() {
-  // jalankan hook tema supaya <html> sudah ada/tidak ada class "dark"
+  // Sync theme to <html> class (dark/light mode)
   useTheme();
 
   const navigate = useNavigate();
-  const { login } = useAuthStore(); // asumsi store punya action "login"
+  const { login } = useAuthStore(); // Access login action from the store
   const [showPassword, setShowPassword] = useState(false);
 
   const {
@@ -40,10 +40,21 @@ export default function Login() {
   });
 
   const onSubmit = async (values) => {
-    // TODO: ganti dengan call API beneran kalau sudah siap
-    // sementara cukup tandai sudah login di zustand
-    login?.(values); // atau login?.(); kalau function-mu tidak butuh argumen
-    navigate("/dashboard"); // setelah login langsung ke halaman dashboard
+    const email = values.email.toLowerCase();
+    const isMahasiswa = email.includes("student");
+
+    // Simpan data login ke store
+    login({
+      email,
+      role: isMahasiswa ? "mahasiswa" : "dosen",
+    });
+
+    // Routing berdasarkan role login → SESUAI ROUTER DI App.jsx
+    if (isMahasiswa) {
+      navigate("/dashboard", { replace: true });        // dashboard mahasiswa
+    } else {
+      navigate("/dashboard-dosen", { replace: true });  // dashboard dosen
+    }
   };
 
   return (
@@ -53,9 +64,9 @@ export default function Login() {
                  dark:bg-gradient-to-b dark:from-[#020617] dark:via-[#020617] dark:to-[#020617] dark:text-slate-50"
     >
       <div className="max-w-6xl w-full mx-auto grid md:grid-cols-2 gap-10 items-center">
-        {/* Kiri: teks + form */}
+        {/* Left side: text + form */}
         <div className="space-y-10">
-          {/* Teks sambutan */}
+          {/* Welcome text */}
           <div className="space-y-2">
             <h1 className="text-4xl md:text-5xl font-extrabold leading-tight text-[#FACC15]">
               Holla,
@@ -69,7 +80,7 @@ export default function Login() {
             </p>
           </div>
 
-          {/* Form login */}
+          {/* Login form */}
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             {/* Email */}
             <div className="space-y-1">
@@ -84,7 +95,7 @@ export default function Login() {
               )}
             </div>
 
-            {/* Password + toggle lihat */}
+            {/* Password + toggle show */}
             <div className="space-y-1">
               <div className="relative">
                 <input
@@ -108,7 +119,7 @@ export default function Login() {
               )}
             </div>
 
-            {/* Tombol Masuk */}
+            {/* Submit button */}
             <button
               type="submit"
               disabled={isSubmitting}
@@ -119,22 +130,21 @@ export default function Login() {
           </form>
         </div>
 
-        {/* Kanan: Ilustrasi + awan dikelompokkan */}
+        {/* Right side: Illustration + clouds */}
         <div className="relative flex justify-center md:justify-end mt-8 md:mt-0">
           <div className="relative w-[260px] md:w-[360px] lg:w-[420px]">
-            {/* Awan atas dekat hero */}
+            {/* Cloud illustrations */}
             <img
               src={cloud}
               alt="Cloud"
               className="pointer-events-none select-none absolute -top-10 left-6 w-24 md:w-28 opacity-90"
             />
-            {/* Awan bawah dekat hero */}
             <img
               src={cloud}
               alt="Cloud"
               className="pointer-events-none select-none absolute -bottom-12 right-2 w-28 md:w-36 opacity-95"
             />
-            {/* Ilustrasi utama login */}
+            {/* Main login illustration */}
             <img
               src={heroLogin}
               alt="Smart Academic Planner login"

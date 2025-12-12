@@ -14,19 +14,17 @@ export default function RencanaStudiPage() {
     navigate("/");
   };
 
-  const menuButtonBase =
-    "w-full flex items-center gap-3 rounded-[999px] px-4 py-3 text-sm transition";
-
   return (
     <main
       className="min-h-screen flex
-                 bg-gradient-to-b from-[#0A4EC0] via-[#7AB6FF] to-[#E6F4FF]
+                 bg-gradient-to-b from-[#C5E0FF] via-[#E6F4FF] to-[#F5FAFF]
                  text-slate-900
-                 dark:from-[#020617] dark:via-[#020617] dark:to-[#020617] dark:text-slate-50"
+                 dark:bg-gradient-to-b dark:from-[#020617] dark:via-[#020617] dark:to-[#020617] dark:text-slate-50"
     >
-      {/* === SIDEBAR (sama style dengan dashboard) === */}
+      {/* === SIDEBAR (disamain dengan Dashboard, Rencana Studi aktif) === */}
       <aside className="w-72 flex flex-col px-4">
-        <div className="mt-6 mb-6 w-full bg-[#0D3B9A] text-white rounded-[36px] px-6 pt-8 pb-6 shadow-[0_18px_40px_rgba(15,23,42,0.65)] flex flex-col justify-between dark:bg-[#0B1F4B]">
+        <div className="mt-6 mb-6 w-full h-full rounded-3xl bg-[#0B3C9C] text-slate-50 shadow-[0_18px_40px_rgba(15,23,42,0.65)] flex flex-col justify-between p-6">
+          {/* Logo + menu */}
           <div>
             <div className="mb-10">
               <p className="text-lg font-bold leading-tight">Smart Academic</p>
@@ -35,56 +33,58 @@ export default function RencanaStudiPage() {
               </p>
             </div>
 
-            <nav className="space-y-4 text-sm font-medium">
-              {/* Beranda */}
+            <nav className="space-y-5 text-sm font-semibold">
+              {/* Beranda (non-aktif) */}
               <button
                 type="button"
                 onClick={() => navigate("/dashboard")}
-                className={`${menuButtonBase} text-slate-100/80 hover:bg-[#214A9A]`}
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-full transition"
               >
-                <span className="h-2 w-2 rounded-full bg-slate-300/70" />
-                <span>Beranda</span>
+                <span className="h-2.5 w-2.5 rounded-full bg-slate-300/80" />
+                <span className="text-slate-100/80">Beranda</span>
               </button>
 
-              {/* Rencana Studi – aktif di halaman ini */}
+              {/* Rencana Studi (AKTIF) */}
               <button
                 type="button"
-                className={`${menuButtonBase} bg-[#214A9A] shadow-md`}
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-full transition bg-[#214A9A] shadow-[0_10px_25px_rgba(15,23,42,0.45)]"
               >
-                <span className="h-2 w-2 rounded-full bg-yellow-300" />
-                <span className="font-semibold">Rencana Studi</span>
+                <span className="h-2.5 w-2.5 rounded-full bg-[#FACC15]" />
+                <span className="text-white">Rencana Studi</span>
               </button>
 
-              {/* Riwayat */}
+              {/* Riwayat (non-aktif) */}
               <button
                 type="button"
                 onClick={() => navigate("/riwayat")}
-                className={`${menuButtonBase} text-slate-100/80 hover:bg-[#214A9A]`}
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-full transition"
               >
-                <span className="h-2 w-2 rounded-full bg-slate-300/70" />
-                <span>Riwayat</span>
+                <span className="h-2.5 w-2.5 rounded-full bg-slate-300/80" />
+                <span className="text-slate-100/80">Riwayat</span>
               </button>
 
-              {/* Profil */}
+              {/* Profil (non-aktif) */}
               <button
                 type="button"
                 onClick={() => navigate("/profil")}
-                className={`${menuButtonBase} text-slate-100/80 hover:bg-[#214A9A]`}
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-full transition"
               >
-                <span className="h-2 w-2 rounded-full bg-slate-300/70" />
-                <span>Profil</span>
+                <span className="h-2.5 w-2.5 rounded-full bg-slate-300/80" />
+                <span className="text-slate-100/80">Profil</span>
               </button>
             </nav>
           </div>
 
-          {/* Bawah: Keluar + toggle tema */}
+          {/* Bawah: Keluar + Toggle Tema (pojok kanan bawah) */}
           <div className="mt-10 flex items-center justify-between">
             <button
               type="button"
               onClick={handleLogout}
-              className="text-sm text-slate-100/90 hover:text-white flex items-center gap-2"
+              className="flex items-center gap-2 text-xs font-medium text-slate-100/80 hover:text-white"
             >
-              <span className="text-lg">↩</span>
+              <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-slate-100/40 text-sm bg-white/5">
+                ⤺
+              </span>
               <span>Keluar Akun</span>
             </button>
 
@@ -94,7 +94,7 @@ export default function RencanaStudiPage() {
               aria-label={
                 theme === "dark" ? "Ubah ke mode terang" : "Ubah ke mode gelap"
               }
-              className="h-11 w-11 rounded-full bg-[#FACC15] shadow-[0_12px_30px_rgba(0,0,0,0.45)] flex items-center justify-center text-xl hover:scale-105 transition-transform"
+              className="h-12 w-12 rounded-full border-[3px] border-white bg-[#FACC15] shadow-[0_18px_45px_rgba(0,0,0,0.55)] flex items-center justify-center text-xl hover:scale-105 transition-transform"
             >
               {theme === "dark" ? "🌙" : "☀️"}
             </button>

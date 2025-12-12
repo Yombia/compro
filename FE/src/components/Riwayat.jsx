@@ -3,154 +3,128 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
 import { useTheme } from "../hooks/useTheme";
+import { usePlanStore } from "../store/usePlanStore";
 
 export default function RiwayatPage() {
   const navigate = useNavigate();
   const { logout } = useAuthStore();
   const { theme, toggleTheme } = useTheme();
+  const { submissions } = usePlanStore();
 
   const handleLogout = () => {
     logout?.();
     navigate("/");
   };
 
-  // ---------------------------------------------------------------------------
-  // DATA DUMMY RIWAYAT
-  // ---------------------------------------------------------------------------
-  const semesters = [
-    {
-      id: "2023-2",
-      year: "2023",
-      label: "Semester 2",
-      ipSemester: 4.0,
-      totalSks: 18,
-      displaySks: 20,
-      courses: [
-        { name: "Sensor Kabel", sks: 4, grade: "A" },
-        { name: "Fisika", sks: 3, grade: "A" },
-        { name: "Dasar IoT", sks: 4, grade: "A" },
-        { name: "Robotika", sks: 4, grade: "A" },
-        { name: "Kalkulus", sks: 3, grade: "A" },
-      ],
-    },
-    {
-      id: "2023-1",
-      year: "2023",
-      label: "Semester 1",
-      ipSemester: 3.75,
-      totalSks: 20,
-      displaySks: 20,
-      courses: [
-        { name: "Probabilitas dan Statistika", sks: 3, grade: "A" },
-        { name: "Persamaan Diferensial", sks: 3, grade: "AB" },
-        { name: "Elektromagnetika", sks: 3, grade: "A" },
-        { name: "Rangkaian Listrik 2", sks: 3, grade: "A" },
-        { name: "Praktikum Rangkaian Listrik", sks: 1, grade: "AB" },
-        { name: "Matematika Lanjut", sks: 3, grade: "A" },
-        { name: "Logika Digital", sks: 4, grade: "A" },
-      ],
-    },
-    {
-      id: "2022-2",
-      year: "2022",
-      label: "Semester 2",
-      ipSemester: 3.6,
-      totalSks: 20,
-      displaySks: 20,
-      courses: [
-        { name: "Aljabar Linear", sks: 3, grade: "A" },
-        { name: "Sinyal dan Sistem", sks: 3, grade: "AB" },
-        { name: "Elektronika Dasar", sks: 3, grade: "A" },
-        { name: "Pemrograman Dasar", sks: 3, grade: "A" },
-        { name: "Praktikum Elektronika", sks: 1, grade: "AB" },
-        { name: "Pengantar Telekomunikasi", sks: 3, grade: "A" },
-        { name: "Praktikum Sinyal", sks: 4, grade: "A" },
-      ],
-    },
-  ];
+  const [activeDetail, setActiveDetail] = useState(null);
 
-  // ID semester yang sedang dibuka (bisa null = semua ketutup)
-  const [expandedId, setExpandedId] = useState(semesters[0].id);
+  // sort terbaru di atas
+  const sortedSubmissions = [...submissions].sort(
+    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+  );
 
-  const toggleSemester = (id) => {
-    setExpandedId((prev) => (prev === id ? null : id));
+  const statusConfig = {
+    pending: {
+      label: "Pending",
+      badgeClass: "bg-[#FACC15] text-slate-900",
+    },
+    delayed: {
+      label: "Tertunda",
+      badgeClass: "bg-[#F97316] text-slate-900",
+    },
+    approved: {
+      label: "Disetujui",
+      badgeClass: "bg-emerald-400 text-slate-900",
+    },
+    rejected: {
+      label: "Ditolak",
+      badgeClass: "bg-rose-400 text-slate-900",
+    },
   };
 
-  // Stats global (dummy)
-  const totalSks = 120;
-  const ipk = 3.89;
-  const tak = 107;
-  const ikk = 3.07;
+  const fokusMap = {
+    s2: "Melanjutkan S2 / Riset",
+    industri: "Bekerja di Industri",
+    startup: "Membangun Start Up Teknologi",
+  };
 
-  const menuButtonBase =
-    "w-full flex items-center gap-3 rounded-[999px] px-4 py-3 text-sm transition";
+  const belajarMap = {
+    konsep: "Konsep & Analisis",
+    project: "Proyek & Implementasi",
+    campuran: "Campuran",
+  };
 
   return (
     <main
       className="min-h-screen flex
-                 bg-gradient-to-b from-[#0A4EC0] via-[#7AB6FF] to-[#E6F4FF]
+                 bg-gradient-to-b from-[#C5E0FF] via-[#E6F4FF] to-[#F5FAFF]
                  text-slate-900
-                 dark:from-[#020617] dark:via-[#020617] dark:to-[#020617] dark:text-slate-50"
+                 dark:bg-gradient-to-b dark:from-[#020617] dark:via-[#020617] dark:to-[#020617] dark:text-slate-50"
     >
-      {/* SIDEBAR – sama seperti dashboard & rencana studi */}
-      <aside className="w-64 flex flex-col">
-        <div className="flex-1 mx-4 my-6 rounded-[32px] bg-[#0D3B9A] text-white flex flex-col shadow-2xl dark:bg-[#0B1F4B]">
-          <div className="pt-8 px-6 pb-4">
+      {/* SIDEBAR – sama seperti dashboard & rencana studi, RIWAYAT aktif */}
+      <aside className="w-72 flex flex-col px-4">
+        <div className="mt-6 mb-6 w-full h-full rounded-3xl bg-[#0B3C9C] text-slate-50 shadow-[0_18px_40px_rgba(15,23,42,0.65)] flex flex-col justify-between p-6">
+          {/* Logo + menu */}
+          <div>
             <div className="mb-10">
-              <p className="text-sm font-semibold leading-tight">
-                Smart Academic
-              </p>
-              <p className="text-sm font-semibold leading-tight text-[#FACC15]">
+              <p className="text-lg font-bold leading-tight">Smart Academic</p>
+              <p className="text-lg font-bold leading-tight text-[#FACC15]">
                 Planner
               </p>
             </div>
 
-            <nav className="space-y-3">
+            <nav className="space-y-5 text-sm font-semibold">
+              {/* Beranda */}
               <button
                 type="button"
                 onClick={() => navigate("/dashboard")}
-                className={`${menuButtonBase} text-slate-100/80 hover:bg-[#1E4AAE]/70`}
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-full transition"
               >
-                <span className="h-2 w-2 rounded-full bg-slate-300/70" />
-                <span>Beranda</span>
+                <span className="h-2.5 w-2.5 rounded-full bg-slate-300/80" />
+                <span className="text-slate-100/80">Beranda</span>
               </button>
 
+              {/* Rencana Studi */}
               <button
                 type="button"
                 onClick={() => navigate("/rencana-studi")}
-                className={`${menuButtonBase} text-slate-100/80 hover:bg-[#1E4AAE]/70`}
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-full transition"
               >
-                <span className="h-2 w-2 rounded-full bg-slate-300/70" />
-                <span>Rencana Studi</span>
+                <span className="h-2.5 w-2.5 rounded-full bg-slate-300/80" />
+                <span className="text-slate-100/80">Rencana Studi</span>
               </button>
 
-              {/* Riwayat aktif */}
+              {/* Riwayat (AKTIF) */}
               <button
                 type="button"
-                className={`${menuButtonBase} bg-[#1E4AAE] shadow-md`}
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-full transition bg-[#214A9A] shadow-[0_10px_25px_rgba(15,23,42,0.45)]"
               >
-                <span className="h-2 w-2 rounded-full bg-yellow-400" />
-                <span className="font-semibold">Riwayat</span>
+                <span className="h-2.5 w-2.5 rounded-full bg-[#FACC15]" />
+                <span className="text-white">Riwayat</span>
               </button>
 
+              {/* Profil */}
               <button
                 type="button"
                 onClick={() => navigate("/profil")}
-                className={`${menuButtonBase} text-slate-100/80 hover:bg-[#1E4AAE]/70`}
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-full transition"
               >
-                <span className="h-2 w-2 rounded-full bg-slate-300/70" />
-                <span>Profil</span>
+                <span className="h-2.5 w-2.5 rounded-full bg-slate-300/80" />
+                <span className="text-slate-100/80">Profil</span>
               </button>
             </nav>
           </div>
 
-          <div className="mt-auto px-6 pb-6 flex items-center justify-between">
+          {/* Bawah: Keluar + toggle tema */}
+          <div className="mt-10 flex items-center justify-between">
             <button
               type="button"
               onClick={handleLogout}
-              className="text-sm text-slate-100/90 hover:text-white flex items-center gap-2"
+              className="flex items-center gap-2 text-xs font-medium text-slate-100/80 hover:text-white"
             >
-              <span className="text-lg">↩</span>
+              <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-slate-100/40 text-sm bg-white/5">
+                ⤺
+              </span>
               <span>Keluar Akun</span>
             </button>
 
@@ -160,7 +134,7 @@ export default function RiwayatPage() {
               aria-label={
                 theme === "dark" ? "Ubah ke mode terang" : "Ubah ke mode gelap"
               }
-              className="h-10 w-10 rounded-full bg-[#FACC15] shadow-lg flex items-center justify-center text-xl hover:scale-105 transition-transform"
+              className="h-12 w-12 rounded-full border-[3px] border-white bg-[#FACC15] shadow-[0_18px_45px_rgba(0,0,0,0.55)] flex items-center justify-center text-xl hover:scale-105 transition-transform"
             >
               {theme === "dark" ? "🌙" : "☀️"}
             </button>
@@ -168,133 +142,172 @@ export default function RiwayatPage() {
         </div>
       </aside>
 
-      {/* KONTEN RIWAYAT */}
+      {/* KONTEN RIWAYAT PENGAJUAN */}
       <section className="flex-1 px-10 py-8 overflow-y-auto">
-        <header className="mb-6 text-center">
-          <h1 className="text-xl md:text-2xl font-semibold">
-            Riwayat Studi dan Nilai Akademik
+        {/* Header */}
+        <header className="mb-6">
+          <h1 className="text-2xl md:text-3xl font-extrabold leading-snug">
+            Riwayat Pengajuan
           </h1>
+          <p className="mt-2 text-sm md:text-base text-slate-700 dark:text-slate-300">
+            Lihat status pengajuan rencana studi kamu.
+          </p>
         </header>
 
-        {/* Summary SKS / IPK / TAK / IKK */}
+        {/* Wrapper besar */}
         <div
-          className="mb-6 rounded-3xl bg-[#0F172A] text-white px-8 py-5 flex flex-col md:flex-row md:items-center md:justify-between gap-4
-                     shadow-[0_18px_40px_rgba(15,23,42,0.75)]
-                     dark:bg-[#020617]"
+          className="rounded-[32px] bg-[#020617] bg-gradient-to-br from-[#020617] via-[#020617] to-[#0f172a]
+                     text-white shadow-[0_18px_40px_rgba(15,23,42,0.85)]
+                     border border-slate-800/70 px-5 py-6 md:px-8 md:py-8"
         >
-          <div className="flex gap-10 text-sm md:text-base">
-            <div>
-              <p className="uppercase text-xs tracking-wide text-slate-300">
-                SKS
-              </p>
-              <p className="text-2xl font-bold mt-1">{totalSks}</p>
-            </div>
-            <div>
-              <p className="uppercase text-xs tracking-wide text-slate-300">
-                IPK
-              </p>
-              <p className="text-2xl font-bold mt-1">{ipk}</p>
-            </div>
-          </div>
-
-          <div className="flex gap-10 text-sm md:text-base">
-            <div className="text-right">
-              <p className="uppercase text-xs tracking-wide text-slate-300">
-                TAK
-              </p>
-              <p className="text-2xl font-bold mt-1">{tak}</p>
-            </div>
-            <div className="text-right">
-              <p className="uppercase text-xs tracking-wide text-slate-300">
-                IKK
-              </p>
-              <p className="text-2xl font-bold mt-1">{ikk}</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="mb-4">
-          <p className="font-semibold text-base md:text-lg">
-            Periode Semester
-          </p>
-        </div>
-
-        {/* LIST SEMESTER – tiap card bisa dibuka/tutup */}
-        <div className="space-y-4">
-          {semesters.map((sem) => {
-            const isOpen = expandedId === sem.id;
-            return (
-              <div
-                key={sem.id}
-                className={`rounded-[28px] overflow-hidden shadow-[0_16px_40px_rgba(15,23,42,0.8)]
-                ${
-                  isOpen
-                    ? "bg-[#0F172A]"
-                    : "bg-[#0F172A]"
-                }`}
+          {sortedSubmissions.length === 0 ? (
+            <div className="py-10 text-center text-sm md:text-base text-slate-300">
+              Belum ada pengajuan rencana studi.
+              <br />
+              Silakan buat rencana studi terlebih dahulu di menu{" "}
+              <span
+                className="font-semibold text-[#FACC15] cursor-pointer underline underline-offset-2"
+                onClick={() => navigate("/rencana-studi")}
               >
-                {/* HEADER CARD – klik untuk toggle */}
-                <button
-                  type="button"
-                  onClick={() => toggleSemester(sem.id)}
-                  className={`w-full text-left px-7 py-4 flex items-center justify-between text-white text-base md:text-lg transition
-                  ${
-                    isOpen
-                      ? "bg-[#2563EB]"
-                      : "bg-transparent hover:bg-[#1E293B]"
-                  }`}
-                >
-                  <div>
-                    <p className="font-semibold">{sem.year}</p>
-                    <p className="text-sm md:text-base mt-1">{sem.label}</p>
-                    {isOpen && (
-                      <p className="text-xs md:text-sm mt-1 opacity-90">
-                        IP Semester: {sem.ipSemester.toFixed(2)}
-                      </p>
-                    )}
-                  </div>
-                  <p className="text-sm md:text-base font-semibold">
-                    {sem.displaySks} SKS
-                  </p>
-                </button>
+                Rencana Studi
+              </span>
+              .
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {sortedSubmissions.map((sub) => {
+                const statusInfo =
+                  statusConfig[sub.status] ?? statusConfig.pending;
 
-                {/* DETAIL – hanya muncul kalau open */}
-                {isOpen && (
-                  <div className="px-7 pb-5 pt-3 bg-slate-900 text-white">
-                    <div className="overflow-x-auto">
-                      <table className="min-w-full text-xs md:text-sm text-left">
-                        <thead>
-                          <tr className="border-b border-slate-700">
-                            <th className="pb-2 pr-4">Mata Kuliah</th>
-                            <th className="pb-2 pr-4 w-20">SKS</th>
-                            <th className="pb-2 pr-4 w-24">Nilai</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {sem.courses.map((c) => (
-                            <tr
-                              key={`${sem.id}-${c.name}`}
-                              className="border-b border-slate-800 last:border-0"
-                            >
-                              <td className="py-2 pr-4">{c.name}</td>
-                              <td className="py-2 pr-4">{c.sks}</td>
-                              <td className="py-2 pr-4">{c.grade}</td>
-                            </tr>
-                          ))}
-                          <tr className="font-semibold">
-                            <td className="pt-3 pr-4">Total SKS</td>
-                            <td className="pt-3 pr-4">{sem.totalSks}</td>
-                            <td className="pt-3 pr-4" />
-                          </tr>
-                        </tbody>
-                      </table>
+                const interestText =
+                  sub.interests && sub.interests.length
+                    ? sub.interests.join(", ")
+                    : "-";
+
+                return (
+                  <div
+                    key={sub.id}
+                    className="rounded-2xl bg-slate-900/70 px-5 py-4 md:px-6 md:py-5
+                               flex flex-col md:flex-row md:items-center md:justify-between gap-4"
+                  >
+                    {/* Kiri: info pengajuan */}
+                    <div>
+                      <div className="flex items-center gap-3 mb-1">
+                        <p className="font-semibold text-sm md:text-base">
+                          {sub.title ?? "Pengajuan Rencana Studi"}
+                        </p>
+                        <span
+                          className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold ${statusInfo.badgeClass}`}
+                        >
+                          <span className="h-2 w-2 rounded-full bg-slate-900/70" />
+                          {statusInfo.label}
+                        </span>
+                      </div>
+                      <p className="text-xs md:text-sm text-slate-300">
+                        Tanggal: {sub.dateLabel ?? "-"}
+                      </p>
+                      <p className="text-xs md:text-sm text-slate-300 mt-1">
+                        Minat: {interestText}
+                      </p>
+                    </div>
+
+                    {/* Kanan: tombol detail – buka modal */}
+                    <div className="flex items-center justify-end">
+                      <button
+                        type="button"
+                        onClick={() => setActiveDetail(sub)}
+                        className="inline-flex items-center gap-2 rounded-full border border-slate-300/60
+                                   px-4 py-2 text-xs md:text-sm font-semibold text-slate-100
+                                   hover:bg-slate-100/10 transition"
+                      >
+                        <span className="text-sm">👁️</span>
+                        <span>Lihat Detail</span>
+                      </button>
                     </div>
                   </div>
-                )}
-              </div>
-            );
-          })}
+                );
+              })}
+            </div>
+          )}
         </div>
+
+        {/* MODAL DETAIL */}
+        {activeDetail && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+            <div className="w-full max-w-lg rounded-3xl bg-[#020617] text-white shadow-[0_20px_50px_rgba(0,0,0,0.8)] border border-slate-700 px-6 py-6 md:px-8 md:py-7">
+              <div className="flex items-start justify-between mb-4">
+                <div>
+                  <h2 className="text-lg md:text-xl font-semibold mb-1">
+                    Detail Pengajuan Rencana Studi
+                  </h2>
+                  <p className="text-xs md:text-sm text-slate-300">
+                    Tanggal pengajuan: {activeDetail.dateLabel ?? "-"}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setActiveDetail(null)}
+                  className="ml-3 text-slate-400 hover:text-white text-xl leading-none"
+                >
+                  ✕
+                </button>
+              </div>
+
+              {/* Isi detail */}
+              <div className="space-y-3 text-xs md:text-sm">
+                <div className="flex justify-between gap-4">
+                  <span className="text-slate-300">IPK Saat Pengajuan</span>
+                  <span className="font-semibold">
+                    {activeDetail.ipk ?? "-"}
+                  </span>
+                </div>
+                <div className="flex justify-between gap-4">
+                  <span className="text-slate-300">Total SKS Rencana</span>
+                  <span className="font-semibold">
+                    {activeDetail.totalSks ?? "-"} SKS
+                  </span>
+                </div>
+                <div className="flex justify-between gap-4">
+                  <span className="text-slate-300">Minat Utama</span>
+                  <span className="font-semibold text-right">
+                    {activeDetail.interests && activeDetail.interests.length
+                      ? activeDetail.interests.join(", ")
+                      : "-"}
+                  </span>
+                </div>
+                <div className="flex justify-between gap-4">
+                  <span className="text-slate-300">Fokus Setelah Lulus</span>
+                  <span className="font-semibold text-right">
+                    {fokusMap[activeDetail.futureFocus] ?? "-"}
+                  </span>
+                </div>
+                <div className="flex justify-between gap-4">
+                  <span className="text-slate-300">Gaya Belajar</span>
+                  <span className="font-semibold text-right">
+                    {belajarMap[activeDetail.learningPreference] ?? "-"}
+                  </span>
+                </div>
+              </div>
+
+              <p className="mt-5 text-[11px] md:text-xs text-slate-400">
+                Rencana studi ini disusun berdasarkan data IPK, total SKS, dan
+                preferensi minat yang kamu isi pada formulir rencana studi.
+              </p>
+
+              <div className="mt-6 flex justify-end">
+                <button
+                  type="button"
+                  onClick={() => setActiveDetail(null)}
+                  className="rounded-full bg-gradient-to-r from-[#FACC15] to-[#F97316]
+                             px-7 py-2.5 text-xs md:text-sm font-semibold text-slate-900
+                             shadow-[0_12px_30px_rgba(248,181,0,0.65)] hover:brightness-105 transition"
+                >
+                  Tutup
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </section>
     </main>
   );

@@ -3,11 +3,15 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
 import { useTheme } from "../hooks/useTheme";
+import { usePlanStore } from "../store/usePlanStore";
 
 export default function RencanaStudiStep2() {
   const navigate = useNavigate();
   const { logout } = useAuthStore();
   const { theme, toggleTheme } = useTheme();
+
+  // ambil action dari store
+  const { setStep2Data } = usePlanStore();
 
   const handleLogout = () => {
     logout?.();
@@ -15,11 +19,22 @@ export default function RencanaStudiStep2() {
   };
 
   // === STATE UNTUK STEP 2 ===
-  const INTEREST_OPTIONS = ["IoT", "Robotics", "Programming", "Networking", "Power System"];
-  const [selectedInterests, setSelectedInterests] = useState(["IoT", "Robotics", "Programming"]); // default seperti figma
+  const INTEREST_OPTIONS = [
+    "IoT",
+    "Robotics",
+    "Programming",
+    "Networking",
+    "Power System",
+  ];
 
-  const [futureFocus, setFutureFocus] = useState("startup"); // "s2", "industri", "startup"
-  const [learningPreference, setLearningPreference] = useState("project"); // "konsep", "project", "campuran"
+  // default sesuai figma
+  const [selectedInterests, setSelectedInterests] = useState([
+    "IoT",
+    "Robotics",
+    "Programming",
+  ]);
+  const [futureFocus, setFutureFocus] = useState("startup"); // "s2" | "industri" | "startup"
+  const [learningPreference, setLearningPreference] = useState("project"); // "konsep" | "project" | "campuran"
 
   const toggleInterest = (option) => {
     setSelectedInterests((prev) => {
@@ -33,15 +48,15 @@ export default function RencanaStudiStep2() {
     });
   };
 
+  // SIMPAN DATA KE STORE & LANJUT STEP 3
   const handleNext = () => {
-    // nanti di sini bisa kirim data ke backend atau navigate ke step 3
-    console.log({
-      selectedInterests,
+    setStep2Data({
+      interests: selectedInterests,
       futureFocus,
       learningPreference,
     });
-    // contoh nanti:
-    // navigate("/rencana-studi/3");
+
+    navigate("/rencana-studi/step-3");
   };
 
   // helper class chip minat
@@ -54,7 +69,8 @@ export default function RencanaStudiStep2() {
     ].join(" ");
 
   // helper class radio
-  const radioWrapperClass = "flex items-center gap-3 text-sm md:text-base text-white";
+  const radioWrapperClass =
+    "flex items-center gap-3 text-sm md:text-base text-white";
 
   const radioCircleClass = (active) =>
     [
@@ -62,19 +78,19 @@ export default function RencanaStudiStep2() {
       active ? "border-[#FACC15]" : "border-white/60",
     ].join(" ");
 
-  const radioDotClass =
-    "h-2.5 w-2.5 rounded-full bg-[#FACC15]";
+  const radioDotClass = "h-2.5 w-2.5 rounded-full bg-[#FACC15]";
 
   return (
     <main
       className="min-h-screen flex
-                 bg-gradient-to-b from-[#0A4EC0] via-[#7AB6FF] to-[#E6F4FF]
+                 bg-gradient-to-b from-[#C5E0FF] via-[#E6F4FF] to-[#F5FAFF]
                  text-slate-900
-                 dark:from-[#020617] dark:via-[#020617] dark:to-[#020617] dark:text-slate-50"
+                 dark:bg-gradient-to-b dark:from-[#020617] dark:via-[#020617] dark:to-[#020617] dark:text-slate-50"
     >
-      {/* === SIDEBAR – SAMA DENGAN STEP 1, RENCANA STUDI AKTIF === */}
+      {/* SIDEBAR – sama seperti Dashboard / Step 1, Rencana Studi aktif */}
       <aside className="w-72 flex flex-col px-4">
-        <div className="mt-6 mb-6 w-full bg-[#0D3B9A] dark:bg-[#0B1F4B] text-white rounded-[36px] px-6 pt-8 pb-6 shadow-[0_18px_40px_rgba(15,23,42,0.65)] flex flex-col justify-between">
+        <div className="mt-6 mb-6 w-full h-full rounded-3xl bg-[#0B3C9C] text-slate-50 shadow-[0_18px_40px_rgba(15,23,42,0.65)] flex flex-col justify-between p-6">
+          {/* Logo + menu */}
           <div>
             <div className="mb-10">
               <p className="text-lg font-bold leading-tight">Smart Academic</p>
@@ -83,44 +99,44 @@ export default function RencanaStudiStep2() {
               </p>
             </div>
 
-            <nav className="space-y-4 text-sm font-medium">
-              {/* Beranda */}
+            <nav className="space-y-5 text-sm font-semibold">
+              {/* Beranda (non-aktif) */}
               <button
                 type="button"
                 onClick={() => navigate("/dashboard")}
-                className="w-full flex items-center gap-3 rounded-[999px] px-4 py-3 text-slate-100/80 hover:bg-[#214A9A] transition"
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-full transition"
               >
-                <span className="h-2 w-2 rounded-full bg-slate-400" />
-                <span>Beranda</span>
+                <span className="h-2.5 w-2.5 rounded-full bg-slate-300/80" />
+                <span className="text-slate-100/80">Beranda</span>
               </button>
 
-              {/* Rencana Studi (aktif) */}
+              {/* Rencana Studi (AKTIF) */}
               <button
                 type="button"
-                className="w-full flex items-center gap-3 rounded-[999px] bg-[#214A9A] px-4 py-3 shadow-md"
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-full transition bg-[#214A9A] shadow-[0_10px_25px_rgba(15,23,42,0.45)]"
               >
-                <span className="h-2 w-2 rounded-full bg-yellow-300" />
-                <span>Rencana Studi</span>
+                <span className="h-2.5 w-2.5 rounded-full bg-[#FACC15]" />
+                <span className="text-white">Rencana Studi</span>
               </button>
 
-              {/* Riwayat */}
+              {/* Riwayat (non-aktif) */}
               <button
                 type="button"
                 onClick={() => navigate("/riwayat")}
-                className="w-full flex items-center gap-3 rounded-[999px] px-4 py-3 text-slate-100/80 hover:bg-[#214A9A] transition"
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-full transition"
               >
-                <span className="h-2 w-2 rounded-full bg-slate-400" />
-                <span>Riwayat</span>
+                <span className="h-2.5 w-2.5 rounded-full bg-slate-300/80" />
+                <span className="text-slate-100/80">Riwayat</span>
               </button>
 
-              {/* Profil */}
+              {/* Profil (non-aktif) */}
               <button
                 type="button"
                 onClick={() => navigate("/profil")}
-                className="w-full flex items-center gap-3 rounded-[999px] px-4 py-3 text-slate-100/80 hover:bg-[#214A9A] transition"
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-full transition"
               >
-                <span className="h-2 w-2 rounded-full bg-slate-400" />
-                <span>Profil</span>
+                <span className="h-2.5 w-2.5 rounded-full bg-slate-300/80" />
+                <span className="text-slate-100/80">Profil</span>
               </button>
             </nav>
           </div>
@@ -130,17 +146,21 @@ export default function RencanaStudiStep2() {
             <button
               type="button"
               onClick={handleLogout}
-              className="text-sm text-slate-100/90 hover:text-white flex items-center gap-2"
+              className="flex items-center gap-2 text-xs font-medium text-slate-100/80 hover:text-white"
             >
-              <span className="text-lg">↩</span>
+              <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-slate-100/40 text-sm bg-white/5">
+                ⤺
+              </span>
               <span>Keluar Akun</span>
             </button>
 
             <button
               type="button"
               onClick={toggleTheme}
-              aria-label={theme === "dark" ? "Ubah ke mode terang" : "Ubah ke mode gelap"}
-              className="h-11 w-11 rounded-full bg-[#FACC15] shadow-[0_12px_30px_rgba(0,0,0,0.45)] flex items-center justify-center text-xl hover:scale-105 transition-transform"
+              aria-label={
+                theme === "dark" ? "Ubah ke mode terang" : "Ubah ke mode gelap"
+              }
+              className="h-12 w-12 rounded-full border-[3px] border-white bg-[#FACC15] shadow-[0_18px_45px_rgba(0,0,0,0.55)] flex items-center justify-center text-xl hover:scale-105 transition-transform"
             >
               {theme === "dark" ? "🌙" : "☀️"}
             </button>
@@ -148,7 +168,7 @@ export default function RencanaStudiStep2() {
         </div>
       </aside>
 
-      {/* === KONTEN STEP 2 === */}
+      {/* KONTEN STEP 2 */}
       <section className="flex-1 px-10 py-8 overflow-y-auto">
         {/* Judul besar */}
         <header className="mb-6">
@@ -165,13 +185,13 @@ export default function RencanaStudiStep2() {
           {/* Step bar */}
           <div className="mb-7">
             <p className="text-sm md:text-base font-semibold mb-3">
-              Step <span className="text-[#FACC15]">2</span> dari 3 - Data Akademik
+              Step <span className="text-[#FACC15]">2</span> dari 3 - Data
+              Akademik
             </p>
 
             {/* Progress line */}
             <div className="flex items-center gap-4">
               <div className="flex-1 h-2 rounded-full bg-blue-800 relative overflow-hidden">
-                {/* 2/3 progress */}
                 <div className="absolute inset-y-0 left-0 w-2/3 bg-[#FACC15]" />
               </div>
 
@@ -200,13 +220,17 @@ export default function RencanaStudiStep2() {
             {/* IPK / SKS / Total SKS */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-2">
-                <p className="text-xs uppercase tracking-wide text-blue-100">IPK</p>
+                <p className="text-xs uppercase tracking-wide text-blue-100">
+                  IPK
+                </p>
                 <div className="rounded-xl bg-blue-900/60 px-5 py-4 text-2xl font-bold">
                   3.89
                 </div>
               </div>
               <div className="space-y-2">
-                <p className="text-xs uppercase tracking-wide text-blue-100">SKS</p>
+                <p className="text-xs uppercase tracking-wide text-blue-100">
+                  SKS
+                </p>
                 <div className="rounded-xl bg-blue-900/60 px-5 py-4 text-2xl font-bold">
                   24
                 </div>
@@ -268,7 +292,9 @@ export default function RencanaStudiStep2() {
                   onClick={() => setFutureFocus("industri")}
                   className={radioWrapperClass}
                 >
-                  <span className={radioCircleClass(futureFocus === "industri")}>
+                  <span
+                    className={radioCircleClass(futureFocus === "industri")}
+                  >
                     {futureFocus === "industri" && (
                       <span className={radioDotClass} />
                     )}
@@ -281,7 +307,9 @@ export default function RencanaStudiStep2() {
                   onClick={() => setFutureFocus("startup")}
                   className={radioWrapperClass}
                 >
-                  <span className={radioCircleClass(futureFocus === "startup")}>
+                  <span
+                    className={radioCircleClass(futureFocus === "startup")}
+                  >
                     {futureFocus === "startup" && (
                       <span className={radioDotClass} />
                     )}
@@ -318,7 +346,9 @@ export default function RencanaStudiStep2() {
                   className={radioWrapperClass}
                 >
                   <span
-                    className={radioCircleClass(learningPreference === "project")}
+                    className={radioCircleClass(
+                      learningPreference === "project"
+                    )}
                   >
                     {learningPreference === "project" && (
                       <span className={radioDotClass} />
@@ -357,14 +387,14 @@ export default function RencanaStudiStep2() {
         {/* Tombol Selanjutnya di kanan bawah */}
         <div className="mt-8 flex justify-end">
           <button
-                type="button"
-                onClick={() => navigate("/rencana-studi/step-3")}
-                className="mt-4 rounded-full bg-gradient-to-r from-[#FACC15] to-[#F97316]
-                            px-10 py-3 text-sm md:text-base font-semibold text-slate-900
-                            shadow-[0_14px_36px_rgba(248,181,0,0.6)] hover:brightness-105 transition"
-                >
-                Selanjutnya
-            </button>
+            type="button"
+            onClick={handleNext}
+            className="mt-4 rounded-full bg-gradient-to-r from-[#FACC15] to-[#F97316]
+                        px-10 py-3 text-sm md:text-base font-semibold text-slate-900
+                        shadow-[0_14px_36px_rgba(248,181,0,0.6)] hover:brightness-105 transition"
+          >
+            Selanjutnya
+          </button>
         </div>
       </section>
     </main>

@@ -1,15 +1,16 @@
-// src/store/useAuthStore.js
 import { create } from "zustand";
 
 export const useAuthStore = create((set) => ({
-  // ⬇️ PASTIKAN default-nya false
   isAuthenticated: false,
+  role: null, // mahasiswa | dosen
+  user: null,
 
-  // nanti kalau sudah ada API beneran, kamu bisa ganti logic di sini
-  login: () => set({ isAuthenticated: true }),
+  login: (userData) =>
+    set({
+      isAuthenticated: true,
+      role: userData.role,
+      user: userData,
+    }),
 
-  logout: () => {
-    // kalau suatu saat kamu simpan token di localStorage / cookie, bisa dibersihkan di sini
-    set({ isAuthenticated: false });
-  },
+  logout: () => set({ isAuthenticated: false, role: null, user: null }),
 }));

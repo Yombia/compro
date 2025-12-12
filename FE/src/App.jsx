@@ -9,6 +9,7 @@ import {
 
 import Beranda from "./components/Beranda";
 import DashboardPage from "./components/Dashboard";
+import DashboardDosenPage from "./components/DashboardDosen"; // Dashboard khusus Dosen
 import Login from "./components/Login";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -17,43 +18,119 @@ import RencanaStudiPage from "./components/RencanaStudi";
 import RencanaStudiStep2 from "./components/RencanaStudiStep2";
 import RencanaStudiStep3 from "./components/RencanaStudiStep3";
 import RencanaStudiStep4 from "./components/RencanaStudiStep4";
-import RiwayatPage from "./components/Riwayat"; // ⬅️ halaman riwayat
+import RiwayatPage from "./components/Riwayat";
+import RiwayatDetailPage from "./components/RiwayatDetail"; // ⬅️ TAMBAHAN
+
+import { useAuthStore } from "./store/useAuthStore";
 
 function AppShell() {
   const location = useLocation();
   const path = location.pathname;
 
-  // Halaman yang TIDAK pakai navbar & footer (full layout sendiri)
-  const hideChrome =
-    path === "/login" ||
-    path.startsWith("/dashboard") ||
-    path.startsWith("/rencana-studi") ||
-    path.startsWith("/riwayat");
+  const { isAuthenticated, role } = useAuthStore();
+
+  // Navbar & footer cuma tampil di halaman landing "/"
+  const showChrome = path === "/";
+
+  // Route guard + cek role
+  const ProtectedRoute = ({ children, roleRequired }) => {
+    if (!isAuthenticated) {
+      return <Navigate to="/login" replace />;
+    }
+
+    if (role !== roleRequired) {
+      return <Navigate to="/" replace />;
+    }
+
+    return children;
+  };
 
   return (
     <div className="relative min-h-screen flex flex-col">
-      {/* Navbar hanya muncul di landing & halaman biasa */}
-      {!hideChrome && <Navbar />}
+      {/* Navbar hanya muncul di halaman awal */}
+      {showChrome && <Navbar />}
 
-      <main className={hideChrome ? "min-h-screen" : "flex-1"}>
+      <main className={showChrome ? "flex-1" : "min-h-screen"}>
         <Routes>
           {/* Landing page */}
           <Route path="/" element={<Beranda />} />
 
-          {/* Dashboard (layout di dalam DashboardPage) */}
-          <Route path="/dashboard" element={<DashboardPage />} />
+          {/* Dashboard mahasiswa */}
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute roleRequired="mahasiswa">
+                <DashboardPage />
+              </ProtectedRoute>
+            }
+          />
 
-          {/* Login fullscreen */}
+          {/* Dashboard dosen */}
+          <Route
+            path="/dashboard-dosen"
+            element={
+              <ProtectedRoute roleRequired="dosen">
+                <DashboardDosenPage />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Login */}
           <Route path="/login" element={<Login />} />
 
           {/* Rencana Studi – step 1 s/d 4 */}
-          <Route path="/rencana-studi" element={<RencanaStudiPage />} />
-          <Route path="/rencana-studi/step-2" element={<RencanaStudiStep2 />} />
-          <Route path="/rencana-studi/step-3" element={<RencanaStudiStep3 />} />
-          <Route path="/rencana-studi/step-4" element={<RencanaStudiStep4 />} />
+          <Route
+            path="/rencana-studi"
+            element={
+              <ProtectedRoute roleRequired="mahasiswa">
+                <RencanaStudiPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/rencana-studi/step-2"
+            element={
+              <ProtectedRoute roleRequired="mahasiswa">
+                <RencanaStudiStep2 />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/rencana-studi/step-3"
+            element={
+              <ProtectedRoute roleRequired="mahasiswa">
+                <RencanaStudiStep3 />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/rencana-studi/step-4"
+            element={
+              <ProtectedRoute roleRequired="mahasiswa">
+                <RencanaStudiStep4 />
+              </ProtectedRoute>
+            }
+          />
 
-          {/* Riwayat – pakai layout sidebar juga */}
-          <Route path="/riwayat" element={<RiwayatPage />} />
+          {/* Riwayat list */}
+          <Route
+            path="/riwayat"
+            element={
+              <ProtectedRoute roleRequired="mahasiswa">
+                <RiwayatPage />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Riwayat detail */}
+          <Route
+            path="/riwayat/:id"
+            element={
+              <ProtectedRoute roleRequired="mahasiswa">
+                <RiwayatDetailPage />
+              </ProtectedRoute>
+            }
+          />
 
           {/* Route lain sementara */}
           <Route path="/tentang" element={<Navigate to="/" replace />} />
@@ -64,8 +141,8 @@ function AppShell() {
         </Routes>
       </main>
 
-      {/* Footer cuma muncul di halaman yang pakai navbar */}
-      {!hideChrome && <Footer />}
+      {/* Footer juga cuma di halaman awal */}
+      {showChrome && <Footer />}
     </div>
   );
 }
