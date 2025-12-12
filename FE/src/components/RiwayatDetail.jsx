@@ -16,7 +16,7 @@ export default function RiwayatDetailPage() {
 
   const handleLogout = () => {
     logout?.();
-    navigate("/");
+    navigate("/login");
   };
 
   // ========= KALAU DATA NGGAK KETEMU =========

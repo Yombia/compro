@@ -1,12 +1,4 @@
-// src/App.jsx
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  Navigate,
-  useLocation,
-} from "react-router-dom";
-
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Beranda from "./components/Beranda";
 import DashboardPage from "./components/Dashboard";
 import DashboardDosenPage from "./components/DashboardDosen"; // Dashboard khusus Dosen
@@ -14,12 +6,18 @@ import Login from "./components/Login";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 
-import RencanaStudiPage from "./components/RencanaStudi";
+// Halaman Rencana Studi
 import RencanaStudiStep2 from "./components/RencanaStudiStep2";
 import RencanaStudiStep3 from "./components/RencanaStudiStep3";
 import RencanaStudiStep4 from "./components/RencanaStudiStep4";
+import MahasiswaForm from './components/Mahasiswa'; // Form Rencana Studi Mahasiswa
+
+// Halaman Riwayat
 import RiwayatPage from "./components/Riwayat";
-import RiwayatDetailPage from "./components/RiwayatDetail"; // ⬅️ TAMBAHAN
+import RiwayatDetailPage from "./components/RiwayatDetail"; 
+
+// Halaman Profil (IMPORT BARU DISINI)
+import ProfilPage from "./components/ProfilPage"; // Pastikan path import sesuai dengan struktur folder Anda
 
 import { useAuthStore } from "./store/useAuthStore";
 
@@ -47,9 +45,7 @@ function AppShell() {
 
   return (
     <div className="relative min-h-screen flex flex-col">
-      {/* Navbar hanya muncul di halaman awal */}
       {showChrome && <Navbar />}
-
       <main className={showChrome ? "flex-1" : "min-h-screen"}>
         <Routes>
           {/* Landing page */}
@@ -78,12 +74,12 @@ function AppShell() {
           {/* Login */}
           <Route path="/login" element={<Login />} />
 
-          {/* Rencana Studi – step 1 s/d 4 */}
+          {/* Rencana Studi – form mahasiswa */}
           <Route
             path="/rencana-studi"
             element={
               <ProtectedRoute roleRequired="mahasiswa">
-                <RencanaStudiPage />
+                <MahasiswaForm />
               </ProtectedRoute>
             }
           />
@@ -132,16 +128,22 @@ function AppShell() {
             }
           />
 
-          {/* Route lain sementara */}
-          <Route path="/tentang" element={<Navigate to="/" replace />} />
-          <Route path="/profil" element={<Navigate to="/login" replace />} />
+          {/* ======================================================== */}
+          {/* HALAMAN PROFIL (ROUTE BARU) */}
+          {/* ======================================================== */}
+          <Route
+            path="/profil"
+            element={
+              <ProtectedRoute roleRequired="mahasiswa">
+                <ProfilPage />
+              </ProtectedRoute>
+            }
+          />
 
-          {/* Fallback: path tidak dikenal balik ke beranda */}
+          {/* Fallback */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
-
-      {/* Footer juga cuma di halaman awal */}
       {showChrome && <Footer />}
     </div>
   );
