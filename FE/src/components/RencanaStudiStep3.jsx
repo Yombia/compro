@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
 import { useTheme } from "../hooks/useTheme";
+import { usePlanStore } from "../store/usePlanStore";
+import { api } from "../api/api";
 
 import robotImg from "../assets/robot.png";
 import tandaTanyaImg from "../assets/tandatanya.png";
@@ -11,39 +13,78 @@ export default function RencanaStudiStep3() {
   const navigate = useNavigate();
   const { logout } = useAuthStore();
   const { theme, toggleTheme } = useTheme();
+  const { currentPlan } = usePlanStore();
 
-  const [progress, setProgress] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [error, setError] = useState(null);
 
-  // animasi progress dari 0 -> 100
+  // Submit ke backend saat component mount
   useEffect(() => {
-    const totalDuration = 5000; // 5 detik
-    const intervalMs = 100;
-    const step = 100 / (totalDuration / intervalMs); // naik sedikit²
+    const submitToBackend = async () => {
+      try {
+        setIsSubmitting(true);
+        setError(null);
 
-    const id = setInterval(() => {
-      setProgress((prev) => {
-        const next = prev + step;
-        if (next >= 100) {
-          clearInterval(id);
-          return 100;
+        console.log('=== DEBUG STEP 3 SUBMIT ===');
+        console.log('currentPlan:', currentPlan);
+
+        // Validasi: pastikan data tidak kosong
+        if (!currentPlan.interests || currentPlan.interests.length === 0) {
+          throw new Error('Pilih minimal 1 bidang minat');
         }
-        return next;
-      });
-    }, intervalMs);
+        if (!currentPlan.futureFocus) {
+          throw new Error('Pilih fokus setelah lulus');
+        }
+        if (!currentPlan.learningPreference) {
+          throw new Error('Pilih gaya belajar');
+        }
 
-    return () => clearInterval(id);
-  }, []);
+        // Prepare data sesuai backend API
+        const submitData = {
+          interests: currentPlan.interests,
+          future_focus: currentPlan.futureFocus,
+          learning_preference: currentPlan.learningPreference,
+        };
 
-  const isComplete = progress >= 100;
+        console.log('submitData:', submitData);
+
+        const response = await api.mahasiswa.submitRencanaStudi(submitData);
+        console.log('Submit response:', response);
+        
+        setSubmitSuccess(true);
+        // Auto redirect ke step 4 setelah 1.5 detik
+        setTimeout(() => {
+          navigate("/rencana-studi/step-4");
+        }, 1500);
+      } catch (err) {
+        console.error("Error submitting rencana studi:", err);
+        setError(err.message || "Gagal submit rencana studi");
+      } finally {
+        setIsSubmitting(false);
+      }
+    };
+
+    submitToBackend();
+  }, [currentPlan, navigate]);
 
   const handleLogout = () => {
     logout?.();
     navigate("/");
   };
 
-  const handleNext = () => {
-    // path ini nanti kita isi dengan page hasil rekomendasi
-    navigate("/rencana-studi/step-4");
+  // Display message based on state
+  const getMessage = () => {
+    if (error) {
+      return `Error: ${error}`;
+    }
+    if (submitSuccess) {
+      return "Pengajuan berhasil! Menunggu dosen untuk generate rekomendasi...";
+    }
+    if (isSubmitting) {
+      return "Sedang mengirim pengajuan rencana studi...";
+    }
+    return "Memproses...";
   };
 
   return (
@@ -173,35 +214,28 @@ export default function RencanaStudiStep3() {
 
           {/* Progress bar + teks */}
           <div className="w-full max-w-3xl space-y-4">
-            <div className="h-4 rounded-full bg-slate-300/60 dark:bg-slate-700 overflow-hidden">
-              <div
-                className="h-full rounded-full
-                           bg-gradient-to-r from-[#FACC15] to-[#F97316]
-                           transition-[width] duration-100 ease-linear"
-                style={{ width: `${progress}%` }}
-              />
-            </div>
+            {isSubmitting && (
+              <div className="flex justify-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#FACC15]"></div>
+              </div>
+            )}
+
+            {submitSuccess && (
+              <div className="text-center">
+                <div className="text-6xl mb-4">✅</div>
+              </div>
+            )}
+
+            {error && (
+              <div className="text-center">
+                <div className="text-6xl mb-4">❌</div>
+              </div>
+            )}
 
             <p className="text-center text-sm md:text-base font-semibold">
-              {isComplete
-                ? "Rekomendasi sudah siap, lanjut cek hasilnya yuk!"
-                : "Sabar ya sistem sedang memberikan studi yang cocok buat kamu"}
+              {getMessage()}
             </p>
           </div>
-
-          {/* Tombol Selanjutnya – muncul kalau progress sudah 100% */}
-          {isComplete && (
-            <button
-              type="button"
-              onClick={handleNext}
-              className="mt-2 rounded-full bg-white text-[#0B3B91]
-                         px-8 py-2.5 text-sm md:text-base font-semibold
-                         shadow-[0_10px_26px_rgba(15,23,42,0.45)]
-                         hover:bg-slate-100 transition"
-            >
-              Selanjutnya
-            </button>
-          )}
         </div>
       </section>
     </main>

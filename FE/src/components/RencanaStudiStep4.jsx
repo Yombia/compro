@@ -9,17 +9,21 @@ export default function RencanaStudiStep4() {
   const { logout } = useAuthStore();
   const { theme, toggleTheme } = useTheme();
 
-  // ambil dan pakai store rencana studi
-  const { currentPlan, setStep2Data, submitCurrentPlan } = usePlanStore();
+  // ambil data dari store
+  const { currentPlan } = usePlanStore();
 
   const handleLogout = () => {
     logout?.();
     navigate("/");
   };
 
-  // ----- DATA UNTUK RINGKASAN -----
-  const ipk = 3.89; // sementara hardcode sesuai desain
-  const totalSksDiambil = 12; // dari tabel contoh
+  const handleViewRiwayat = () => {
+    navigate("/riwayat");
+  };
+
+  const interests = currentPlan?.interests ?? [];
+  const futureFocus = currentPlan?.futureFocus;
+  const learningPreference = currentPlan?.learningPreference;
 
   const fokusBelajarMap = {
     s2: "Melanjutkan S2 / Riset",
@@ -31,33 +35,6 @@ export default function RencanaStudiStep4() {
     konsep: "Konsep & Analisis",
     project: "Proyek & Implementasi",
     campuran: "Campuran",
-  };
-
-  const interests = currentPlan?.interests ?? [];
-  const futureFocus = currentPlan?.futureFocus;
-  const learningPreference = currentPlan?.learningPreference;
-
-  const bidangDominan = interests.length
-    ? interests.join(", ")
-    : "Belum dipilih";
-
-  const fokusBelajar = fokusBelajarMap[futureFocus] ?? "Belum ditentukan";
-  const gayaBelajar =
-    gayaBelajarMap[learningPreference] ?? "Belum ditentukan";
-
-  // ----- SUBMIT RENCANA STUDI -----
-  const handleSubmitPlan = () => {
-    // isi IPK dan total SKS ke currentPlan
-    setStep2Data({
-      ipk,
-      totalSks: totalSksDiambil,
-    });
-
-    // buat 1 pengajuan baru di store
-    submitCurrentPlan();
-
-    // pindah ke halaman riwayat
-    navigate("/riwayat");
   };
 
   return (
@@ -173,140 +150,72 @@ export default function RencanaStudiStep4() {
           </div>
         </div>
 
-        {/* Kartu besar ringkasan */}
+        {/* Kartu Success Message */}
         <div
           className="rounded-[32px] bg-[#0B3B91] text-white shadow-2xl border border-blue-300/40
-                     dark:bg-[#020A26] dark:border-blue-500/40 px-6 py-6 md:px-8 md:py-8
-                     flex flex-col lg:flex-row gap-8"
+                     dark:bg-[#020A26] dark:border-blue-500/40 px-8 py-12
+                     flex flex-col items-center justify-center gap-6"
         >
-          {/* Kiri: tabel contoh */}
-          <div className="flex-1">
-            <h2 className="text-lg md:text-xl font-semibold mb-4">
-              Rencana Studi Semester 3 (Contoh)
+          {/* Success icon */}
+          <div className="text-8xl">✅</div>
+
+          {/* Success message */}
+          <div className="text-center space-y-3 max-w-2xl">
+            <h2 className="text-2xl md:text-3xl font-bold">
+              Pengajuan Rencana Studi Berhasil!
             </h2>
-
-            <div className="overflow-x-auto rounded-2xl bg-white/5">
-              <table className="min-w-full text-xs md:text-sm">
-                <thead className="bg-white/10">
-                  <tr className="text-left">
-                    <th className="px-4 py-2">Mata Kuliah</th>
-                    <th className="px-4 py-2">SKS</th>
-                    <th className="px-4 py-2">Kategori</th>
-                    <th className="px-4 py-2">Kecocokan</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="border-t border-white/10">
-                    <td className="px-4 py-2">Pemrograman Lanjut</td>
-                    <td className="px-4 py-2">3</td>
-                    <td className="px-4 py-2">Programming</td>
-                    <td className="px-4 py-2">100%</td>
-                  </tr>
-                  <tr className="border-t border-white/10">
-                    <td className="px-4 py-2">Sistem Embedded IoT</td>
-                    <td className="px-4 py-2">3</td>
-                    <td className="px-4 py-2">IoT</td>
-                    <td className="px-4 py-2">95%</td>
-                  </tr>
-                  <tr className="border-t border-white/10">
-                    <td className="px-4 py-2">Robotika Dasar</td>
-                    <td className="px-4 py-2">3</td>
-                    <td className="px-4 py-2">Robotics</td>
-                    <td className="px-4 py-2">90%</td>
-                  </tr>
-                  <tr className="border-t border-white/10">
-                    <td className="px-4 py-2">Metode Numerik</td>
-                    <td className="px-4 py-2">3</td>
-                    <td className="px-4 py-2">Pendukung</td>
-                    <td className="px-4 py-2">85%</td>
-                  </tr>
-                  <tr className="border-t border-white/10 font-semibold">
-                    <td className="px-4 py-2" colSpan={1}>
-                      Total SKS
-                    </td>
-                    <td className="px-4 py-2">{totalSksDiambil}</td>
-                    <td className="px-4 py-2" colSpan={2}>
-                      Kesesuaian tinggi dengan minat {bidangDominan}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <p className="mt-4 text-[11px] md:text-xs text-blue-100">
-              Daftar di atas hanya contoh rekomendasi. Nantinya daftar aktual
-              bisa diambil dari data sistem atau input pengguna.
+            <p className="text-sm md:text-base text-blue-100">
+              Rencana studi kamu sudah berhasil diajukan. Sekarang menunggu dosen untuk
+              generate rekomendasi mata kuliah berdasarkan minat dan preferensi kamu.
             </p>
           </div>
 
-          {/* Kanan: ringkasan singkat */}
-          <div className="w-full lg:w-80 space-y-4">
-            <div className="rounded-2xl bg-white/5 p-4">
-              <h3 className="text-sm font-semibold mb-3">
-                Ringkasan Rencana Studi
-              </h3>
-              <ul className="space-y-2 text-xs md:text-sm">
-                <li className="flex justify-between">
-                  <span>IPK Saat Ini</span>
-                  <span className="font-semibold">{ipk}</span>
-                </li>
-                <li className="flex justify-between">
-                  <span>Total SKS yang Diambil</span>
-                  <span className="font-semibold">
-                    {totalSksDiambil} SKS
-                  </span>
-                </li>
-                <li className="flex justify-between">
-                  <span>Bidang Dominan</span>
-                  <span className="font-semibold max-w-[9rem] text-right">
-                    {bidangDominan}
-                  </span>
-                </li>
-                <li className="flex justify-between">
-                  <span>Fokus Setelah Lulus</span>
-                  <span className="font-semibold max-w-[9rem] text-right">
-                    {fokusBelajar}
-                  </span>
-                </li>
-                <li className="flex justify-between">
-                  <span>Gaya Belajar</span>
-                  <span className="font-semibold max-w-[9rem] text-right">
-                    {gayaBelajar}
-                  </span>
-                </li>
-              </ul>
-            </div>
+          {/* Info ringkas */}
+          <div className="rounded-2xl bg-white/10 p-6 w-full max-w-lg">
+            <h3 className="text-sm font-semibold mb-4 text-[#FACC15]">
+              Data yang Telah Diajukan
+            </h3>
+            <ul className="space-y-2 text-xs md:text-sm">
+              <li className="flex justify-between">
+                <span className="text-blue-100">Bidang Minat:</span>
+                <span className="font-semibold">
+                  {interests.length > 0 ? interests.join(", ") : "Belum dipilih"}
+                </span>
+              </li>
+              <li className="flex justify-between">
+                <span className="text-blue-100">Fokus Setelah Lulus:</span>
+                <span className="font-semibold">
+                  {fokusBelajarMap[futureFocus] || "Belum ditentukan"}
+                </span>
+              </li>
+              <li className="flex justify-between">
+                <span className="text-blue-100">Gaya Belajar:</span>
+                <span className="font-semibold">
+                  {gayaBelajarMap[learningPreference] || "Belum ditentukan"}
+                </span>
+              </li>
+            </ul>
+          </div>
 
-            <div className="rounded-2xl bg-white/5 p-4 text-xs md:text-sm text-blue-100">
-              <p className="font-semibold mb-1 text-[#FACC15]">Catatan Sistem</p>
-              <p>
-                Kombinasi mata kuliah ini dirancang supaya beban SKS tetap
-                seimbang, tapi tetap mendorong kamu di bidang yang kamu minati.
-              </p>
-            </div>
+          {/* Status info */}
+          <div className="rounded-2xl bg-[#FACC15]/20 border border-[#FACC15]/40 p-4 w-full max-w-lg">
+            <p className="text-xs md:text-sm text-center">
+              <span className="font-semibold text-[#FACC15]">Status:</span>{" "}
+              <span className="text-white">Menunggu Dosen Generate Rekomendasi</span>
+            </p>
           </div>
         </div>
 
-        {/* Tombol aksi bawah */}
-        <div className="mt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+        {/* Tombol lihat riwayat */}
+        <div className="mt-8 flex justify-center">
           <button
             type="button"
-            onClick={() => navigate("/rencana-studi")}
-            className="order-2 md:order-1 rounded-full border border-slate-300/70 dark:border-slate-600
-                       px-8 py-3 text-sm md:text-base font-semibold text-slate-800 dark:text-slate-100
-                       hover:bg-slate-100/70 dark:hover:bg-slate-800/70 transition"
-          >
-            Atur Ulang Rencana Studi
-          </button>
-
-          <button
-            type="button"
-            onClick={handleSubmitPlan}
-            className="order-1 md:order-2 rounded-full bg-gradient-to-r from-[#FACC15] to-[#F97316]
+            onClick={handleViewRiwayat}
+            className="rounded-full bg-gradient-to-r from-[#FACC15] to-[#F97316]
                        px-10 py-3 text-sm md:text-base font-semibold text-slate-900
                        shadow-[0_14px_36px_rgba(248,181,0,0.6)] hover:brightness-105 transition"
           >
-            Ajukan & Lihat Riwayat
+            Lihat Riwayat Pengajuan
           </button>
         </div>
       </section>

@@ -14,10 +14,14 @@ import MahasiswaForm from './components/Mahasiswa'; // Form Rencana Studi Mahasi
 
 // Halaman Riwayat
 import RiwayatPage from "./components/Riwayat";
-import RiwayatDetailPage from "./components/RiwayatDetail"; 
 
-// Halaman Profil (IMPORT BARU DISINI)
-import ProfilPage from "./components/ProfilPage"; // Pastikan path import sesuai dengan struktur folder Anda
+// Halaman Profil
+import ProfilPage from "./components/ProfilPage";
+import ProfilDosen from "./components/ProfilDosen";
+
+// Halaman Dosen
+import RencanaStudiDosen from "./components/RencanaStudiDosen";
+import RiwayatDosen from "./components/RiwayatDosen";
 
 import { useAuthStore } from "./store/useAuthStore";
 
@@ -36,7 +40,10 @@ function AppShell() {
       return <Navigate to="/login" replace />;
     }
 
-    if (role !== roleRequired) {
+    // Support multiple roles (array or string)
+    const allowedRoles = Array.isArray(roleRequired) ? roleRequired : [roleRequired];
+    
+    if (!allowedRoles.includes(role)) {
       return <Navigate to="/" replace />;
     }
 
@@ -118,24 +125,44 @@ function AppShell() {
             }
           />
 
-          {/* Riwayat detail */}
+          {/* ======================================================== */}
+          {/* HALAMAN DOSEN */}
+          {/* ======================================================== */}
           <Route
-            path="/riwayat/:id"
+            path="/rencana-studi-dosen"
             element={
-              <ProtectedRoute roleRequired="mahasiswa">
-                <RiwayatDetailPage />
+              <ProtectedRoute roleRequired="dosen">
+                <RencanaStudiDosen />
+              </ProtectedRoute>
+            }
+          />
+          
+          <Route
+            path="/riwayat-dosen"
+            element={
+              <ProtectedRoute roleRequired="dosen">
+                <RiwayatDosen />
               </ProtectedRoute>
             }
           />
 
           {/* ======================================================== */}
-          {/* HALAMAN PROFIL (ROUTE BARU) */}
+          {/* HALAMAN PROFIL */}
           {/* ======================================================== */}
           <Route
             path="/profil"
             element={
               <ProtectedRoute roleRequired="mahasiswa">
                 <ProfilPage />
+              </ProtectedRoute>
+            }
+          />
+          
+          <Route
+            path="/profil-dosen"
+            element={
+              <ProtectedRoute roleRequired="dosen">
+                <ProfilDosen />
               </ProtectedRoute>
             }
           />

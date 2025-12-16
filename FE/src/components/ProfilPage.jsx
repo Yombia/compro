@@ -1,54 +1,68 @@
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
 import { useTheme } from "../hooks/useTheme";
-
-// Pilih salah satu sidebar sesuai role
-// import SidebarMahasiswa from "./SidebarMahasiswa";
-// import SidebarDosen from "./SidebarDosen";
+import SidebarMahasiswa from "./SidebarMahasiswa";
+import SidebarDosen from "./SidebarDosen";
+import { api } from "../api/api";
 
 export default function ProfilPage() {
   const navigate = useNavigate();
-  const { user, logout } = useAuthStore(); // Asumsikan auth store memiliki data user
+  const { user, logout } = useAuthStore();
   const { theme, toggleTheme } = useTheme();
 
-  // Tentukan role user (sesuaikan dengan data dari auth store)
-  const userRole = user?.role || "mahasiswa"; // "mahasiswa" atau "dosen"
+  const [profileData, setProfileData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Tentukan role user
+  const userRole = user?.role || "mahasiswa";
   const isDosen = userRole === "dosen";
   
   // Gunakan sidebar berdasarkan role
   const SidebarComponent = isDosen ? SidebarDosen : SidebarMahasiswa;
 
-  // =================================================================
-  // DATA PROFIL BERDASARKAN ROLE
-  // =================================================================
-  
-  // Data profil mahasiswa
-  const studentProfile = {
-    name: "Jane Doe",
-    nim: "1301987654",
-    major: "S1 Teknik Elektro",
-    totalSks: 50,
-    ipk: 3.89,
-    semester: 2,
-    academicYear: "2023",
-    avatarUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=Jane&backgroundColor=ffdfbf",
-  };
+  // Fetch profile data
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        setLoading(true);
+        if (isDosen) {
+          const data = await api.dosen.getProfile();
+          setProfileData({
+            name: data.dosen.nama,
+            nip: data.dosen.nip,
+            position: "Dosen Tetap",
+            faculty: "Fakultas Teknik",
+            department: data.dosen.jurusan || "Teknik Elektro",
+            teachingExperience: "15 tahun",
+            researchCount: 23,
+            publications: 45,
+            avatarUrl: `https://api.dicebear.com/7.x/avataaars/svg?seed=${data.dosen.nama}&backgroundColor=ffdfbf`,
+          });
+        } else {
+          const data = await api.mahasiswa.getProfile();
+          setProfileData({
+            name: data.mahasiswa.nama,
+            nim: data.mahasiswa.nim,
+            major: "S1 Teknik Elektro",
+            totalSks: data.mahasiswa.total_sks || 0,
+            ipk: parseFloat(data.mahasiswa.ipk || 0).toFixed(2),
+            semester: data.mahasiswa.semester_saat_ini || 1,
+            academicYear: new Date().getFullYear().toString(),
+            avatarUrl: `https://api.dicebear.com/7.x/avataaars/svg?seed=${data.mahasiswa.nama}&backgroundColor=ffdfbf`,
+          });
+        }
+      } catch (err) {
+        console.error("Error fetching profile:", err);
+        setError(err.message || "Gagal mengambil data profil");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  // Data profil dosen
-  const lecturerProfile = {
-    name: "Prof. Dr. John Smith",
-    nip: "198012345678901234",
-    position: "Dosen Tetap",
-    faculty: "Fakultas Teknik",
-    department: "Teknik Elektro",
-    teachingExperience: "15 tahun",
-    researchCount: 23,
-    publications: 45,
-    avatarUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=Professor&backgroundColor=ffdfbf",
-  };
-
-  // Pilih profil berdasarkan role
-  const profileData = isDosen ? lecturerProfile : studentProfile;
+    fetchProfile();
+  }, [isDosen]);
 
   const handleLogout = () => {
     logout?.();
@@ -69,8 +83,24 @@ export default function ProfilPage() {
           </h1>
         </header>
 
-        {/* KARTU PROFIL BESAR */}
-        <div className="w-full rounded-[40px] bg-[#173678] text-white shadow-2xl relative overflow-hidden p-10 md:p-16 flex flex-col items-center text-center">
+        {loading ? (
+          <div className="flex justify-center items-center py-20">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          </div>
+        ) : error ? (
+          <div className="text-center py-20">
+            <p className="text-red-500 font-semibold mb-4">{error}</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            >
+              Coba Lagi
+            </button>
+          </div>
+        ) : profileData ? (
+          <>
+            {/* KARTU PROFIL BESAR */}
+            <div className="w-full rounded-[40px] bg-[#173678] text-white shadow-2xl relative overflow-hidden p-10 md:p-16 flex flex-col items-center text-center">
           
           {/* Avatar Lingkaran */}
           <div className="mb-6 relative">
@@ -228,6 +258,8 @@ export default function ProfilPage() {
             </div>
           </div>
         )}
+          </>
+        ) : null}
       </section>
     </main>
   );

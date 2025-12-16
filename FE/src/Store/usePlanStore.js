@@ -1,5 +1,6 @@
 // src/store/usePlanStore.js
 import { create } from "zustand";
+import { api } from "../api/api";
 
 export const usePlanStore = create((set) => ({
   // Data rencana studi yang sedang diisi
@@ -24,42 +25,52 @@ export const usePlanStore = create((set) => ({
     })),
 
   // Submit pengajuan rencana studi
-  submitCurrentPlan: () =>
-    set((state) => {
-      const plan = state.currentPlan;
+  submitCurrentPlan: async () => {
+    const state = usePlanStore.getState();
+    const plan = state.currentPlan;
 
-      // Jika ada data kosong, jangan lanjutkan submit
-      if (
-        !plan.interests?.length &&
-        !plan.futureFocus &&
-        !plan.learningPreference
-      ) {
-        return state;
-      }
+    // Validasi: Jika ada data kosong, jangan lanjutkan submit
+    if (
+      !plan.interests?.length ||
+      !plan.futureFocus ||
+      !plan.learningPreference
+    ) {
+      console.error("Data tidak lengkap:", plan);
+      alert("Mohon lengkapi semua field (bidang minat, fokus, dan gaya belajar)");
+      return;
+    }
 
-      const now = new Date();
-      const createdAt = now.toISOString();
-      const dateLabel = now.toLocaleDateString("id-ID", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
+    try {
+      // Kirim ke backend
+      console.log("Submitting to backend:", {
+        interests: plan.interests,
+        future_focus: plan.futureFocus,
+        learning_preference: plan.learningPreference,
       });
 
-      // Membuat pengajuan dengan data dari form
-      const newSubmission = {
-        id: Date.now().toString(),
-        title: "Pengajuan Rencana Studi",
-        status: "pending", // status awal "pending"
-        createdAt, // tanggal pembuatan
-        dateLabel, // format tanggal
-        ...plan,   // menggunakan data form mahasiswa
-      };
+      const response = await api.mahasiswa.submitRencanaStudi({
+        interests: plan.interests,
+        future_focus: plan.futureFocus,
+        learning_preference: plan.learningPreference,
+      });
 
-      return {
-        submissions: [newSubmission, ...state.submissions], // Menambahkan pengajuan baru
+      console.log("Submit berhasil:", response);
+      alert("Rencana studi berhasil diajukan!");
+
+      // Reset currentPlan setelah submit berhasil
+      set({
         currentPlan: {
-          ...plan, // reset form plan setelah submit
+          interests: [],
+          futureFocus: "",
+          learningPreference: "",
+          ipk: null,
+          totalSks: null,
         },
-      };
-    }),
+      });
+    } catch (error) {
+      console.error("Submit gagal:", error);
+      alert(error.message || "Gagal submit rencana studi. Silakan coba lagi.");
+      throw error;
+    }
+  },
 }));

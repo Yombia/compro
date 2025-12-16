@@ -1,89 +1,36 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
 import { useTheme } from "../hooks/useTheme";
-// import { usePlanStore } from "../store/usePlanStore"; // Kita disable dulu store aslinya
+import { api } from "../api/api";
 
 // IMPORT LIBRARY PDF
-import html2canvas from "html2canvas";
-import { jsPDF } from "jspdf";
-
-// =================================================================
-// 1. DATA DUMMY (RIWAYAT BODONG) UNTUK DEMO
-// =================================================================
-const dummySubmissions = [
-  {
-    id: "1765549145517",
-    title: "Rencana Studi Semester Genap",
-    status: "approved", // STATUS: DISETUJUI
-    createdAt: "2025-12-01T09:00:00Z",
-    dateLabel: "01/12/2025",
-    ipk: "3.89",
-    totalSks: "85",
-    interests: ["IoT", "Robotics"],
-    futureFocus: "startup",
-    learningPreference: "project",
-  },
-  {
-    id: "1765549145518",
-    title: "Pengajuan Perbaikan SKS",
-    status: "pending", // STATUS: PENDING
-    createdAt: "2025-12-12T14:30:00Z",
-    dateLabel: "12/12/2025",
-    ipk: "3.90",
-    totalSks: "105",
-    interests: ["Programming"],
-    futureFocus: "industri",
-    learningPreference: "konsep",
-  },
-  {
-    id: "1765549145519",
-    title: "Rencana Studi Awal",
-    status: "rejected", // STATUS: DITOLAK
-    createdAt: "2025-11-20T10:15:00Z",
-    dateLabel: "20/11/2025",
-    ipk: "3.50",
-    totalSks: "60",
-    interests: ["IoT", "Programming"],
-    futureFocus: "s2",
-    learningPreference: "campuran",
-  },
-];
-
-// =================================================================
-// DATA REKOMENDASI MATA KULIAH (Tetap Sama)
-// =================================================================
-const recommendationData = [
-  { course: "Matriks dan Ruang Vektor", sks: 3, reason: "Mendukung dasar AI dan Data Science", match: 100 },
-  { course: "Praktikum Elektronika", sks: 1, reason: "Penting untuk pengembangan perangkat IoT", match: 85 },
-  { course: "Fisika 3A", sks: 2, reason: "Dasar pemahaman sistem fisik/Robotics", match: 100 },
-  { course: "Pembangkitan Energi Elektrik", sks: 3, reason: "Cocok untuk bidang energi terbarukan/startup", match: 90 },
-  { course: "Kalkulus", sks: 3, reason: "Diperlukan untuk analisis algoritma kompleks", match: 85 },
-];
+import { pdf } from '@react-pdf/renderer';
+import RencanaStudiPDF from './RencanaStudiPDF';
 
 // =================================================================
 // FUNGSI GENERATE PDF
 // =================================================================
 const handleSaveAsPdf = async (detail) => {
-  const element = document.getElementById("modal-content-to-print");
-  if (!element) return;
-
   try {
-    const canvas = await html2canvas(element, {
-      scale: 2,
-      useCORS: true,
-      backgroundColor: "#0B3C9C", 
-    });
-
-    const imgData = canvas.toDataURL("image/png");
-    const pdf = new jsPDF("p", "mm", "a4");
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const imgProps = pdf.getImageProperties(imgData);
-    const imgHeight = (imgProps.height * pdfWidth) / imgProps.width;
-
-    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, imgHeight);
+    // Generate PDF document
+    const blob = await pdf(<RencanaStudiPDF data={detail} />).toBlob();
+    
+    // Create download link
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    
     const timestamp = new Date().toISOString().slice(0, 10);
-    pdf.save(`Rencana_Studi_${detail.id}.pdf`);
+    const fileName = `Rencana_Studi_${detail.mahasiswa?.nama || 'Mahasiswa'}_${timestamp}.pdf`;
+    link.download = fileName;
+    
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    // Clean up
+    URL.revokeObjectURL(url);
   } catch (error) {
     console.error("Gagal membuat PDF:", error);
     alert("Terjadi kesalahan saat mengunduh PDF.");
@@ -95,8 +42,27 @@ export default function RiwayatPage() {
   const { logout } = useAuthStore();
   const { theme, toggleTheme } = useTheme();
   
-  // const { submissions } = usePlanStore(); // <--- Store asli dikomentari dulu
-  const submissions = dummySubmissions;     // <--- Pakai data bodong
+  const [submissions, setSubmissions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch riwayat from backend
+  useEffect(() => {
+    const fetchRiwayat = async () => {
+      try {
+        setLoading(true);
+        const data = await api.mahasiswa.getRiwayat();
+        setSubmissions(data.data || []);
+      } catch (err) {
+        console.error("Error fetching riwayat:", err);
+        setError(err.message || "Gagal mengambil data riwayat");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRiwayat();
+  }, []);
 
   const handleLogout = () => {
     logout?.();
@@ -105,8 +71,19 @@ export default function RiwayatPage() {
 
   const [activeDetail, setActiveDetail] = useState(null);
 
+  // Map status dari backend ke frontend
+  const mapStatus = (backendStatus) => {
+    const statusMap = {
+      'Pending': 'pending',
+      'Tertunda': 'delayed',
+      'Disetujui': 'approved',
+      'Ditolak': 'rejected',
+    };
+    return statusMap[backendStatus] || 'pending';
+  };
+
   const sortedSubmissions = [...submissions].sort(
-    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+    (a, b) => new Date(b.created_at) - new Date(a.created_at)
   );
 
   const statusConfig = {
@@ -143,23 +120,19 @@ export default function RiwayatPage() {
   const DetailModal = ({ detail, onClose }) => {
     if (!detail) return null;
 
-    const dominantText = getDominantInterestText(detail.interests);
+    const dominantText = getDominantInterestText(detail.mahasiswa?.interests);
+    const mataKuliah = detail.mata_kuliah || [];
 
-    // 1. KONTEN UNTUK STATUS APPROVED (LENGKAP)
+    // 1. KONTEN UNTUK STATUS APPROVED/DELAYED (LENGKAP)
     const RenderApprovedContent = () => {
-      const totalRecommendedSks = getTotalRecommendedSKS(recommendationData);
-      const interestDistribution = [
-        { name: 'IoT', value: 40, color: '#007BFF' },
-        { name: 'Programming', value: 20, color: '#32CD32' },
-        { name: 'Robotics', value: 40, color: '#FACC15' },
-      ];
+      const totalRecommendedSks = mataKuliah.reduce((sum, mk) => sum + mk.sks, 0);
 
       return (
         <>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
             <div className="p-5 bg-[#072d7a] rounded-2xl border border-white/10 shadow-inner">
               <p className="text-sm text-slate-300 mb-1">IPK Saat Ini</p>
-              <p className="text-3xl font-bold text-white">{parseFloat(detail.ipk).toFixed(2)}</p>
+              <p className="text-3xl font-bold text-white">{parseFloat(detail.mahasiswa?.ipk || 0).toFixed(2)}</p>
             </div>
             <div className="p-5 bg-[#072d7a] rounded-2xl border border-white/10 shadow-inner">
               <p className="text-sm text-slate-300 mb-1">Bidang Dominan</p>
@@ -167,7 +140,7 @@ export default function RiwayatPage() {
             </div>
             <div className="p-5 bg-[#072d7a] rounded-2xl border border-white/10 shadow-inner">
               <p className="text-sm text-slate-300 mb-1">Fokus Karir</p>
-              <p className="text-xl font-bold text-[#FACC15] truncate">{fokusMap[detail.futureFocus]}</p>
+              <p className="text-xl font-bold text-[#FACC15] truncate">{fokusMap[detail.mahasiswa?.future_focus]}</p>
             </div>
           </div>
 
@@ -187,14 +160,18 @@ export default function RiwayatPage() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-white/5">
-                      {recommendationData.map((item, index) => (
+                      {mataKuliah.map((mk, index) => (
                         <tr key={index} className="hover:bg-white/5 transition-colors">
                           <td className="py-3 pr-2">
-                            <div className="font-medium text-white">{item.course}</div>
-                            <div className="text-xs text-slate-400 mt-0.5">{item.reason}</div>
+                            <div className="font-medium text-white">{mk.nama_mata_kuliah}</div>
+                            <div className="text-xs text-slate-400 mt-0.5">{mk.alasan || '-'}</div>
                           </td>
-                          <td className="py-3 text-center text-white">{item.sks}</td>
-                          <td className="py-3 text-right font-bold text-[#FACC15]">{item.match}%</td>
+                          <td className="py-3 text-center text-white">{mk.sks}</td>
+                          <td className="py-3 text-right font-bold text-[#FACC15]">
+                            {mk.tingkat_kecocokan !== null && mk.tingkat_kecocokan !== undefined 
+                              ? `${mk.tingkat_kecocokan}%` 
+                              : '-'}
+                          </td>
                         </tr>
                       ))}
                     </tbody>
@@ -211,27 +188,21 @@ export default function RiwayatPage() {
             </div>
 
             <div className="w-full lg:w-80 flex flex-col gap-6">
-              <div className="bg-[#072d7a]/50 rounded-2xl border border-white/5 p-6 flex flex-col items-center justify-center">
-                <h3 className="text-lg font-bold mb-4 text-center">Distribusi Minat</h3>
-                <div className="relative w-40 h-40 mb-6 rounded-full shadow-2xl"
-                  style={{
-                    background: `conic-gradient(
-                      ${interestDistribution[0].color} 0% ${interestDistribution[0].value}%, 
-                      ${interestDistribution[1].color} ${interestDistribution[0].value}% ${interestDistribution[0].value + interestDistribution[1].value}%, 
-                      ${interestDistribution[2].color} ${interestDistribution[0].value + interestDistribution[1].value}% 100%
-                    )`
-                  }}
-                ></div>
-                <div className="w-full space-y-2">
-                  {interestDistribution.map(item => (
-                    <div key={item.name} className="flex items-center justify-between text-sm">
-                      <div className="flex items-center gap-2">
-                        <span className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }}></span>
-                        <span className="text-slate-200">{item.name}</span>
-                      </div>
-                      <span className="font-bold text-white">{item.value}%</span>
-                    </div>
-                  ))}
+              <div className="bg-[#072d7a]/50 rounded-2xl border border-white/5 p-6">
+                <h3 className="text-lg font-bold mb-4">Informasi Tambahan</h3>
+                <div className="space-y-3 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-slate-300">Total Mata Kuliah:</span>
+                    <span className="font-semibold text-white">{mataKuliah.length}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-300">Total SKS:</span>
+                    <span className="font-semibold text-white">{totalRecommendedSks}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-300">Status:</span>
+                    <span className="font-semibold text-[#FACC15]">{detail.status_rencana}</span>
+                  </div>
                 </div>
               </div>
 
@@ -261,11 +232,10 @@ export default function RiwayatPage() {
       <div className="flex flex-col items-center justify-center py-10">
         <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-2xl p-8 mb-8 w-full max-w-2xl text-center backdrop-blur-sm">
           <div className="text-5xl mb-4">⏳</div>
-          <h3 className="text-2xl font-bold text-[#FACC15] mb-3">Menunggu Persetujuan</h3>
+          <h3 className="text-2xl font-bold text-[#FACC15] mb-3">Menunggu Dosen Generate Rekomendasi</h3>
           <p className="text-slate-300 leading-relaxed">
-            Rencana studi kamu sedang dalam proses peninjauan oleh Dosen Wali.<br/>
-            Analisis lengkap, rekomendasi mata kuliah, dan grafik minat akan tersedia setelah status pengajuan berubah menjadi 
-            <span className="text-emerald-400 font-semibold"> Disetujui</span>.
+            Rencana studi kamu sudah diajukan.<br/>
+            Dosen akan generate rekomendasi mata kuliah berdasarkan minat dan preferensi kamu menggunakan AI.
           </p>
         </div>
 
@@ -278,15 +248,15 @@ export default function RiwayatPage() {
             </div>
             <div>
               <p className="text-slate-400 mb-0.5">Fokus Karir</p>
-              <p className="text-[#FACC15] font-medium text-lg">{fokusMap[detail.futureFocus]}</p>
+              <p className="text-[#FACC15] font-medium text-lg">{fokusMap[detail.mahasiswa?.future_focus]}</p>
             </div>
             <div>
               <p className="text-slate-400 mb-0.5">IPK Terakhir</p>
-              <p className="text-white font-medium">{detail.ipk}</p>
+              <p className="text-white font-medium">{detail.mahasiswa?.ipk}</p>
             </div>
             <div>
               <p className="text-slate-400 mb-0.5">Gaya Belajar</p>
-              <p className="text-white font-medium">{belajarMap[detail.learningPreference]}</p>
+              <p className="text-white font-medium">{belajarMap[detail.mahasiswa?.learning_preference]}</p>
             </div>
           </div>
         </div>
@@ -323,11 +293,10 @@ export default function RiwayatPage() {
     );
 
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-        <div className="max-h-screen overflow-y-auto w-full flex justify-center">
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-2 md:p-4">
+        <div className="max-h-screen overflow-y-auto w-full flex justify-center px-2 md:px-4">
           <div 
-            id="modal-content-to-print" 
-            className="w-full max-w-5xl rounded-3xl bg-[#0B3C9C] text-white shadow-[0_20px_60px_rgba(0,0,0,0.9)] border border-slate-700 p-6 md:p-8 relative min-h-[550px]"
+            className="w-full max-w-[95vw] lg:max-w-6xl rounded-2xl md:rounded-3xl bg-[#0B3C9C] text-white shadow-[0_20px_60px_rgba(0,0,0,0.9)] border border-slate-700 p-4 md:p-6 lg:p-8 relative"
           >
             {/* Tombol Close */}
             <button
@@ -346,26 +315,34 @@ export default function RiwayatPage() {
               <div className="flex flex-wrap items-center gap-3">
                 <span className="text-slate-400 text-xs font-mono bg-black/20 px-2 py-1 rounded">ID: {detail.id}</span>
                 <span className={`px-2.5 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider border ${
-                  detail.status === 'approved' ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30' :
-                  detail.status === 'rejected' ? 'bg-rose-500/20 text-rose-300 border-rose-500/30' :
+                  mapStatus(detail.status_rencana) === 'approved' ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30' :
+                  mapStatus(detail.status_rencana) === 'rejected' ? 'bg-rose-500/20 text-rose-300 border-rose-500/30' :
+                  mapStatus(detail.status_rencana) === 'delayed' ? 'bg-orange-500/20 text-orange-300 border-orange-500/30' :
                   'bg-yellow-500/20 text-yellow-300 border-yellow-500/30'
                 }`}>
-                  {detail.status === 'approved' ? 'Disetujui' : detail.status === 'rejected' ? 'Ditolak' : 'Pending'}
+                  {detail.status_rencana}
                 </span>
                 <span className="text-slate-400 text-xs">•</span>
-                <span className="text-slate-300 text-xs">{detail.dateLabel}</span>
+                <span className="text-slate-300 text-xs">
+                  {new Date(detail.created_at).toLocaleDateString('id-ID', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric'
+                  })}
+                </span>
               </div>
             </div>
 
             {/* Dynamic Content Body */}
             <div className="mt-6">
-              {detail.status === 'approved' && <RenderApprovedContent />}
-              {detail.status === 'pending' && <RenderPendingContent />}
-              {detail.status === 'rejected' && <RenderRejectedContent />}
+              {mapStatus(detail.status_rencana) === 'approved' && <RenderApprovedContent />}
+              {mapStatus(detail.status_rencana) === 'delayed' && <RenderApprovedContent />}
+              {mapStatus(detail.status_rencana) === 'pending' && <RenderPendingContent />}
+              {mapStatus(detail.status_rencana) === 'rejected' && <RenderRejectedContent />}
             </div>
 
-            {/* Footer hanya muncul jika Approved */}
-            {detail.status === 'approved' && (
+            {/* Footer hanya muncul jika Approved/Delayed */}
+            {(mapStatus(detail.status_rencana) === 'approved' || mapStatus(detail.status_rencana) === 'delayed') && (
               <div className="mt-10 pt-4 border-t border-white/10">
                 <p className="text-[10px] md:text-xs text-slate-400 text-center leading-relaxed opacity-70">
                   Dokumen ini dibuat secara otomatis oleh sistem Smart Academic Planner. <br/>
@@ -431,27 +408,53 @@ export default function RiwayatPage() {
         </header>
 
         <div className="rounded-[32px] bg-[#020617] bg-gradient-to-br from-[#020617] via-[#020617] to-[#0f172a] text-white shadow-[0_18px_40px_rgba(15,23,42,0.85)] border border-slate-800/70 px-5 py-6 md:px-8 md:py-8">
-          {sortedSubmissions.length === 0 ? (
-            <div className="py-10 text-center text-sm md:text-base text-slate-300">
-              Belum ada pengajuan rencana studi.<br />
-              Silakan buat rencana studi terlebih dahulu di menu <span className="font-semibold text-[#FACC15] cursor-pointer underline" onClick={() => navigate("/rencana-studi")}>Rencana Studi</span>.
+          {/* Isi konten list */}
+          {loading ? (
+            <div className="flex justify-center items-center py-20">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            </div>
+          ) : error ? (
+            <div className="text-center py-20">
+              <p className="text-red-500 font-semibold mb-4">{error}</p>
+              <button
+                onClick={() => window.location.reload()}
+                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              >
+                Coba Lagi
+              </button>
+            </div>
+          ) : sortedSubmissions.length === 0 ? (
+            <div className="text-center py-20">
+              <p className="text-slate-600 dark:text-slate-400 mb-4">Belum ada riwayat pengajuan</p>
+              <button
+                onClick={() => navigate('/rencana-studi')}
+                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              >
+                Buat Rencana Studi
+              </button>
             </div>
           ) : (
             <div className="space-y-4">
               {sortedSubmissions.map((sub) => {
-                const statusInfo = statusConfig[sub.status] ?? statusConfig.pending;
-                const interestText = sub.interests?.length ? sub.interests.join(", ") : "-";
+                const statusInfo = statusConfig[mapStatus(sub.status_rencana)] ?? statusConfig.pending;
+                const interestText = sub.mahasiswa?.interests?.length ? sub.mahasiswa.interests.join(", ") : "-";
 
                 return (
                   <div key={sub.id} className="rounded-2xl bg-slate-900/70 px-5 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4 border border-slate-800 hover:border-slate-600 transition-colors">
                     <div>
                       <div className="flex items-center gap-3 mb-1">
-                        <p className="font-semibold text-sm md:text-base">{sub.title ?? "Pengajuan Rencana Studi"}</p>
+                        <p className="font-semibold text-sm md:text-base">Pengajuan Rencana Studi</p>
                         <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold ${statusInfo.badgeClass}`}>
                           <span className="h-2 w-2 rounded-full bg-slate-900/70" /> {statusInfo.label}
                         </span>
                       </div>
-                      <p className="text-xs md:text-sm text-slate-300">Tanggal: {sub.dateLabel ?? "-"}</p>
+                      <p className="text-xs md:text-sm text-slate-300">
+                        Tanggal: {new Date(sub.created_at).toLocaleDateString('id-ID', {
+                          day: '2-digit',
+                          month: '2-digit',
+                          year: 'numeric'
+                        })}
+                      </p>
                       <p className="text-xs md:text-sm text-slate-300 mt-1">Minat: {interestText}</p>
                     </div>
                     <div className="flex items-center justify-end">

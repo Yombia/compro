@@ -9,6 +9,7 @@ import heroLogin from "../assets/PROPLOG.png";
 import cloud from "../assets/white-cloud 5.png";
 import { useAuthStore } from "../store/useAuthStore";
 import { useTheme } from "../hooks/useTheme"; // sync theme from landing
+import { api } from "../api/api";
 
 // Simple schema for form validation
 const loginSchema = z.object({
@@ -40,20 +41,28 @@ export default function Login() {
   });
 
   const onSubmit = async (values) => {
-    const email = values.email.toLowerCase();
-    const isMahasiswa = email.includes("student");
+    try {
+      // Call API login
+      const response = await api.login(values.email, values.password);
+      
+      // Simpan data login ke store
+      login({
+        email: response.user.email,
+        role: response.user.role,
+        name: response.user.name,
+        token: response.token,
+        data: response.data,
+      });
 
-    // Simpan data login ke store
-    login({
-      email,
-      role: isMahasiswa ? "mahasiswa" : "dosen",
-    });
-
-    // Routing berdasarkan role login → SESUAI ROUTER DI App.jsx
-    if (isMahasiswa) {
-      navigate("/dashboard", { replace: true });        // dashboard mahasiswa
-    } else {
-      navigate("/dashboard-dosen", { replace: true });  // dashboard dosen
+      // Routing berdasarkan role login
+      if (response.user.role === 'mahasiswa') {
+        navigate("/dashboard", { replace: true });        // dashboard mahasiswa
+      } else if (response.user.role === 'dosen') {
+        navigate("/dashboard-dosen", { replace: true });  // dashboard dosen
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      alert(error.message || 'Login gagal. Silakan coba lagi.');
     }
   };
 

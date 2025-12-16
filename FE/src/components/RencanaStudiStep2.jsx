@@ -27,14 +27,10 @@ export default function RencanaStudiStep2() {
     "Power System",
   ];
 
-  // default sesuai figma
-  const [selectedInterests, setSelectedInterests] = useState([
-    "IoT",
-    "Robotics",
-    "Programming",
-  ]);
-  const [futureFocus, setFutureFocus] = useState("startup"); // "s2" | "industri" | "startup"
-  const [learningPreference, setLearningPreference] = useState("project"); // "konsep" | "project" | "campuran"
+  // State kosong - user harus pilih sendiri
+  const [selectedInterests, setSelectedInterests] = useState([]);
+  const [futureFocus, setFutureFocus] = useState(""); // "s2" | "industri" | "startup"
+  const [learningPreference, setLearningPreference] = useState(""); // "konsep" | "project" | "campuran"
 
   const toggleInterest = (option) => {
     setSelectedInterests((prev) => {
@@ -50,12 +46,18 @@ export default function RencanaStudiStep2() {
 
   // SIMPAN DATA KE STORE & LANJUT STEP 3
   const handleNext = () => {
+    console.log('=== DEBUG STEP 2 HANDLE NEXT ===');
+    console.log('selectedInterests:', selectedInterests);
+    console.log('futureFocus:', futureFocus);
+    console.log('learningPreference:', learningPreference);
+
     setStep2Data({
       interests: selectedInterests,
       futureFocus,
       learningPreference,
     });
 
+    console.log('Navigating to step-3...');
     navigate("/rencana-studi/step-3");
   };
 

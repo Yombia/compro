@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { usePlanStore } from "../store/usePlanStore"; // Import store zustand
 import { useTheme } from "../hooks/useTheme"; // Import hook tema
+import { api } from "../api/api"; // Import API
 
 export default function MahasiswaForm() {
   const navigate = useNavigate();
@@ -18,31 +19,47 @@ export default function MahasiswaForm() {
     learningPreference: "",
   });
 
-  // =================================================================================
-  // SIMULASI INTEGRASI DATA:
-  // Mengambil data akademik mahasiswa dari database/backend saat halaman dimuat.
-  // =================================================================================
+  const [loading, setLoading] = useState(true);
+
+  // Fetch data mahasiswa dari backend
   useEffect(() => {
-    // Ceritanya ini request ke API: /api/mahasiswa/akademik
-    const academicDataFromDB = {
-      ipk: "3.89",      // Data dari database
-      sks: "24",        // Data dari database (SKS semester ini)
-      totalSks: "85"    // Data dari database (Total SKS kumulatif)
+    const fetchProfile = async () => {
+      try {
+        const response = await api.mahasiswa.getProfile();
+        const mhs = response.mahasiswa;
+        
+        setFormData((prev) => ({
+          ...prev,
+          ipk: mhs.ipk.toFixed(2),
+          sks: mhs.sks_semester_ini.toString(),
+          totalSks: mhs.total_sks.toString(),
+          interests: mhs.interests || [],
+          futureFocus: mhs.future_focus || "",
+          learningPreference: mhs.learning_preference || "",
+        }));
+        
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching profile:', error);
+        setLoading(false);
+      }
     };
 
-    // Update state form dengan data dari database
-    setFormData((prev) => ({
-      ...prev,
-      ...academicDataFromDB
-    }));
+    fetchProfile();
   }, []);
 
   // Handle submit form
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
-    setStep2Data(formData); // Simpan ke store
-    submitCurrentPlan();    // Finalisasi submission
-    navigate("/riwayat");   // Arahkan ke riwayat
+    
+    try {
+      setStep2Data(formData); // Simpan ke store
+      await submitCurrentPlan();    // Submit ke backend (async)
+      navigate("/riwayat");   // Arahkan ke riwayat setelah berhasil
+    } catch (error) {
+      // Error sudah di-handle di submitCurrentPlan
+      console.error("Submit error:", error);
+    }
   };
 
   // Handle perubahan input (Hanya untuk dropdown)

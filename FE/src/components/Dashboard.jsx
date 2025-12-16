@@ -6,7 +6,7 @@ import { useTheme } from "../hooks/useTheme";
 export default function DashboardPage() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { logout } = useAuthStore();
+  const { logout, user } = useAuthStore();
   const { theme, toggleTheme } = useTheme();
 
   const path = location.pathname;
@@ -206,7 +206,7 @@ export default function DashboardPage() {
             <h1 className="text-3xl md:text-4xl font-extrabold">
               Halo,{" "}
               <span className="relative inline-block">
-                <span className="relative z-10">Pengguna!</span>
+                <span className="relative z-10">{user?.name || "Pengguna"}!</span>
                 <span className="absolute inset-x-0 bottom-0 h-3 bg-[#FACC15] rounded-md -z-0" />
               </span>
             </h1>

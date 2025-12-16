@@ -1,0 +1,177 @@
+[2025-12-14 16:14:00] [849.03ms] Proses dimulai
+
+[2025-12-14 16:14:01] [2172.26ms] Membangun prompt untuk AI
+
+[2025-12-14 16:15:45] [42.94ms] Proses dimulai
+
+[2025-12-14 16:15:45] [212.95ms] Membangun prompt untuk AI
+
+[2025-12-14 16:15:55] [45.61ms] Proses dimulai
+
+[2025-12-14 16:15:56] [244.2ms] Membangun prompt untuk AI
+
+[2025-12-14 16:22:12] [45.18ms] Proses dimulai
+
+[2025-12-14 16:22:13] [228.32ms] Membangun prompt untuk AI
+
+[2025-12-14 16:30:28] [50.34ms] Proses dimulai
+
+[2025-12-14 16:30:28] [268.81ms] Membangun prompt untuk AI
+
+[2025-12-14 16:32:20] [50.82ms] Proses dimulai
+
+[2025-12-14 16:32:20] [233.39ms] Membangun prompt untuk AI
+
+[2025-12-14 16:32:21] [324.33ms] Memvalidasi API Key untuk OpenRouter
+
+[2025-12-14 16:32:21] [411.91ms] API Key valid untuk OpenRouter
+
+[2025-12-14 16:32:21] [510.35ms] Prompt berhasil dibangun (2071 karakter)
+
+[2025-12-14 16:32:21] [604.11ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-4-maverick:free)
+
+[2025-12-14 16:32:23] [2603.28ms] Request selesai dikirim, menunggu response dari OpenRouter
+
+[2025-12-14 16:32:23] [2686.8ms] Menerima response dari OpenRouter
+
+[2025-12-14 16:32:23] [2774.77ms] Error: Response gagal dari OpenRouter (HTTP 404)
+
+[2025-12-14 16:32:23] [2861.81ms] Error: Gagal terhubung ke OpenRouter API (HTTP 404): {"error":{"message":"No endpoints found for meta-llama/llama-4-maverick:free.","code":404},"user_id":"user_2wrwgEzEoLOXtc78Sj8m21LnYd4"}
+
+[2025-12-14 16:34:33] [49.99ms] Proses dimulai
+
+[2025-12-14 16:34:33] [236.85ms] Membangun prompt untuk AI
+
+[2025-12-14 16:34:33] [322.71ms] Memvalidasi API Key untuk OpenRouter
+
+[2025-12-14 16:34:33] [578.57ms] API Key valid untuk OpenRouter
+
+[2025-12-14 16:34:34] [828.78ms] Prompt berhasil dibangun (2071 karakter)
+
+[2025-12-14 16:34:34] [913.35ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-14 16:34:59] [25743.34ms] Request selesai dikirim, menunggu response dari OpenRouter
+
+[2025-12-14 16:34:59] [25826.96ms] Menerima response dari OpenRouter
+
+[2025-12-14 16:34:59] [25912.76ms] Response berhasil diterima dari OpenRouter (3057 bytes)
+
+[2025-12-14 16:34:59] [25994.14ms] Content berhasil diekstrak dari OpenRouter (1595 karakter)
+
+[2025-12-14 16:34:59] [26116.38ms] Parsing JSON response
+
+[2025-12-14 16:34:59] [26199.96ms] JSON berhasil di-parse
+
+[2025-12-14 16:34:59] [26284.06ms] Proses selesai menggunakan OpenRouter
+
+[2025-12-14 16:34:59] [26367.47ms] Proses selesai - Rekomendasi berhasil dibuat
+
+[2025-12-14 18:14:28] [66.99ms] Proses dimulai
+
+[2025-12-14 18:14:28] [275.7ms] Membangun prompt untuk AI
+
+[2025-12-14 18:14:28] [363.94ms] Memvalidasi API Key untuk OpenRouter
+
+[2025-12-14 18:14:28] [448.85ms] API Key valid untuk OpenRouter
+
+[2025-12-14 18:14:28] [532.5ms] Prompt berhasil dibangun (2060 karakter)
+
+[2025-12-14 18:14:28] [615.8ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-14 18:14:58] [30443.72ms] Request selesai dikirim, menunggu response dari OpenRouter
+
+[2025-12-14 18:14:58] [30526.01ms] Menerima response dari OpenRouter
+
+[2025-12-14 18:14:58] [30609.67ms] Response berhasil diterima dari OpenRouter (3427 bytes)
+
+[2025-12-14 18:14:58] [30694.53ms] Content berhasil diekstrak dari OpenRouter (1844 karakter)
+
+[2025-12-14 18:14:58] [30778.65ms] Parsing JSON response
+
+[2025-12-14 18:14:58] [30864.9ms] JSON berhasil di-parse
+
+[2025-12-14 18:14:58] [30952.5ms] Proses selesai menggunakan OpenRouter
+
+[2025-12-14 18:14:59] [31035.23ms] Proses selesai - Rekomendasi berhasil dibuat
+
+[2025-12-14 18:49:04] [53.23ms] Proses dimulai
+
+[2025-12-14 18:49:04] [232.57ms] Membangun prompt untuk AI
+
+[2025-12-14 18:49:04] [337.42ms] Memvalidasi API Key untuk OpenRouter
+
+[2025-12-14 18:49:04] [421.27ms] API Key valid untuk OpenRouter
+
+[2025-12-14 18:49:04] [505.43ms] Prompt berhasil dibangun (2070 karakter)
+
+[2025-12-14 18:49:04] [685.46ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-14 18:49:32] [27977.9ms] Request selesai dikirim, menunggu response dari OpenRouter
+
+[2025-12-14 18:49:32] [28066.61ms] Menerima response dari OpenRouter
+
+[2025-12-14 18:49:32] [28153.73ms] Response berhasil diterima dari OpenRouter (3122 bytes)
+
+[2025-12-14 18:49:32] [28235.63ms] Content berhasil diekstrak dari OpenRouter (1630 karakter)
+
+[2025-12-14 18:49:32] [28322.58ms] Parsing JSON response
+
+[2025-12-14 18:49:32] [28407.01ms] JSON berhasil di-parse
+
+[2025-12-14 18:49:32] [28506.47ms] Proses selesai menggunakan OpenRouter
+
+[2025-12-14 18:49:32] [28603ms] Proses selesai - Rekomendasi berhasil dibuat
+
+[2025-12-14 21:27:37] [403.92ms] Proses dimulai
+
+[2025-12-14 21:27:38] [1473.76ms] Membangun prompt untuk AI
+
+[2025-12-14 21:27:38] [1595.42ms] Memvalidasi API Key untuk OpenRouter
+
+[2025-12-14 21:27:38] [1678.17ms] API Key valid untuk OpenRouter
+
+[2025-12-14 21:27:38] [1760.59ms] Prompt berhasil dibangun (2086 karakter)
+
+[2025-12-14 21:27:38] [1843.45ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-14 21:28:01] [24919.79ms] Request selesai dikirim, menunggu response dari OpenRouter
+
+[2025-12-14 21:28:01] [25004.89ms] Menerima response dari OpenRouter
+
+[2025-12-14 21:28:01] [25089.96ms] Response berhasil diterima dari OpenRouter (2837 bytes)
+
+[2025-12-14 21:28:01] [25173.2ms] Content berhasil diekstrak dari OpenRouter (1510 karakter)
+
+[2025-12-14 21:28:02] [25257.77ms] Parsing JSON response
+
+[2025-12-14 21:28:02] [25341.91ms] JSON berhasil di-parse
+
+[2025-12-14 21:28:02] [25426.92ms] Proses selesai menggunakan OpenRouter
+
+[2025-12-14 21:28:02] [25510.08ms] Proses selesai - Rekomendasi berhasil dibuat
+
+[2025-12-14 22:54:27] [59.99ms] Memulai proses generate rekomendasi
+
+[2025-12-14 22:54:27] [233.57ms] Mengumpulkan data transkrip mahasiswa
+
+[2025-12-14 22:54:27] [420.27ms] Data mahasiswa berhasil dikumpulkan
+
+[2025-12-14 22:54:27] [513.19ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-14 22:54:27] [606.75ms] Prompt AI berhasil dibangun (2062 karakter)
+
+[2025-12-14 22:54:28] [702.72ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-14 22:54:58] [31270.65ms] Response diterima dari OpenRouter AI
+
+[2025-12-14 22:54:58] [31359.3ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-14 22:54:58] [31444.65ms] Hasil AI berhasil diekstrak, parsing JSON...
+
+[2025-12-14 22:54:58] [31530.64ms] Rekomendasi berhasil diproses oleh AI
+
+[2025-12-14 22:54:58] [31618.97ms] Menyimpan hasil rekomendasi ke database
+
+[2025-12-14 22:55:00] [32806.99ms] Hasil berhasil disimpan ke database
+
+[2025-12-14 22:55:00] [32950.89ms] Proses selesai - Rekomendasi siap direview

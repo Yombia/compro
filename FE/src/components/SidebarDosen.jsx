@@ -1,36 +1,24 @@
 // SidebarDosen.jsx
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useAuthStore } from "../store/useAuthStore";
+import { useTheme } from "../context/ThemeContext";
 
 export default function SidebarDosen() {
   const navigate = useNavigate();
-  const [activeMenu, setActiveMenu] = useState("dashboard");
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const location = useLocation();
+  const { logout } = useAuthStore();
+  const { theme, toggleTheme } = useTheme();
 
   const handleLogout = () => {
-    // Logika logout
+    logout?.();
     navigate("/");
   };
 
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
-    // Logika toggle theme
-  };
-
-  const handleMenuClick = (menu) => {
-    setActiveMenu(menu);
-    // Navigasi ke halaman yang sesuai
-    if (menu === "dashboard") {
-      navigate("/dashboard-dosen");
-    } else if (menu === "profil") {
-      navigate("/profil-dosen");
-    }
-    // Tambahkan navigasi untuk menu lainnya
-  };
+  const isActive = (path) => location.pathname === path;
 
   return (
     <aside className="w-72 flex flex-col px-4">
-      <div className="mt-6 mb-6 w-full bg-[#0D3B9A] text-white rounded-[36px] px-6 pt-8 pb-6 shadow-[0_18px_40px_rgba(15,23,42,0.65)] flex flex-col justify-between min-h-[calc(100vh-3rem)]">
+      <div className="mt-6 mb-6 w-full bg-[#0D3B9A] dark:bg-[#0B1F4B] text-white rounded-[36px] px-6 pt-8 pb-6 shadow-[0_18px_40px_rgba(15,23,42,0.65)] flex flex-col justify-between min-h-[calc(100vh-3rem)]">
         <div>
           <div className="mb-10">
             <p className="text-lg font-bold leading-tight">Smart Academic</p>
@@ -38,88 +26,56 @@ export default function SidebarDosen() {
           </div>
 
           <nav className="space-y-4 text-sm font-medium">
-            {/* Dashboard */}
             <button
               type="button"
-              onClick={() => handleMenuClick("dashboard")}
+              onClick={() => navigate("/dashboard-dosen")}
               className={`w-full flex items-center gap-3 rounded-[999px] px-4 py-3 ${
-                activeMenu === "dashboard"
+                isActive("/dashboard-dosen")
                   ? "bg-[#214A9A] shadow-md"
                   : "text-slate-100/80 hover:bg-[#214A9A] transition"
               }`}
             >
-              <span className={`h-2 w-2 rounded-full ${activeMenu === "dashboard" ? "bg-yellow-300" : "bg-slate-400"}`} />
-              <span>Dashboard</span>
+              <span className={`h-2 w-2 rounded-full ${isActive("/dashboard-dosen") ? "bg-yellow-300" : "bg-slate-400"}`} />
+              <span>Beranda</span>
             </button>
 
-            {/* Rencana Studi */}
             <button
               type="button"
-              onClick={() => handleMenuClick("rencana-studi")}
+              onClick={() => navigate("/rencana-studi-dosen")}
               className={`w-full flex items-center gap-3 rounded-[999px] px-4 py-3 ${
-                activeMenu === "rencana-studi"
+                isActive("/rencana-studi-dosen")
                   ? "bg-[#214A9A] shadow-md"
                   : "text-slate-100/80 hover:bg-[#214A9A] transition"
               }`}
             >
-              <span className={`h-2 w-2 rounded-full ${activeMenu === "rencana-studi" ? "bg-yellow-300" : "bg-slate-400"}`} />
+              <span className={`h-2 w-2 rounded-full ${isActive("/rencana-studi-dosen") ? "bg-yellow-300" : "bg-slate-400"}`} />
               <span>Rencana Studi</span>
             </button>
 
-            {/* Riwayat */}
             <button
               type="button"
-              onClick={() => handleMenuClick("riwayat")}
+              onClick={() => navigate("/riwayat-dosen")}
               className={`w-full flex items-center gap-3 rounded-[999px] px-4 py-3 ${
-                activeMenu === "riwayat"
+                isActive("/riwayat-dosen")
                   ? "bg-[#214A9A] shadow-md"
                   : "text-slate-100/80 hover:bg-[#214A9A] transition"
               }`}
             >
-              <span className={`h-2 w-2 rounded-full ${activeMenu === "riwayat" ? "bg-yellow-300" : "bg-slate-400"}`} />
+              <span className={`h-2 w-2 rounded-full ${isActive("/riwayat-dosen") ? "bg-yellow-300" : "bg-slate-400"}`} />
               <span>Riwayat</span>
             </button>
 
-            {/* Profil */}
             <button
               type="button"
-              onClick={() => handleMenuClick("profil")}
+              onClick={() => navigate("/profil-dosen")}
               className={`w-full flex items-center gap-3 rounded-[999px] px-4 py-3 ${
-                activeMenu === "profil"
+                isActive("/profil-dosen")
                   ? "bg-[#214A9A] shadow-md"
                   : "text-slate-100/80 hover:bg-[#214A9A] transition"
               }`}
             >
-              <span className={`h-2 w-2 rounded-full ${activeMenu === "profil" ? "bg-yellow-300" : "bg-slate-400"}`} />
+              <span className={`h-2 w-2 rounded-full ${isActive("/profil-dosen") ? "bg-yellow-300" : "bg-slate-400"}`} />
               <span>Profil</span>
-            </button>
-
-            {/* KELOLA DATA (Opsional) */}
-            <button
-              type="button"
-              onClick={() => handleMenuClick("kelola-data")}
-              className={`w-full flex items-center gap-3 rounded-[999px] px-4 py-3 ${
-                activeMenu === "kelola-data"
-                  ? "bg-[#214A9A] shadow-md"
-                  : "text-slate-100/80 hover:bg-[#214A9A] transition"
-              }`}
-            >
-              <span className={`h-2 w-2 rounded-full ${activeMenu === "kelola-data" ? "bg-yellow-300" : "bg-slate-400"}`} />
-              <span>Kelola Data</span>
-            </button>
-
-            {/* LAPORAN (Opsional) */}
-            <button
-              type="button"
-              onClick={() => handleMenuClick("laporan")}
-              className={`w-full flex items-center gap-3 rounded-[999px] px-4 py-3 ${
-                activeMenu === "laporan"
-                  ? "bg-[#214A9A] shadow-md"
-                  : "text-slate-100/80 hover:bg-[#214A9A] transition"
-              }`}
-            >
-              <span className={`h-2 w-2 rounded-full ${activeMenu === "laporan" ? "bg-yellow-300" : "bg-slate-400"}`} />
-              <span>Laporan</span>
             </button>
           </nav>
         </div>
@@ -136,10 +92,10 @@ export default function SidebarDosen() {
 
           <button
             type="button"
-            onClick={toggleDarkMode}
+            onClick={toggleTheme}
             className="h-11 w-11 rounded-full bg-[#FACC15] shadow-[0_12px_30px_rgba(0,0,0,0.45)] flex items-center justify-center text-xl hover:scale-105 transition-transform"
           >
-            {isDarkMode ? "☀️" : "🌙"}
+            {theme === "dark" ? "☀️" : "🌙"}
           </button>
         </div>
       </div>

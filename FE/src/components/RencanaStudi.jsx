@@ -14,7 +14,7 @@ export default function RencanaStudiPage() {
     learningPreference: "",
   });
 
-  // Fungsi handle submit form (pastikan hanya ada satu fungsi ini)
+  // Fungsi handle submit form 
   const handleFormSubmit = (e) => {
     e.preventDefault(); // Jangan biarkan form melakukan refresh
     setStep2Data(formData); // Simpan data ke store Zustand
