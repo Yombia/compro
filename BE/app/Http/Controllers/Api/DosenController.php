@@ -568,6 +568,8 @@ class DosenController extends Controller
                     'id' => $rencana->kelas->id,
                     'nama_kelas' => $rencana->kelas->nama_kelas,
                     'kode_kelas' => $rencana->kelas->kode_kelas,
+                    'semester' => $rencana->kelas->semester,
+                    'tahun_ajaran' => $rencana->kelas->tahun_ajaran,
                 ] : null,
                 'mata_kuliah' => $rencana->details->map(function ($detail) {
                     $mataKuliah = $detail->mataKuliah;

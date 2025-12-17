@@ -65,6 +65,7 @@ export default function DashboardDosen() {
   // verify popup state
   const [showVerifyPopup, setShowVerifyPopup] = useState(false);
   const [verifyAction, setVerifyAction] = useState(null);
+  const [rejecting, setRejecting] = useState(false);
 
   // review form state (setelah generate AI selesai)
   const [showReviewForm, setShowReviewForm] = useState(false);
@@ -337,32 +338,51 @@ export default function DashboardDosen() {
     setShowVerifyPopup(true);
   }
 
+  async function rejectRencanaStudiDirect(student) {
+    try {
+      setRejecting(true);
+      await api.dosen.tolakRencanaStudi(student.rencana_studi_id);
+
+      setStudents((prev) =>
+        prev.map((s) =>
+          s.nim === student.nim ? { ...s, status: "Ditolak" } : s
+        )
+      );
+
+      setSelectedStudent((prev) => (prev ? { ...prev, status: "Ditolak" } : prev));
+      setShowDetailPopup(false);
+      void fetchMahasiswaData(true);
+    } catch (error) {
+      console.error("Error rejecting rencana studi:", error);
+      alert("Gagal menolak rencana studi. Silakan coba lagi.");
+    } finally {
+      setRejecting(false);
+    }
+  }
+
   function onPrepareReject() {
-    if (!selectedStudent) return;
-    setVerifyAction("reject");
-    setShowVerifyPopup(true);
+    if (!selectedStudent || rejecting) return;
+    const confirmed = window.confirm(
+      `Apakah Anda yakin ingin menolak rencana studi ${selectedStudent.name}?`
+    );
+    if (!confirmed) return;
+    void rejectRencanaStudiDirect(selectedStudent);
   }
 
   function onVerifyContinue() {
     if (!selectedStudent || !verifyAction) return;
     setShowVerifyPopup(false);
-    setShowDetailPopup(false);
-    setProcessingStudent(selectedStudent);
-    setProcessingAction(verifyAction);
-    
-    if (verifyAction === "reject") {
-      // Untuk reject, langsung proses
-      startProcessingFlow(verifyAction, selectedStudent);
-    } else if (verifyAction === "approve") {
-      // Jika approve, cek apakah sudah ada mata kuliah
+    if (verifyAction === "approve") {
+      setShowDetailPopup(false);
+
       if (!selectedStudent.rencana || selectedStudent.rencana.length === 0) {
-        // Belum ada MK → generate AI dulu
-        startGenerateAndApproveFlow(selectedStudent);
+        void startGenerateAndApproveFlow(selectedStudent);
       } else {
-        // Sudah ada MK (status Tertunda) → langsung tampilkan review form
-        showReviewFormDirectly(selectedStudent);
+        void showReviewFormDirectly(selectedStudent);
       }
     }
+
+    setVerifyAction(null);
   }
 
   async function showReviewFormDirectly(student) {
@@ -1505,14 +1525,18 @@ export default function DashboardDosen() {
             <div className="flex gap-4 pt-6 mt-6 border-t border-white/20">
               <button
                 onClick={onPrepareReject}
-                disabled={selectedStudent.status === 'Disetujui' || selectedStudent.status === 'Ditolak'}
+                disabled={
+                  selectedStudent.status === 'Disetujui' ||
+                  selectedStudent.status === 'Ditolak' ||
+                  rejecting
+                }
                 className={`flex-1 px-6 py-3 rounded-xl font-semibold transition ${
-                  selectedStudent.status === 'Disetujui' || selectedStudent.status === 'Ditolak'
+                  selectedStudent.status === 'Disetujui' || selectedStudent.status === 'Ditolak' || rejecting
                     ? 'bg-gray-400 cursor-not-allowed opacity-50'
                     : 'bg-red-500 hover:bg-red-600'
                 }`}
               >
-                Tolak
+                {rejecting ? 'Memproses...' : 'Tolak'}
               </button>
               <button
                 onClick={onPrepareApprove}

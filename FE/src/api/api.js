@@ -1,290 +1,405 @@
 // src/api/api.js
 
-const sanitizeBaseUrl = (baseUrl) => {
-  if (!baseUrl) {
-    return '';
-  }
+const API_BASE_URL = 'http://localhost:8000/api';
 
-  return baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
-};
-
-const envBaseUrl = typeof import.meta !== 'undefined' ? import.meta.env?.VITE_API_BASE_URL : undefined;
-const API_BASE_URL = sanitizeBaseUrl(envBaseUrl ?? 'http://localhost:8000/api');
-
-const buildUrl = (path) => {
-  const normalizedPath = path.startsWith('/') ? path : `/${path}`;
-  return `${API_BASE_URL}${normalizedPath}`;
-};
-
+// Helper untuk mengambil token dari localStorage
 const getAuthToken = () => {
   return localStorage.getItem('auth_token');
 };
 
+// Helper untuk menyimpan token ke localStorage
 const setAuthToken = (token) => {
   localStorage.setItem('auth_token', token);
 };
 
+// Helper untuk menghapus token dari localStorage
 const removeAuthToken = () => {
   localStorage.removeItem('auth_token');
 };
 
-const CACHE_TTL_MS = 2 * 60 * 1000;
-let dosenProfileCache = null;
-let dosenProfileTimestamp = 0;
-let dosenProfilePromise = null;
-let dosenMahasiswaCache = null;
-let dosenMahasiswaTimestamp = 0;
-let dosenMahasiswaPromise = null;
-
-const shouldUseCache = (timestamp) => {
-  if (!timestamp) {
-    return false;
-  }
-
-  return Date.now() - timestamp < CACHE_TTL_MS;
-};
-
-const clearDosenCache = () => {
-  dosenProfileCache = null;
-  dosenProfileTimestamp = 0;
-  dosenProfilePromise = null;
-  dosenMahasiswaCache = null;
-  dosenMahasiswaTimestamp = 0;
-  dosenMahasiswaPromise = null;
-};
-
 export const clearApiCache = () => {
-  clearDosenCache();
-};
-
-const request = async (path, { method = 'GET', body, headers = {}, auth = true } = {}) => {
-  const finalHeaders = {
-    Accept: 'application/json',
-    ...headers,
-  };
-
-  let formattedBody = body;
-
-  if (body && !(body instanceof FormData)) {
-    finalHeaders['Content-Type'] = 'application/json';
-    formattedBody = JSON.stringify(body);
-  }
-
-  if (auth) {
-    const token = getAuthToken();
-
-    if (!token) {
-      throw new Error('Token tidak ditemukan, silakan login ulang');
-    }
-
-    finalHeaders.Authorization = `Bearer ${token}`;
-  }
-
-  let response;
-
   try {
-    response = await fetch(buildUrl(path), {
-      method,
-      headers: finalHeaders,
-      body: formattedBody,
-    });
+    const cacheKeys = [
+      'api_cache',
+      'mahasiswa_cache',
+      'riwayat_cache',
+      'dashboard_cache',
+    ];
+
+    cacheKeys.forEach((key) => localStorage.removeItem(key));
   } catch (error) {
-    throw new Error('Gagal terhubung ke server');
+    console.error('Gagal membersihkan cache API:', error);
   }
-
-  if (!response.ok) {
-    let errorMessage = 'Permintaan gagal';
-
-    try {
-      const errorPayload = await response.json();
-      errorMessage = errorPayload.message ?? errorMessage;
-
-      if (errorPayload.errors) {
-        const firstError = Object.values(errorPayload.errors)[0];
-
-        if (Array.isArray(firstError) && firstError.length > 0) {
-          errorMessage = firstError[0];
-        }
-      }
-    } catch (parseError) {
-      // Abaikan jika respons gagal di-parse
-    }
-
-    throw new Error(errorMessage);
-  }
-
-  if (response.status === 204) {
-    return null;
-  }
-
-  return response.json();
 };
 
 export const api = {
+  // Auth endpoints
   login: async (email, password) => {
-    const data = await request('/login', {
+    const response = await fetch(`${API_BASE_URL}/login`, {
       method: 'POST',
-      body: { email, password },
-      auth: false,
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
     });
 
-    if (data.token) {
-      setAuthToken(data.token);
-      clearDosenCache();
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || 'Login gagal');
     }
 
+    const data = await response.json();
+    
+    // Simpan token ke localStorage
+    if (data.token) {
+      setAuthToken(data.token);
+    }
+    
     return data;
   },
 
   logout: async () => {
-    try {
-      return await request('/logout', {
-        method: 'POST',
-      });
-    } finally {
-      clearDosenCache();
-      removeAuthToken();
-    }
+    const token = getAuthToken();
+    const response = await fetch(`${API_BASE_URL}/logout`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    // Hapus token dari localStorage
+    removeAuthToken();
+    
+    return await response.json();
   },
 
   me: async () => {
-    return request('/me');
-  },
-
-  mahasiswa: {
-    getProfile: async () => {
-      return request('/mahasiswa/profile');
-    },
-
-    submitRencanaStudi: async (payload) => {
-      return request('/mahasiswa/recommendation/submit', {
-        method: 'POST',
-        body: payload,
-      });
-    },
-
-    getRiwayat: async () => {
-      return request('/mahasiswa/riwayat');
-    },
-  },
-
-  getRencanaStudiDetail: async (id) => {
-    return request(`/rencana-studi/${id}`);
-  },
-
-  updateStatusRencanaStudi: async (id, status) => {
-    return request(`/rencana-studi/${id}`, {
-      method: 'PUT',
-      body: { status },
+    const token = getAuthToken();
+    const response = await fetch(`${API_BASE_URL}/me`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
     });
+
+    if (!response.ok) {
+      throw new Error('Gagal mengambil data user');
+    }
+
+    return await response.json();
   },
 
-  dosen: {
-    getProfile: async ({ force = false } = {}) => {
-      if (!force && dosenProfileCache && shouldUseCache(dosenProfileTimestamp)) {
-        return dosenProfileCache;
-      }
-
-      if (!force && dosenProfilePromise) {
-        return dosenProfilePromise;
-      }
-
-      const loadProfile = (async () => {
-        const data = await request('/dosen/profile');
-        dosenProfileCache = data;
-        dosenProfileTimestamp = Date.now();
-        return data;
-      })();
-
-      dosenProfilePromise = loadProfile;
-
-      try {
-        return await loadProfile;
-      } finally {
-        dosenProfilePromise = null;
-      }
-    },
-
-    getDashboard: async () => {
-      return request('/dosen/dashboard');
-    },
-
-    getMahasiswa: async ({ force = false } = {}) => {
-      if (!force && dosenMahasiswaCache && shouldUseCache(dosenMahasiswaTimestamp)) {
-        return dosenMahasiswaCache;
-      }
-
-      if (!force && dosenMahasiswaPromise) {
-        return dosenMahasiswaPromise;
-      }
-
-      const loadMahasiswa = (async () => {
-        const data = await request('/dosen/mahasiswa');
-        dosenMahasiswaCache = data;
-        dosenMahasiswaTimestamp = Date.now();
-        return data;
-      })();
-
-      dosenMahasiswaPromise = loadMahasiswa;
-
-      try {
-        return await loadMahasiswa;
-      } finally {
-        dosenMahasiswaPromise = null;
-      }
-    },
-
-    getDetailRencanaStudi: async (id) => {
-      return request(`/dosen/rencana-studi/${id}`);
-    },
-
-    setujuiRencanaStudi: async (id, catatan = null) => {
-      return request(`/dosen/rencana-studi/${id}/setujui`, {
-        method: 'POST',
-        body: { catatan },
-      });
-    },
-
-    tolakRencanaStudi: async (id, catatan = null) => {
-      return request(`/dosen/rencana-studi/${id}/tolak`, {
-        method: 'POST',
-        body: { catatan },
-      });
-    },
-
-    cancelRencanaStudi: async (id) => {
-      return request(`/dosen/rencana-studi/${id}/tolak`, {
-        method: 'POST',
-        body: { catatan: 'Dibatalkan oleh dosen' },
-      });
-    },
-
-    getRiwayat: async () => {
-      return request('/dosen/riwayat');
-    },
-
-    generateRekomendasi: async (rencanaStudiId) => {
-      return request(`/dosen/rencana-studi/${rencanaStudiId}/generate`, {
-        method: 'POST',
-      });
-    },
-
-    getRecommendationStatus: async (sessionId) => {
-      return request(`/dosen/recommendation/status/${sessionId}`);
-    },
-
-    getAllMataKuliah: async () => {
-      return request('/dosen/mata-kuliah');
-    },
-
-    updateMataKuliah: async (rencanaStudiId, mataKuliah, catatan = null) => {
-      return request(`/dosen/rencana-studi/${rencanaStudiId}/update-mata-kuliah`, {
-        method: 'PUT',
-        body: {
-          mata_kuliah: mataKuliah,
-          catatan,
+  // Pengajuan rencana studi mahasiswa
+  mahasiswa: {
+    // Get profile mahasiswa
+    getProfile: async () => {
+      const token = getAuthToken();
+      const response = await fetch(`${API_BASE_URL}/mahasiswa/profile`, {
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
       });
+
+      if (!response.ok) {
+        throw new Error('Gagal mengambil data profil');
+      }
+
+      return await response.json();
+    },
+
+    submitRencanaStudi: async (data) => {
+      const token = getAuthToken();
+      const response = await fetch(`${API_BASE_URL}/mahasiswa/recommendation/submit`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || 'Gagal submit rencana studi');
+      }
+
+      return await response.json();
+    },
+
+    // Get riwayat mahasiswa
+    getRiwayat: async () => {
+      const token = getAuthToken();
+      const response = await fetch(`${API_BASE_URL}/mahasiswa/riwayat`, {
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Gagal mengambil riwayat');
+      }
+
+      return await response.json();
+    },
+  },
+
+  // Mendapatkan detail rencana studi berdasarkan ID
+  getRencanaStudiDetail: async (id) => {
+    const token = getAuthToken();
+    const response = await fetch(`${API_BASE_URL}/rencana-studi/${id}`, {
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+    return await response.json();
+  },
+
+  // Mengupdate status pengajuan
+  updateStatusRencanaStudi: async (id, status) => {
+    const token = getAuthToken();
+    const response = await fetch(`${API_BASE_URL}/rencana-studi/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify({ status }),
+    });
+    return await response.json();
+  },
+
+  // Dosen endpoints
+  dosen: {
+    // Get profile dosen
+    getProfile: async () => {
+      const token = getAuthToken();
+      const response = await fetch(`${API_BASE_URL}/dosen/profile`, {
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Gagal mengambil data profil');
+      }
+
+      return await response.json();
+    },
+
+    // Get dashboard data
+    getDashboard: async () => {
+      const token = getAuthToken();
+      const response = await fetch(`${API_BASE_URL}/dosen/dashboard`, {
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Gagal mengambil data dashboard');
+      }
+
+      return await response.json();
+    },
+
+    // Get list mahasiswa
+    getMahasiswa: async () => {
+      const token = getAuthToken();
+      const response = await fetch(`${API_BASE_URL}/dosen/mahasiswa`, {
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Gagal mengambil data mahasiswa');
+      }
+
+      return await response.json();
+    },
+
+    // Get detail rencana studi
+    getDetailRencanaStudi: async (id) => {
+      const token = getAuthToken();
+      const response = await fetch(`${API_BASE_URL}/dosen/rencana-studi/${id}`, {
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Gagal mengambil detail rencana studi');
+      }
+
+      return await response.json();
+    },
+
+    // Setujui rencana studi
+    setujuiRencanaStudi: async (id, catatan = null) => {
+      const token = getAuthToken();
+      const response = await fetch(`${API_BASE_URL}/dosen/rencana-studi/${id}/setujui`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ catatan }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Gagal menyetujui rencana studi');
+      }
+
+      return await response.json();
+    },
+
+    // Tolak rencana studi
+    tolakRencanaStudi: async (id, catatan = null) => {
+      const token = getAuthToken();
+      const response = await fetch(`${API_BASE_URL}/dosen/rencana-studi/${id}/tolak`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ catatan }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Gagal menolak rencana studi');
+      }
+
+      return await response.json();
+    },
+
+    // Cancel rencana studi
+    cancelRencanaStudi: async (id) => {
+      const token = getAuthToken();
+      const response = await fetch(`${API_BASE_URL}/dosen/rencana-studi/${id}/tolak`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ catatan: 'Dibatalkan oleh dosen' }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Gagal membatalkan rencana studi');
+      }
+
+      return await response.json();
+    },
+
+    // Get riwayat
+    getRiwayat: async () => {
+      const token = getAuthToken();
+      const response = await fetch(`${API_BASE_URL}/dosen/riwayat`, {
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Gagal mengambil riwayat');
+      }
+
+      return await response.json();
+    },
+
+    // Generate AI recommendation
+    generateRekomendasi: async (rencanaStudiId) => {
+      const token = getAuthToken();
+      const response = await fetch(`${API_BASE_URL}/dosen/rencana-studi/${rencanaStudiId}/generate`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || 'Gagal generate rekomendasi');
+      }
+
+      return await response.json();
+    },
+
+    // Get recommendation status (polling)
+    getRecommendationStatus: async (sessionId) => {
+      const token = getAuthToken();
+      const response = await fetch(`${API_BASE_URL}/dosen/recommendation/status/${sessionId}`, {
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Gagal mengambil status');
+      }
+
+      return await response.json();
+    },
+
+    // Get all mata kuliah
+    getAllMataKuliah: async () => {
+      const token = getAuthToken();
+      const response = await fetch(`${API_BASE_URL}/dosen/mata-kuliah`, {
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Gagal mengambil data mata kuliah');
+      }
+
+      return await response.json();
+    },
+
+    // Update mata kuliah hasil rekomendasi
+    updateMataKuliah: async (rencanaStudiId, mataKuliah, catatan = null) => {
+      const token = getAuthToken();
+      const response = await fetch(`${API_BASE_URL}/dosen/rencana-studi/${rencanaStudiId}/update-mata-kuliah`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ 
+          mata_kuliah: mataKuliah,
+          catatan: catatan 
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Gagal update mata kuliah');
+      }
+
+      return await response.json();
     },
   },
 };

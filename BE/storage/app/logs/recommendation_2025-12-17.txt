@@ -1,0 +1,257 @@
+[2025-12-17 10:13:46] [369.98ms] Memulai proses generate rekomendasi
+
+[2025-12-17 10:13:47] [1264.25ms] Mengumpulkan data transkrip mahasiswa
+
+[2025-12-17 10:13:48] [2557.39ms] Data mahasiswa berhasil dikumpulkan
+
+[2025-12-17 10:13:49] [3688.75ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-17 10:13:50] [3821.19ms] Prompt AI berhasil dibangun (2082 karakter)
+
+[2025-12-17 10:13:50] [3948.75ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-17 10:14:12] [26244.27ms] Mengulang koneksi ke OpenRouter...
+
+[2025-12-17 10:14:34] [47934.33ms] Koneksi ke OpenRouter gagal: cURL error 28: Operation timed out after 20001 milliseconds with 506 bytes received (see https://curl.haxx.se/libcurl/c/libcurl-errors.html) for https://openrouter.ai/api/v1/chat/completions
+
+[2025-12-17 10:14:34] [48078.88ms] Error: Tidak dapat terhubung ke layanan OpenRouter: cURL error 28: Operation timed out after 20001 milliseconds with 506 bytes received (see https://curl.haxx.se/libcurl/c/libcurl-errors.html) for https://openrouter.ai/api/v1/chat/completions
+
+[2025-12-17 10:14:38] [62.14ms] Memulai proses generate rekomendasi
+
+[2025-12-17 10:14:38] [198.17ms] Mengumpulkan data transkrip mahasiswa
+
+[2025-12-17 10:14:40] [1460.91ms] Data mahasiswa berhasil dikumpulkan
+
+[2025-12-17 10:14:41] [2599.75ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-17 10:14:41] [2729.45ms] Prompt AI berhasil dibangun (2082 karakter)
+
+[2025-12-17 10:14:41] [2857.51ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-17 10:15:01] [23031.12ms] Mengulang koneksi ke OpenRouter...
+
+[2025-12-17 10:15:21] [42634.65ms] Response diterima dari OpenRouter AI
+
+[2025-12-17 10:15:22] [43783.21ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-17 10:15:23] [44921.45ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-17 10:15:23] [45062.32ms] Rekomendasi berhasil diproses oleh AI
+
+[2025-12-17 10:15:24] [46211.21ms] Menyimpan hasil rekomendasi ke database
+
+[2025-12-17 10:15:26] [47479.94ms] Hasil berhasil disimpan ke database
+
+[2025-12-17 10:15:27] [48728.6ms] Proses selesai - Rekomendasi siap direview
+
+[2025-12-17 20:08:39] [397.77ms] Memulai proses generate rekomendasi
+
+[2025-12-17 20:08:40] [1798.64ms] Mengumpulkan data transkrip mahasiswa
+
+[2025-12-17 20:08:43] [3931.01ms] Data mahasiswa berhasil dikumpulkan
+
+[2025-12-17 20:08:45] [6111.5ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-17 20:08:45] [6245.74ms] Prompt AI berhasil dibangun (2079 karakter)
+
+[2025-12-17 20:08:45] [6390.73ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-17 20:09:07] [28643.12ms] Mengulang koneksi ke OpenRouter...
+
+[2025-12-17 20:09:29] [50569.34ms] Koneksi ke OpenRouter gagal: cURL error 28: Operation timed out after 20006 milliseconds with 473 bytes received (see https://curl.haxx.se/libcurl/c/libcurl-errors.html) for https://openrouter.ai/api/v1/chat/completions
+
+[2025-12-17 20:09:30] [51185.41ms] Error: Tidak dapat terhubung ke layanan OpenRouter: cURL error 28: Operation timed out after 20006 milliseconds with 473 bytes received (see https://curl.haxx.se/libcurl/c/libcurl-errors.html) for https://openrouter.ai/api/v1/chat/completions
+
+[2025-12-17 20:09:34] [551.59ms] Memulai proses generate rekomendasi
+
+[2025-12-17 20:09:34] [694.46ms] Mengumpulkan data transkrip mahasiswa
+
+[2025-12-17 20:09:36] [1978.34ms] Data mahasiswa berhasil dikumpulkan
+
+[2025-12-17 20:09:37] [3352.7ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-17 20:09:37] [3494.56ms] Prompt AI berhasil dibangun (2079 karakter)
+
+[2025-12-17 20:09:37] [3627.44ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-17 20:09:48] [14035.37ms] Mengulang koneksi ke OpenRouter...
+
+[2025-12-17 20:10:10] [35969.48ms] Koneksi ke OpenRouter gagal: cURL error 28: Operation timed out after 20000 milliseconds with 506 bytes received (see https://curl.haxx.se/libcurl/c/libcurl-errors.html) for https://openrouter.ai/api/v1/chat/completions
+
+[2025-12-17 20:10:10] [36157.13ms] Error: Tidak dapat terhubung ke layanan OpenRouter: cURL error 28: Operation timed out after 20000 milliseconds with 506 bytes received (see https://curl.haxx.se/libcurl/c/libcurl-errors.html) for https://openrouter.ai/api/v1/chat/completions
+
+[2025-12-17 20:19:02] [308.1ms] Memulai proses generate rekomendasi
+
+[2025-12-17 20:19:03] [699.38ms] Mengumpulkan data transkrip mahasiswa
+
+[2025-12-17 20:19:05] [3205.81ms] Data mahasiswa berhasil dikumpulkan
+
+[2025-12-17 20:19:07] [4589.52ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-17 20:19:07] [4960.51ms] Prompt AI berhasil dibangun (2079 karakter)
+
+[2025-12-17 20:19:08] [6120.45ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-17 20:19:29] [26639.92ms] Response diterima dari OpenRouter AI
+
+[2025-12-17 20:19:30] [28035.19ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-17 20:19:31] [29184.99ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-17 20:19:32] [29803.48ms] Rekomendasi berhasil diproses oleh AI
+
+[2025-12-17 20:19:33] [31181.99ms] Menyimpan hasil rekomendasi ke database
+
+[2025-12-17 20:19:35] [33271.75ms] Hasil berhasil disimpan ke database
+
+[2025-12-17 20:19:37] [34656.76ms] Proses selesai - Rekomendasi siap direview
+
+[2025-12-17 20:45:31] [314.6ms] Memulai proses generate rekomendasi
+
+[2025-12-17 20:45:31] [471.91ms] Mengumpulkan data transkrip mahasiswa
+
+[2025-12-17 20:45:33] [2468.74ms] Data mahasiswa berhasil dikumpulkan
+
+[2025-12-17 20:45:35] [4556.88ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-17 20:45:35] [4700.67ms] Prompt AI berhasil dibangun (2086 karakter)
+
+[2025-12-17 20:45:36] [5785.75ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-17 20:45:57] [26192.18ms] Mengulang koneksi ke OpenRouter...
+
+[2025-12-17 20:46:18] [47927.45ms] Koneksi ke OpenRouter gagal: cURL error 28: Operation timed out after 20004 milliseconds with 473 bytes received (see https://curl.haxx.se/libcurl/c/libcurl-errors.html) for https://openrouter.ai/api/v1/chat/completions
+
+[2025-12-17 20:46:19] [48667.35ms] Error: Tidak dapat terhubung ke layanan OpenRouter: cURL error 28: Operation timed out after 20004 milliseconds with 473 bytes received (see https://curl.haxx.se/libcurl/c/libcurl-errors.html) for https://openrouter.ai/api/v1/chat/completions
+
+[2025-12-17 20:46:33] [320.68ms] Memulai proses generate rekomendasi
+
+[2025-12-17 20:46:33] [480.76ms] Mengumpulkan data transkrip mahasiswa
+
+[2025-12-17 20:46:35] [2256.57ms] Data mahasiswa berhasil dikumpulkan
+
+[2025-12-17 20:46:36] [3402.56ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-17 20:46:36] [3785.56ms] Prompt AI berhasil dibangun (2086 karakter)
+
+[2025-12-17 20:46:37] [4169.46ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-17 20:46:57] [24837.22ms] Mengulang koneksi ke OpenRouter...
+
+[2025-12-17 20:47:20] [47000.1ms] Koneksi ke OpenRouter gagal: cURL error 28: Operation timed out after 20003 milliseconds with 506 bytes received (see https://curl.haxx.se/libcurl/c/libcurl-errors.html) for https://openrouter.ai/api/v1/chat/completions
+
+[2025-12-17 20:47:20] [47385.96ms] Error: Tidak dapat terhubung ke layanan OpenRouter: cURL error 28: Operation timed out after 20003 milliseconds with 506 bytes received (see https://curl.haxx.se/libcurl/c/libcurl-errors.html) for https://openrouter.ai/api/v1/chat/completions
+
+[2025-12-17 20:54:54] [317.13ms] Memulai proses generate rekomendasi
+
+[2025-12-17 20:54:54] [711.33ms] Mengumpulkan data transkrip mahasiswa
+
+[2025-12-17 20:54:55] [2007.34ms] Data mahasiswa berhasil dikumpulkan
+
+[2025-12-17 20:54:57] [3405.84ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-17 20:54:57] [3797.05ms] Prompt AI berhasil dibangun (2086 karakter)
+
+[2025-12-17 20:54:58] [4901.21ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-17 20:55:19] [25374.88ms] Mengulang koneksi ke OpenRouter...
+
+[2025-12-17 20:55:29] [36071.96ms] Error: cURL error 18: transfer closed with outstanding read data remaining (see https://curl.haxx.se/libcurl/c/libcurl-errors.html) for https://openrouter.ai/api/v1/chat/completions
+
+[2025-12-17 20:58:24] [73.88ms] Memulai proses generate rekomendasi
+
+[2025-12-17 20:58:24] [469.02ms] Mengumpulkan data transkrip mahasiswa
+
+[2025-12-17 20:58:27] [3183.7ms] Data mahasiswa berhasil dikumpulkan
+
+[2025-12-17 20:58:28] [4564.77ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-17 20:58:28] [4950.52ms] Prompt AI berhasil dibangun (2086 karakter)
+
+[2025-12-17 20:58:29] [5566.27ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-17 20:58:49] [25749.7ms] Mengulang koneksi ke OpenRouter...
+
+[2025-12-17 20:59:11] [47658.49ms] Koneksi ke OpenRouter gagal: cURL error 28: Operation timed out after 20011 milliseconds with 506 bytes received (see https://curl.haxx.se/libcurl/c/libcurl-errors.html) for https://openrouter.ai/api/v1/chat/completions
+
+[2025-12-17 20:59:12] [48530.74ms] Error: Tidak dapat terhubung ke layanan OpenRouter: cURL error 28: Operation timed out after 20011 milliseconds with 506 bytes received (see https://curl.haxx.se/libcurl/c/libcurl-errors.html) for https://openrouter.ai/api/v1/chat/completions
+
+[2025-12-17 21:00:39] [45.01ms] Memulai proses generate rekomendasi
+
+[2025-12-17 21:00:39] [207.48ms] Mengumpulkan data transkrip mahasiswa
+
+[2025-12-17 21:00:40] [1393.25ms] Data mahasiswa berhasil dikumpulkan
+
+[2025-12-17 21:00:41] [2532.11ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-17 21:00:41] [2612.69ms] Prompt AI berhasil dibangun (2086 karakter)
+
+[2025-12-17 21:00:41] [2694.6ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-17 21:01:01] [22819.81ms] Mengulang koneksi ke OpenRouter...
+
+[2025-12-17 21:01:23] [44443.43ms] Koneksi ke OpenRouter gagal: cURL error 28: Operation timed out after 20007 milliseconds with 484 bytes received (see https://curl.haxx.se/libcurl/c/libcurl-errors.html) for https://openrouter.ai/api/v1/chat/completions
+
+[2025-12-17 21:01:23] [44530.26ms] Error: Tidak dapat terhubung ke layanan OpenRouter: cURL error 28: Operation timed out after 20007 milliseconds with 484 bytes received (see https://curl.haxx.se/libcurl/c/libcurl-errors.html) for https://openrouter.ai/api/v1/chat/completions
+
+[2025-12-17 21:01:54] [42.5ms] Memulai proses generate rekomendasi
+
+[2025-12-17 21:01:54] [136.64ms] Mengumpulkan data transkrip mahasiswa
+
+[2025-12-17 21:01:55] [1315.59ms] Data mahasiswa berhasil dikumpulkan
+
+[2025-12-17 21:01:56] [2400.88ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-17 21:01:56] [2482.58ms] Prompt AI berhasil dibangun (2086 karakter)
+
+[2025-12-17 21:01:56] [2567.47ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-17 21:02:17] [22694.91ms] Mengulang koneksi ke OpenRouter...
+
+[2025-12-17 21:02:38] [44314.37ms] Koneksi ke OpenRouter gagal: cURL error 28: Operation timed out after 20007 milliseconds with 506 bytes received (see https://curl.haxx.se/libcurl/c/libcurl-errors.html) for https://openrouter.ai/api/v1/chat/completions
+
+[2025-12-17 21:02:38] [44412.78ms] Error: Tidak dapat terhubung ke layanan OpenRouter: cURL error 28: Operation timed out after 20007 milliseconds with 506 bytes received (see https://curl.haxx.se/libcurl/c/libcurl-errors.html) for https://openrouter.ai/api/v1/chat/completions
+
+[2025-12-17 21:03:13] [56.8ms] Memulai proses generate rekomendasi
+
+[2025-12-17 21:03:13] [151.81ms] Mengumpulkan data transkrip mahasiswa
+
+[2025-12-17 21:03:14] [1320.07ms] Data mahasiswa berhasil dikumpulkan
+
+[2025-12-17 21:03:15] [2421.19ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-17 21:03:16] [2551.31ms] Prompt AI berhasil dibangun (2086 karakter)
+
+[2025-12-17 21:03:16] [2634.15ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-17 21:03:36] [22761.76ms] Mengulang koneksi ke OpenRouter...
+
+[2025-12-17 21:03:57] [44421.18ms] Koneksi ke OpenRouter gagal: cURL error 28: Operation timed out after 20008 milliseconds with 506 bytes received (see https://curl.haxx.se/libcurl/c/libcurl-errors.html) for https://openrouter.ai/api/v1/chat/completions
+
+[2025-12-17 21:03:58] [44544.1ms] Error: Tidak dapat terhubung ke layanan OpenRouter: cURL error 28: Operation timed out after 20008 milliseconds with 506 bytes received (see https://curl.haxx.se/libcurl/c/libcurl-errors.html) for https://openrouter.ai/api/v1/chat/completions
+
+[2025-12-17 21:04:24] [42.58ms] Memulai proses generate rekomendasi
+
+[2025-12-17 21:04:24] [138.77ms] Mengumpulkan data transkrip mahasiswa
+
+[2025-12-17 21:04:26] [1484.55ms] Data mahasiswa berhasil dikumpulkan
+
+[2025-12-17 21:04:27] [2659.21ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-17 21:04:27] [2930.37ms] Prompt AI berhasil dibangun (2086 karakter)
+
+[2025-12-17 21:04:27] [3020.43ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-17 21:04:45] [20530.19ms] Response diterima dari OpenRouter AI
+
+[2025-12-17 21:04:46] [21622.55ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-17 21:04:47] [22713.87ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-17 21:04:47] [22801.35ms] Rekomendasi berhasil diproses oleh AI
+
+[2025-12-17 21:04:48] [23895.62ms] Menyimpan hasil rekomendasi ke database
+
+[2025-12-17 21:04:49] [24412.1ms] Hasil berhasil disimpan ke database
+
+[2025-12-17 21:04:50] [25500.43ms] Proses selesai - Rekomendasi siap direview

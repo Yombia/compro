@@ -296,9 +296,9 @@ export default function RiwayatDosen() {
     );
 
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-2 md:p-4">
-        <div className="max-h-screen overflow-y-auto w-full flex justify-center px-2 md:px-4">
-          <div className="w-full max-w-[95vw] lg:max-w-6xl rounded-2xl md:rounded-3xl bg-[#0B3C9C] text-white shadow-[0_20px_60px_rgba(0,0,0,0.9)] border border-slate-700 p-4 md:p-6 lg:p-8 relative">
+      <div className="fixed inset-0 z-50 flex items-start md:items-center justify-center bg-black/70 backdrop-blur-sm p-2 md:p-6 overflow-y-auto">
+        <div className="w-full flex justify-center px-2 md:px-4">
+          <div className="w-full max-w-[95vw] lg:max-w-6xl rounded-2xl md:rounded-3xl bg-[#0B3C9C] text-white shadow-[0_20px_60px_rgba(0,0,0,0.9)] border border-slate-700 p-4 md:p-6 lg:p-8 relative max-h-[90vh] overflow-y-auto">
             <button
               type="button"
               onClick={onClose}
@@ -436,7 +436,7 @@ export default function RiwayatDosen() {
           </p>
         </header>
 
-        <div className="rounded-[32px] bg-[#020617] bg-gradient-to-br from-[#020617] via-[#020617] to-[#0f172a] text-white shadow-[0_18px_40px_rgba(15,23,42,0.85)] border border-slate-800/70 px-5 py-6 md:px-8 md:py-8">
+        <div className="rounded-[32px] bg-white bg-gradient-to-br from-white via-white to-slate-50 text-slate-900 shadow-[0_18px_40px_rgba(148,163,184,0.25)] border border-slate-200 px-5 py-6 md:px-8 md:py-8 dark:from-[#020617] dark:via-[#020617] dark:to-[#0f172a] dark:text-white dark:shadow-[0_18px_40px_rgba(15,23,42,0.85)] dark:border-slate-800/70">
           {loading ? (
             <div className="flex justify-center items-center py-20">
               <div className="text-center">
@@ -470,30 +470,30 @@ export default function RiwayatDosen() {
                 return (
                   <div
                     key={entry.id}
-                    className="rounded-2xl bg-slate-900/70 px-5 py-4 flex flex-col gap-4 border border-slate-800 hover:border-slate-600 transition-colors"
+                    className="rounded-2xl bg-white/90 px-5 py-4 flex flex-col gap-4 border border-slate-200 shadow-sm hover:border-blue-200 transition-colors dark:bg-slate-900/70 dark:border-slate-800 dark:hover:border-slate-600"
                   >
                     <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                       <div>
                         <div className="flex flex-wrap items-center gap-3 mb-1">
-                          <p className="font-semibold text-sm md:text-base">{entry.mahasiswa?.nama || "Mahasiswa"}</p>
+                          <p className="font-semibold text-sm md:text-base text-slate-800 dark:text-white">{entry.mahasiswa?.nama || "Mahasiswa"}</p>
                           <span
                             className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold ${statusInfo.badgeClass}`}
                           >
-                            <span className="h-2 w-2 rounded-full bg-slate-900/70" /> {statusInfo.label}
+                            <span className="h-2 w-2 rounded-full bg-slate-200 dark:bg-slate-900/70" /> {statusInfo.label}
                           </span>
                         </div>
-                        <p className="text-xs md:text-sm text-slate-300">
+                        <p className="text-xs md:text-sm text-slate-500 dark:text-slate-300">
                           NIM: {entry.mahasiswa?.nim || "-"} • Tanggal Pengajuan: {new Date(entry.created_at).toLocaleDateString("id-ID", {
                             day: "2-digit",
                             month: "2-digit",
                             year: "numeric",
                           })}
                         </p>
-                        <p className="text-xs md:text-sm text-slate-300 mt-1">Minat: {interestText}</p>
-                        <p className="text-xs md:text-sm text-slate-300 mt-1">Kelas: {entry.kelas?.nama_kelas || "-"}</p>
+                        <p className="text-xs md:text-sm text-slate-500 dark:text-slate-300 mt-1">Minat: {interestText}</p>
+                        <p className="text-xs md:text-sm text-slate-500 dark:text-slate-300 mt-1">Kelas: {entry.kelas?.nama_kelas || "-"}</p>
                       </div>
 
-                      <div className="flex flex-wrap items-center gap-4 text-xs md:text-sm text-slate-200">
+                      <div className="flex flex-wrap items-center gap-4 text-xs md:text-sm text-slate-600 dark:text-slate-200">
                         <div className="flex items-center gap-2">
                           <span className="h-2 w-2 rounded-full bg-emerald-400"></span>
                           <span>{jumlahMK} Mata Kuliah</span>
@@ -503,7 +503,7 @@ export default function RiwayatDosen() {
                           <span>{totalSKS} SKS</span>
                         </div>
                         {entry.catatan ? (
-                          <div className="flex items-center gap-2 text-slate-400">
+                          <div className="flex items-center gap-2 text-slate-500 dark:text-slate-400">
                             <span className="h-2 w-2 rounded-full bg-slate-500"></span>
                             <span className="max-w-[12rem] truncate" title={entry.catatan}>Catatan Dosen</span>
                           </div>
@@ -515,7 +515,7 @@ export default function RiwayatDosen() {
                       <button
                         type="button"
                         onClick={() => setActiveDetail(entry)}
-                        className="inline-flex items-center gap-2 rounded-full border border-slate-300/60 px-4 py-2 text-xs md:text-sm font-semibold text-slate-100 hover:bg-slate-100/10 transition"
+                        className="inline-flex items-center gap-2 rounded-full border border-slate-300 px-4 py-2 text-xs md:text-sm font-semibold text-slate-700 hover:bg-slate-100 transition dark:border-slate-300/60 dark:text-slate-100 dark:hover:bg-slate-100/10"
                       >
                         <span>👁️</span> Lihat Detail
                       </button>
