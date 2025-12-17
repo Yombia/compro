@@ -1,10 +1,11 @@
+// app.jsx
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Beranda from "./components/Beranda";
 import DashboardPage from "./components/Dashboard";
 import DashboardDosenPage from "./components/DashboardDosen"; // Dashboard khusus Dosen
 import Login from "./components/Login";
 import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
+// import Footer from "./components/Footer";  <-- HAPUS INI
 
 // Halaman Rencana Studi
 import RencanaStudiStep2 from "./components/RencanaStudiStep2";
@@ -31,7 +32,8 @@ function AppShell() {
 
   const { isAuthenticated, role } = useAuthStore();
 
-  // Navbar & footer cuma tampil di halaman landing "/"
+  // Navbar cuma tampil di halaman landing "/"
+  // Footer sudah dihapus karena sudah di-handle oleh gambar di dalam Beranda.jsx
   const showChrome = path === "/";
 
   // Route guard + cek role
@@ -52,7 +54,9 @@ function AppShell() {
 
   return (
     <div className="relative min-h-screen flex flex-col">
+      {/* Navbar tetap muncul di Home */}
       {showChrome && <Navbar />}
+      
       <main className={showChrome ? "flex-1" : "min-h-screen"}>
         <Routes>
           {/* Landing page */}
@@ -171,7 +175,9 @@ function AppShell() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
-      {showChrome && <Footer />}
+
+      {/* BAGIAN INI SUDAH DIHAPUS AGAR TIDAK MUNCUL FOOTER GANDA/PEPEK */}
+      {/* {showChrome && <Footer />} */} 
     </div>
   );
 }
