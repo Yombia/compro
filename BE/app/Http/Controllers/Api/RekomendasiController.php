@@ -43,7 +43,7 @@ class RekomendasiController extends Controller
                 'ipk' => (float) $mahasiswa->ipk,
                 'semester_saat_ini' => $mahasiswa->semester_saat_ini,
                 'sks_semester_ini' => $sksSemesterIni,
-                'total_sks' => $mahasiswa->total_sks,
+                'total_sks' => (int) $mahasiswa->total_sks,
                 'interests' => $mahasiswa->interests ?? [],
                 'future_focus' => $mahasiswa->future_focus,
                 'learning_preference' => $mahasiswa->learning_preference,
@@ -90,7 +90,7 @@ class RekomendasiController extends Controller
                         'semester' => $t->semester,
                         'kode_mk' => $t->kode_mk,
                         'nama_mk' => $t->nama_mk,
-                        'sks' => $t->sks,
+                        'sks' => (int) $t->sks,
                         'nilai' => $t->nilai,
                     ];
                 })->toArray();
@@ -100,7 +100,7 @@ class RekomendasiController extends Controller
                 return [
                     'kode_mk' => $c->kode_mk,
                     'nama_mk' => $c->nama_mk,
-                    'sks' => $c->sks,
+                    'sks' => (int) $c->sks,
                     'semester' => $c->semester,
                     'tipe' => 'Pilihan', // tipe bawaan
                 ];
@@ -270,18 +270,21 @@ class RekomendasiController extends Controller
                             'nim' => $mahasiswa->nim,
                             'prodi' => $mahasiswa->jurusan,
                             'ipk' => (float) $mahasiswa->ipk,
-                            'total_sks' => $mahasiswa->total_sks,
+                            'total_sks' => (int) $mahasiswa->total_sks,
                             'interests' => $mahasiswa->interests,
                             'future_focus' => $mahasiswa->future_focus,
                             'learning_preference' => $mahasiswa->learning_preference,
                         ],
+                        'total_sks' => $rs->details->reduce(function ($total, $detail) {
+                            return $total + (int) ($detail->mataKuliah?->sks ?? 0);
+                        }, 0),
                         'mata_kuliah' => $rs->details->map(function ($detail) {
                             $mk = $detail->mataKuliah;
                             return [
-                                'kode_mk' => $mk->kode_mk,
-                                'nama_mata_kuliah' => $mk->nama_mk,
-                                'sks' => $mk->sks,
-                                'bidang_minat' => $mk->bidang_minat ?? null,
+                                'kode_mk' => $mk?->kode_mk,
+                                'nama_mata_kuliah' => $mk?->nama_mk,
+                                'sks' => (int) ($mk?->sks ?? 0),
+                                'bidang_minat' => $mk?->bidang_minat ?? null,
                                 'alasan' => $detail->alasan,
                                 'tingkat_kecocokan' => $detail->tingkat_kecocokan,
                             ];

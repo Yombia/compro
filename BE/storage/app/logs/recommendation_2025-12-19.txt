@@ -1,0 +1,45 @@
+[2025-12-19 12:53:36] [333.07ms] Memulai proses generate rekomendasi
+
+[2025-12-19 12:53:37] [1144.84ms] Mengumpulkan data transkrip mahasiswa
+
+[2025-12-19 12:53:38] [2371.81ms] Data mahasiswa berhasil dikumpulkan
+
+[2025-12-19 12:53:39] [3463.68ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-19 12:53:40] [3548.54ms] Prompt AI berhasil dibangun (2082 karakter)
+
+[2025-12-19 12:53:40] [3633.15ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-19 12:54:02] [25624.53ms] Mengulang koneksi ke OpenRouter...
+
+[2025-12-19 12:54:23] [47275.12ms] Koneksi ke OpenRouter gagal: cURL error 28: Operation timed out after 20012 milliseconds with 506 bytes received (see https://curl.haxx.se/libcurl/c/libcurl-errors.html) for https://openrouter.ai/api/v1/chat/completions
+
+[2025-12-19 12:54:23] [47363.87ms] Error: Tidak dapat terhubung ke layanan OpenRouter: cURL error 28: Operation timed out after 20012 milliseconds with 506 bytes received (see https://curl.haxx.se/libcurl/c/libcurl-errors.html) for https://openrouter.ai/api/v1/chat/completions
+
+[2025-12-19 12:54:38] [45.98ms] Memulai proses generate rekomendasi
+
+[2025-12-19 12:54:38] [140.13ms] Mengumpulkan data transkrip mahasiswa
+
+[2025-12-19 12:54:40] [1327.13ms] Data mahasiswa berhasil dikumpulkan
+
+[2025-12-19 12:54:41] [2418.13ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-19 12:54:41] [2501.67ms] Prompt AI berhasil dibangun (2082 karakter)
+
+[2025-12-19 12:54:41] [2583.44ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-19 12:55:01] [22701.42ms] Mengulang koneksi ke OpenRouter...
+
+[2025-12-19 12:55:14] [35571.34ms] Response diterima dari OpenRouter AI
+
+[2025-12-19 12:55:15] [36668.1ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-19 12:55:16] [37771.48ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-19 12:55:16] [37856.14ms] Rekomendasi berhasil diproses oleh AI
+
+[2025-12-19 12:55:17] [38953.29ms] Menyimpan hasil rekomendasi ke database
+
+[2025-12-19 12:55:18] [39541.3ms] Hasil berhasil disimpan ke database
+
+[2025-12-19 12:55:19] [40630.93ms] Proses selesai - Rekomendasi siap direview

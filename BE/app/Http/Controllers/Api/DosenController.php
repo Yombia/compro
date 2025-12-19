@@ -121,7 +121,7 @@ class DosenController extends Controller
                 'submissionDate' => $rencanaStudi ? $rencanaStudi->tanggal_pengajuan->format('d/m/Y') : null,
                 'status' => $rencanaStudi ? $rencanaStudi->status : 'Belum Ada',
                 'ipk' => (float) $mhs->ipk,
-                'totalSks' => $mhs->total_sks,
+                'totalSks' => (int) $mhs->total_sks,
                 'interests' => $mhs->interests ?? [],
                 'futureFocus' => $mhs->future_focus,
                 'learningPreference' => $mhs->learning_preference,
@@ -151,17 +151,21 @@ class DosenController extends Controller
         $mhs = $rencanaStudi->mahasiswa;
         
         $mataKuliahList = $rencanaStudi->details->map(function($detail) {
+            $mataKuliah = $detail->mataKuliah;
+
             return [
-                'kode_mk' => $detail->mataKuliah->kode_mk,
-                'nama' => $detail->mataKuliah->nama_mk,
-                'sks' => $detail->mataKuliah->sks,
-                'bidang_minat' => $detail->mataKuliah->bidang_minat,
+                'kode_mk' => $mataKuliah?->kode_mk,
+                'nama' => $mataKuliah?->nama_mk,
+                'sks' => (int) ($mataKuliah?->sks ?? 0),
+                'bidang_minat' => $mataKuliah?->bidang_minat,
                 'alasan' => $detail->alasan,
                 'tingkat_kecocokan' => $detail->tingkat_kecocokan,
             ];
         });
 
-        $totalSks = $mataKuliahList->sum('sks');
+        $totalSks = $mataKuliahList->reduce(function ($total, $mataKuliah) {
+            return $total + (int) ($mataKuliah['sks'] ?? 0);
+        }, 0);
 
         return response()->json([
             'rencana_studi' => [
@@ -226,7 +230,7 @@ class DosenController extends Controller
                         'semester' => $t->semester,
                         'kode_mk' => $t->kode_mk,
                         'nama_mk' => $t->nama_mk,
-                        'sks' => $t->sks,
+                        'sks' => (int) $t->sks,
                         'nilai' => $t->nilai,
                     ];
                 })->toArray();
@@ -236,7 +240,7 @@ class DosenController extends Controller
                 return [
                     'kode_mk' => $c->kode_mk,
                     'nama_mk' => $c->nama_mk,
-                    'sks' => $c->sks,
+                    'sks' => (int) $c->sks,
                     'semester' => $c->semester,
                     'tipe' => 'Pilihan',
                 ];
@@ -291,7 +295,7 @@ class DosenController extends Controller
                         $mataKuliah = MataKuliah::create([
                             'kode_mk' => $mk['kode_mk'],
                             'nama_mk' => $mk['nama_mk'],
-                            'sks' => $mk['sks'] ?? 3,
+                            'sks' => (int) ($mk['sks'] ?? 3),
                             'semester' => $mahasiswa->semester_saat_ini + 1,
                             'jurusan' => $mahasiswa->jurusan,
                         ]);
@@ -394,7 +398,7 @@ class DosenController extends Controller
                             'semester' => $t->semester,
                             'kode_mk' => $t->kode_mk,
                             'nama_mk' => $t->nama_mk,
-                            'sks' => $t->sks,
+                            'sks' => (int) $t->sks,
                             'nilai' => $t->nilai,
                         ];
                     })->toArray();
@@ -404,7 +408,7 @@ class DosenController extends Controller
                     return [
                         'kode_mk' => $c->kode_mk,
                         'nama_mk' => $c->nama_mk,
-                        'sks' => $c->sks,
+                        'sks' => (int) $c->sks,
                         'semester' => $c->semester,
                         'tipe' => 'Pilihan',
                     ];
@@ -452,7 +456,7 @@ class DosenController extends Controller
                             $mataKuliah = MataKuliah::create([
                                 'kode_mk' => $mk['kode_mk'],
                                 'nama_mk' => $mk['nama_mk'],
-                                'sks' => $mk['sks'] ?? 3,
+                                'sks' => (int) ($mk['sks'] ?? 3),
                                 'semester' => $mahasiswa->semester_saat_ini + 1,
                                 'jurusan' => $mahasiswa->jurusan,
                             ]);
@@ -559,7 +563,7 @@ class DosenController extends Controller
                     'nim' => $mahasiswa->nim,
                     'prodi' => $mahasiswa->jurusan,
                     'ipk' => (float) $mahasiswa->ipk,
-                    'total_sks' => $mahasiswa->total_sks,
+                    'total_sks' => (int) $mahasiswa->total_sks,
                     'interests' => $mahasiswa->interests,
                     'future_focus' => $mahasiswa->future_focus,
                     'learning_preference' => $mahasiswa->learning_preference,
@@ -571,13 +575,16 @@ class DosenController extends Controller
                     'semester' => $rencana->kelas->semester,
                     'tahun_ajaran' => $rencana->kelas->tahun_ajaran,
                 ] : null,
+                'total_sks' => $rencana->details->reduce(function ($total, $detail) {
+                    return $total + (int) ($detail->mataKuliah?->sks ?? 0);
+                }, 0),
                 'mata_kuliah' => $rencana->details->map(function ($detail) {
                     $mataKuliah = $detail->mataKuliah;
 
                     return [
                         'kode_mk' => $mataKuliah?->kode_mk,
                         'nama_mata_kuliah' => $mataKuliah?->nama_mk,
-                        'sks' => $mataKuliah?->sks,
+                        'sks' => (int) ($mataKuliah?->sks ?? 0),
                         'bidang_minat' => $mataKuliah?->bidang_minat,
                         'alasan' => $detail->alasan,
                         'tingkat_kecocokan' => $detail->tingkat_kecocokan,
@@ -602,7 +609,7 @@ class DosenController extends Controller
                 'id' => $mk->id,
                 'kode_mk' => $mk->kode_mk,
                 'nama_mk' => $mk->nama_mk,
-                'sks' => $mk->sks,
+                'sks' => (int) $mk->sks,
                 'semester' => $mk->semester,
             ];
         });
