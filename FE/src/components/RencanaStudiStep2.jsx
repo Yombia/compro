@@ -1,9 +1,30 @@
 // src/components/RencanaStudiStep2.jsx
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
 import { useTheme } from "../hooks/useTheme";
 import { usePlanStore } from "../store/usePlanStore";
+import { api } from "../api/api";
+
+const DEFAULT_INTEREST_OPTIONS = [
+  { value: "IoT", label: "IoT & Embedded Systems" },
+  { value: "Robotics", label: "Robotika & Otomasi" },
+  { value: "Programming", label: "Software Engineering & Programming" },
+  { value: "Networking", label: "Telekomunikasi & Jaringan" },
+  { value: "Power System", label: "Sistem Tenaga & Energi" },
+];
+
+const DEFAULT_FUTURE_FOCUS_OPTIONS = [
+  { value: "s2", label: "S2 / Penelitian Lanjut" },
+  { value: "industri", label: "Karir Profesional di Industri" },
+  { value: "startup", label: "Bangun Startup / Wirausaha Teknologi" },
+];
+
+const DEFAULT_LEARNING_OPTIONS = [
+  { value: "konsep", label: "Fokus pada Konsep & Analisis" },
+  { value: "project", label: "Berbasis Proyek & Implementasi" },
+  { value: "campuran", label: "Campuran (Teori & Praktik)" },
+];
 
 export default function RencanaStudiStep2() {
   const navigate = useNavigate();
@@ -11,7 +32,7 @@ export default function RencanaStudiStep2() {
   const { theme, toggleTheme } = useTheme();
 
   // ambil action dari store
-  const { setStep2Data } = usePlanStore();
+  const { currentPlan, setStep2Data } = usePlanStore();
 
   const handleLogout = () => {
     logout?.();
@@ -19,18 +40,120 @@ export default function RencanaStudiStep2() {
   };
 
   // === STATE UNTUK STEP 2 ===
-  const INTEREST_OPTIONS = [
-    "IoT",
-    "Robotics",
-    "Programming",
-    "Networking",
-    "Power System",
-  ];
+  const [interestOptions, setInterestOptions] = useState(
+    DEFAULT_INTEREST_OPTIONS
+  );
+  const [focusOptions, setFocusOptions] = useState(
+    DEFAULT_FUTURE_FOCUS_OPTIONS
+  );
+  const [learningOptions, setLearningOptions] = useState(
+    DEFAULT_LEARNING_OPTIONS
+  );
 
-  // State kosong - user harus pilih sendiri
-  const [selectedInterests, setSelectedInterests] = useState([]);
-  const [futureFocus, setFutureFocus] = useState(""); // "s2" | "industri" | "startup"
-  const [learningPreference, setLearningPreference] = useState(""); // "konsep" | "project" | "campuran"
+  // State kosong - user harus pilih sendiri (prefill dari store jika ada)
+  const [selectedInterests, setSelectedInterests] = useState(
+    currentPlan?.interests ?? []
+  );
+  const [futureFocus, setFutureFocus] = useState(currentPlan?.futureFocus ?? "");
+  const [learningPreference, setLearningPreference] = useState(
+    currentPlan?.learningPreference ?? ""
+  );
+  const [profileData, setProfileData] = useState(null);
+  const [loadingProfile, setLoadingProfile] = useState(true);
+  const [profileError, setProfileError] = useState("");
+  const hasApprovedPlan = Boolean(profileData?.has_approved_plan_current_semester);
+  const hasOpenPlan = Boolean(profileData?.has_open_plan);
+
+  useEffect(() => {
+    setInterestOptions((options) => {
+      const existing = new Set(options.map((opt) => opt.value));
+      const additions = selectedInterests
+        .filter((value) => value && !existing.has(value))
+        .map((value) => ({ value, label: value }));
+
+      if (!additions.length) {
+        return options;
+      }
+
+      return [...options, ...additions];
+    });
+  }, [selectedInterests]);
+
+  useEffect(() => {
+    if (!futureFocus) return;
+    setFocusOptions((options) => {
+      if (options.some((opt) => opt.value === futureFocus)) {
+        return options;
+      }
+
+      return [...options, { value: futureFocus, label: futureFocus }];
+    });
+  }, [futureFocus]);
+
+  useEffect(() => {
+    if (!learningPreference) return;
+    setLearningOptions((options) => {
+      if (options.some((opt) => opt.value === learningPreference)) {
+        return options;
+      }
+
+      return [...options, { value: learningPreference, label: learningPreference }];
+    });
+  }, [learningPreference]);
+
+  useEffect(() => {
+    let isMounted = true;
+    const planSnapshot = currentPlan;
+
+    const fetchProfile = async () => {
+      try {
+        setLoadingProfile(true);
+        const response = await api.mahasiswa.getProfile();
+        if (!isMounted) return;
+
+        const { mahasiswa, preference_options: options } = response;
+        setProfileData(mahasiswa ?? null);
+
+        if (options?.interests?.length) {
+          setInterestOptions(options.interests);
+        }
+        if (options?.future_focus?.length) {
+          setFocusOptions(options.future_focus);
+        }
+        if (options?.learning_preferences?.length) {
+          setLearningOptions(options.learning_preferences);
+        }
+
+        if (!planSnapshot?.interests?.length && mahasiswa?.interests?.length) {
+          setSelectedInterests(mahasiswa.interests.slice(0, 2));
+        }
+
+        if (!planSnapshot?.futureFocus && mahasiswa?.future_focus) {
+          setFutureFocus(mahasiswa.future_focus);
+        }
+
+        if (!planSnapshot?.learningPreference && mahasiswa?.learning_preference) {
+          setLearningPreference(mahasiswa.learning_preference);
+        }
+
+        setProfileError("");
+      } catch (error) {
+        if (!isMounted) return;
+        console.error("Gagal memuat profil mahasiswa", error);
+        setProfileError(error?.message || "Gagal memuat profil mahasiswa");
+      } finally {
+        if (isMounted) {
+          setLoadingProfile(false);
+        }
+      }
+    };
+
+    fetchProfile();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const toggleInterest = (option) => {
     setSelectedInterests((prev) => {
@@ -38,18 +161,46 @@ export default function RencanaStudiStep2() {
         // kalau sudah dipilih, klik lagi untuk unselect
         return prev.filter((item) => item !== option);
       }
-      // batasi maksimal 3
-      if (prev.length >= 3) return prev;
+        if (hasApprovedPlan || hasOpenPlan) {
+          alert(hasApprovedPlan
+            ? "Rencana studi semester ini sudah disetujui."
+            : `Pengajuan sebelumnya masih ${profileData?.open_plan_status || "diproses"}. Tunggu sampai selesai.`);
+          return;
+        }
+      // batasi maksimal 2
+      if (prev.length >= 2) return prev;
       return [...prev, option];
     });
   };
 
   // SIMPAN DATA KE STORE & LANJUT STEP 3
   const handleNext = () => {
-    console.log('=== DEBUG STEP 2 HANDLE NEXT ===');
-    console.log('selectedInterests:', selectedInterests);
-    console.log('futureFocus:', futureFocus);
-    console.log('learningPreference:', learningPreference);
+    if (hasApprovedPlan || hasOpenPlan) {
+      alert(hasApprovedPlan
+        ? "Rencana studi semester ini sudah disetujui."
+        : `Pengajuan sebelumnya masih ${profileData?.open_plan_status || "diproses"}. Tunggu sampai selesai.`);
+      return;
+    }
+
+    if (!selectedInterests.length) {
+      alert("Pilih minimal satu bidang minat terlebih dahulu.");
+      return;
+    }
+
+    if (!futureFocus) {
+      alert("Pilih fokus setelah lulus terlebih dahulu.");
+      return;
+    }
+
+    if (!learningPreference) {
+      alert("Pilih gaya belajar terlebih dahulu.");
+      return;
+    }
+
+    console.log("=== DEBUG STEP 2 HANDLE NEXT ===");
+    console.log("selectedInterests:", selectedInterests);
+    console.log("futureFocus:", futureFocus);
+    console.log("learningPreference:", learningPreference);
 
     setStep2Data({
       interests: selectedInterests,
@@ -57,9 +208,47 @@ export default function RencanaStudiStep2() {
       learningPreference,
     });
 
-    console.log('Navigating to step-3...');
+    console.log("Navigating to step-3...");
     navigate("/rencana-studi/step-3");
   };
+
+  const formatIpkValue = (value) => {
+    if (value === null || value === undefined) {
+      return loadingProfile ? "..." : "—";
+    }
+
+    const numeric = Number(value);
+    if (Number.isNaN(numeric)) {
+      return "—";
+    }
+
+    return numeric.toFixed(2);
+  };
+
+  const formatNumberValue = (value) => {
+    if (value === null || value === undefined) {
+      return loadingProfile ? "..." : "—";
+    }
+
+    const numeric = Number(value);
+    if (Number.isNaN(numeric)) {
+      return "—";
+    }
+
+    return numeric;
+  };
+
+  const programStudi = profileData?.jurusan
+    ? profileData.jurusan.toUpperCase()
+    : "S1 TEKNIK ELEKTRO";
+  const ipkDisplay = formatIpkValue(profileData?.ipk);
+  const sksQuotaDisplay = formatNumberValue(
+    profileData?.remaining_sks_semester ?? profileData?.max_sks_semester ?? profileData?.sks_semester_ini
+  );
+  const totalSksDisplay = formatNumberValue(profileData?.total_sks);
+  const electiveSksDisplay = formatNumberValue(
+    profileData?.sks_pilihan_maksimal
+  );
 
   // helper class chip minat
   const chipClass = (active) =>
@@ -213,7 +402,7 @@ export default function RencanaStudiStep2() {
               <p className="text-sm font-semibold">Program Studi</p>
               <input
                 type="text"
-                value="S1 TEKNIK ELEKTRO"
+                  value={programStudi}
                 readOnly
                 className="w-full rounded-lg bg-white text-slate-900 px-4 py-3 text-sm md:text-base shadow-inner focus:outline-none"
               />
@@ -226,50 +415,68 @@ export default function RencanaStudiStep2() {
                   IPK
                 </p>
                 <div className="rounded-xl bg-blue-900/60 px-5 py-4 text-2xl font-bold">
-                  3.89
+                    {ipkDisplay}
                 </div>
               </div>
               <div className="space-y-2">
                 <p className="text-xs uppercase tracking-wide text-blue-100">
-                  SKS
+                    Kuota SKS Semester Ini
                 </p>
                 <div className="rounded-xl bg-blue-900/60 px-5 py-4 text-2xl font-bold">
-                  24
+                    {sksQuotaDisplay}
                 </div>
+                 <p className="text-xs text-blue-100/70">
+                   {loadingProfile
+                     ? "Memuat informasi kuota SKS..."
+                     : hasApprovedPlan
+                     ? "Rencana studi semester ini sudah disetujui. Tidak dapat mengajukan ulang."
+                     : profileData?.can_take_electives
+                     ? `Sisa SKS pilihan tersedia: ${electiveSksDisplay}`
+                     : "Belum memenuhi syarat untuk menambah mata kuliah pilihan."}
+                 </p>
               </div>
               <div className="space-y-2">
                 <p className="text-xs uppercase tracking-wide text-blue-100">
                   TOTAL SKS
                 </p>
                 <div className="rounded-xl bg-blue-900/60 px-5 py-4 text-2xl font-bold">
-                  102
+                    {totalSksDisplay}
                 </div>
               </div>
             </div>
 
+              {profileError && (
+                <div className="rounded-xl border border-red-400/60 bg-red-500/10 px-4 py-3 text-sm text-red-100">
+                  {profileError}
+                </div>
+              )}
+
             {/* Bidang yang diminati */}
             <div className="space-y-3 pt-2">
               <p className="text-sm md:text-base font-semibold">
-                Bidang yang Diminati (Maksimal 3)
+                  Bidang yang Diminati (Pilih Maksimal 2)
               </p>
               <div className="flex flex-wrap gap-3">
-                {INTEREST_OPTIONS.map((opt) => {
-                  const active = selectedInterests.includes(opt);
+                  {interestOptions.map((opt) => {
+                    const active = selectedInterests.includes(opt.value);
                   return (
                     <button
-                      key={opt}
+                        key={opt.value}
                       type="button"
-                      onClick={() => toggleInterest(opt)}
+                        onClick={() => toggleInterest(opt.value)}
                       className={chipClass(active)}
                     >
                       {active && (
                         <span className="h-2 w-2 rounded-full bg-slate-900" />
                       )}
-                      <span>{opt}</span>
+                        <span>{opt.label}</span>
                     </button>
                   );
                 })}
               </div>
+                <p className="text-xs text-blue-100/70">
+                  *Pilih 1 atau 2 minat utama kamu agar rekomendasi lebih tepat.
+                </p>
             </div>
 
             {/* Fokus setelah lulus */}
@@ -278,46 +485,22 @@ export default function RencanaStudiStep2() {
                 Apa fokus Kamu setelah lulus?
               </p>
               <div className="grid gap-3 md:grid-cols-3">
-                <button
-                  type="button"
-                  onClick={() => setFutureFocus("s2")}
-                  className={radioWrapperClass}
-                >
-                  <span className={radioCircleClass(futureFocus === "s2")}>
-                    {futureFocus === "s2" && <span className={radioDotClass} />}
-                  </span>
-                  <span>Melanjutkan S2/Riset</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setFutureFocus("industri")}
-                  className={radioWrapperClass}
-                >
-                  <span
-                    className={radioCircleClass(futureFocus === "industri")}
-                  >
-                    {futureFocus === "industri" && (
-                      <span className={radioDotClass} />
-                    )}
-                  </span>
-                  <span>Bekerja di Industri</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setFutureFocus("startup")}
-                  className={radioWrapperClass}
-                >
-                  <span
-                    className={radioCircleClass(futureFocus === "startup")}
-                  >
-                    {futureFocus === "startup" && (
-                      <span className={radioDotClass} />
-                    )}
-                  </span>
-                  <span>Membangun Start Up Teknologi</span>
-                </button>
+                  {focusOptions.map((option) => {
+                    const active = futureFocus === option.value;
+                    return (
+                      <button
+                        key={option.value}
+                        type="button"
+                        onClick={() => setFutureFocus(option.value)}
+                        className={radioWrapperClass}
+                      >
+                        <span className={radioCircleClass(active)}>
+                          {active && <span className={radioDotClass} />}
+                        </span>
+                        <span>{option.label}</span>
+                      </button>
+                    );
+                  })}
               </div>
             </div>
 
@@ -327,54 +510,22 @@ export default function RencanaStudiStep2() {
                 Kamu lebih nyaman belajar dengan pendekatan seperti apa?
               </p>
               <div className="grid gap-3 md:grid-cols-3">
-                <button
-                  type="button"
-                  onClick={() => setLearningPreference("konsep")}
-                  className={radioWrapperClass}
-                >
-                  <span
-                    className={radioCircleClass(learningPreference === "konsep")}
-                  >
-                    {learningPreference === "konsep" && (
-                      <span className={radioDotClass} />
-                    )}
-                  </span>
-                  <span>Konsep dan Analisis</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setLearningPreference("project")}
-                  className={radioWrapperClass}
-                >
-                  <span
-                    className={radioCircleClass(
-                      learningPreference === "project"
-                    )}
-                  >
-                    {learningPreference === "project" && (
-                      <span className={radioDotClass} />
-                    )}
-                  </span>
-                  <span>Proyek dan Implementasi</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setLearningPreference("campuran")}
-                  className={radioWrapperClass}
-                >
-                  <span
-                    className={radioCircleClass(
-                      learningPreference === "campuran"
-                    )}
-                  >
-                    {learningPreference === "campuran" && (
-                      <span className={radioDotClass} />
-                    )}
-                  </span>
-                  <span>Campuran</span>
-                </button>
+                  {learningOptions.map((option) => {
+                    const active = learningPreference === option.value;
+                    return (
+                      <button
+                        key={option.value}
+                        type="button"
+                        onClick={() => setLearningPreference(option.value)}
+                        className={radioWrapperClass}
+                      >
+                        <span className={radioCircleClass(active)}>
+                          {active && <span className={radioDotClass} />}
+                        </span>
+                        <span>{option.label}</span>
+                      </button>
+                    );
+                  })}
               </div>
             </div>
 
@@ -387,17 +538,24 @@ export default function RencanaStudiStep2() {
         </div>
 
         {/* Tombol Selanjutnya di kanan bawah */}
-        <div className="mt-8 flex justify-end">
-          <button
-            type="button"
-            onClick={handleNext}
-            className="mt-4 rounded-full bg-gradient-to-r from-[#FACC15] to-[#F97316]
-                        px-10 py-3 text-sm md:text-base font-semibold text-slate-900
-                        shadow-[0_14px_36px_rgba(248,181,0,0.6)] hover:brightness-105 transition"
-          >
-            Selanjutnya
-          </button>
-        </div>
+         <div className="mt-8 flex justify-end">
+           <button
+             type="button"
+             onClick={handleNext}
+             disabled={hasApprovedPlan || hasOpenPlan}
+             className={`mt-4 rounded-full px-10 py-3 text-sm md:text-base font-semibold text-slate-900 shadow-[0_14px_36px_rgba(248,181,0,0.6)] transition ${
+               hasApprovedPlan || hasOpenPlan
+                 ? 'bg-slate-500 cursor-not-allowed opacity-70'
+                 : 'bg-gradient-to-r from-[#FACC15] to-[#F97316] hover:brightness-105'
+             }`}
+           >
+            {hasApprovedPlan
+              ? 'Sudah Disetujui'
+              : hasOpenPlan
+                ? (profileData?.open_plan_status === 'Tertunda' ? 'Sedang Ditinjau Dosen' : 'Menunggu Diproses')
+                : 'Selanjutnya'}
+           </button>
+         </div>
       </section>
     </main>
   );

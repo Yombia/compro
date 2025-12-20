@@ -8,13 +8,95 @@ import { api } from "../api/api";
 import { pdf } from '@react-pdf/renderer';
 import RencanaStudiPDF from './RencanaStudiPDF';
 
+const DEFAULT_INTEREST_OPTIONS = [
+  { value: "IoT", label: "IoT & Embedded Systems" },
+  { value: "Robotics", label: "Robotika & Otomasi" },
+  { value: "Programming", label: "Software Engineering & Programming" },
+  { value: "Networking", label: "Telekomunikasi & Jaringan" },
+  { value: "Power System", label: "Sistem Tenaga & Energi" },
+];
+
+const normalizeOptionList = (options) => {
+  if (!Array.isArray(options) || !options.length) {
+    return [];
+  }
+
+  return options
+    .map((item) => {
+      if (!item) return null;
+      if (typeof item === "string") {
+        return { value: item, label: item };
+      }
+
+      if (typeof item === "object") {
+        const value =
+          item.value ?? item.id ?? (typeof item.label === "string" ? item.label : "");
+        if (value === undefined || value === null || value === "") {
+          return null;
+        }
+
+        const label = item.label ?? String(value);
+        return { value: String(value), label: typeof label === "string" ? label : String(value) };
+      }
+
+      return null;
+    })
+    .filter(Boolean);
+};
+
+const mapInterestValues = (values, dynamicOptions) => {
+  if (!Array.isArray(values) || !values.length) {
+    return [];
+  }
+
+  const lookup = new Map();
+
+  DEFAULT_INTEREST_OPTIONS.forEach(({ value, label }) => {
+    if (value !== undefined && value !== null && value !== "") {
+      lookup.set(String(value), label || String(value));
+    }
+  });
+
+  normalizeOptionList(dynamicOptions).forEach(({ value, label }) => {
+    if (value !== undefined && value !== null && value !== "") {
+      lookup.set(String(value), label || String(value));
+    }
+  });
+
+  return values.map((value) => {
+    const key = value !== undefined && value !== null ? String(value) : "";
+    if (!key) return "";
+    return lookup.get(key) || key;
+  }).filter(Boolean);
+};
+
+const prepareDetailForExport = (detail) => {
+  if (!detail) {
+    return detail;
+  }
+
+  const interests = mapInterestValues(
+    detail?.mahasiswa?.interests,
+    detail?.preference_options?.interests
+  );
+
+  return {
+    ...detail,
+    mahasiswa: {
+      ...detail?.mahasiswa,
+      interests,
+    },
+  };
+};
+
 // =================================================================
 // FUNGSI GENERATE PDF
 // =================================================================
 const handleSaveAsPdf = async (detail) => {
   try {
+    const preparedDetail = prepareDetailForExport(detail);
     // Generate PDF document
-    const blob = await pdf(<RencanaStudiPDF data={detail} />).toBlob();
+    const blob = await pdf(<RencanaStudiPDF data={preparedDetail} />).toBlob();
     
     // Create download link
     const url = URL.createObjectURL(blob);
@@ -22,7 +104,7 @@ const handleSaveAsPdf = async (detail) => {
     link.href = url;
     
     const timestamp = new Date().toISOString().slice(0, 10);
-    const fileName = `Rencana_Studi_${detail.mahasiswa?.nama || 'Mahasiswa'}_${timestamp}.pdf`;
+    const fileName = `Rencana_Studi_${preparedDetail.mahasiswa?.nama || 'Mahasiswa'}_${timestamp}.pdf`;
     link.download = fileName;
     
     document.body.appendChild(link);
@@ -105,9 +187,10 @@ export default function RiwayatPage() {
     campuran: "Campuran",
   };
 
-  const getDominantInterestText = (interests) => {
-    if (!interests || interests.length === 0) return "-";
-    return interests.join(" & ");
+  const getDominantInterestText = (interests, options) => {
+    const labels = mapInterestValues(interests, options);
+    if (!labels.length) return "-";
+    return labels.join(" & ");
   };
 
   const getTotalRecommendedSKS = (recs) => {
@@ -120,7 +203,10 @@ export default function RiwayatPage() {
   const DetailModal = ({ detail, onClose }) => {
     if (!detail) return null;
 
-    const dominantText = getDominantInterestText(detail.mahasiswa?.interests);
+    const dominantText = getDominantInterestText(
+      detail.mahasiswa?.interests,
+      detail.preference_options?.interests
+    );
     const mataKuliah = detail.mata_kuliah || [];
 
     // 1. KONTEN UNTUK STATUS APPROVED/DELAYED (LENGKAP)
@@ -437,7 +523,11 @@ export default function RiwayatPage() {
             <div className="space-y-4">
               {sortedSubmissions.map((sub) => {
                 const statusInfo = statusConfig[mapStatus(sub.status_rencana)] ?? statusConfig.pending;
-                const interestText = sub.mahasiswa?.interests?.length ? sub.mahasiswa.interests.join(", ") : "-";
+                const interestLabels = mapInterestValues(
+                  sub.mahasiswa?.interests,
+                  sub.preference_options?.interests
+                );
+                const interestText = interestLabels.length ? interestLabels.join(", ") : "-";
 
                 return (
                   <div key={sub.id} className="rounded-2xl bg-white/90 px-5 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4 border border-slate-200 shadow-sm hover:border-blue-200 transition-colors dark:bg-slate-900/70 dark:border-slate-800 dark:hover:border-slate-600">

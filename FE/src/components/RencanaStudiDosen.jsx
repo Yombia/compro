@@ -16,6 +16,14 @@ const STATUS_STYLES = {
     label: "Disetujui",
     badgeClass: "bg-emerald-100 text-emerald-800 dark:bg-emerald-500/20 dark:text-emerald-200",
   },
+  Aktif: {
+    label: "Aktif",
+    badgeClass: "bg-blue-100 text-blue-800 dark:bg-blue-500/20 dark:text-blue-200",
+  },
+  Riwayat: {
+    label: "Riwayat",
+    badgeClass: "bg-slate-100 text-slate-600 dark:bg-slate-600/40 dark:text-slate-200",
+  },
   Ditolak: {
     label: "Ditolak",
     badgeClass: "bg-rose-100 text-rose-800 dark:bg-rose-500/20 dark:text-rose-200",
@@ -24,6 +32,217 @@ const STATUS_STYLES = {
     label: "Belum Ada",
     badgeClass: "bg-slate-200 text-slate-700 dark:bg-slate-700/60 dark:text-slate-200",
   },
+};
+
+const MONTH_YEAR_FORMATTER = new Intl.DateTimeFormat("id-ID", {
+  month: "short",
+  year: "numeric",
+});
+
+const parseDate = (value) => {
+  if (!value) return null;
+  const parsed = new Date(value);
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
+};
+
+const getNestedValue = (object, path) => {
+  if (!object) return undefined;
+  return path.split(".").reduce((acc, key) => {
+    if (acc === null || acc === undefined) return undefined;
+    return acc[key];
+  }, object);
+};
+
+const pickFirstValue = (object, paths) => {
+  for (const path of paths) {
+    const value = getNestedValue(object, path);
+    if (value !== undefined && value !== null && value !== "") {
+      return value;
+    }
+  }
+  return null;
+};
+
+const parseSemesterNumber = (value) => {
+  if (value === null || value === undefined) return null;
+  if (typeof value === "number" && Number.isFinite(value) && value > 0) {
+    return value;
+  }
+
+  const numericMatch = String(value).match(/\d+/);
+  if (!numericMatch) return null;
+
+  const parsed = Number(numericMatch[0]);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : null;
+};
+
+const normalizeTermLabel = (value) => {
+  if (!value) return null;
+  let label = String(value).trim();
+  if (!label) return null;
+  if (/^\d+$/u.test(label)) return null;
+
+  if (label.toLowerCase().startsWith("semester ")) {
+    label = label.slice(9).trim();
+  }
+
+  return label || null;
+};
+
+const formatAcademicYear = (value) => {
+  if (!value) return null;
+  const raw = String(value).trim();
+  if (!raw) return null;
+
+  const digits = raw.replace(/-/g, "/").match(/\d{4}/g);
+  if (digits && digits.length >= 2) {
+    return `${digits[0]}/${digits[1]}`;
+  }
+
+  if (raw.includes("/")) return raw;
+  if (raw.includes("-")) return raw.replace(/-/g, "/");
+
+  return raw;
+};
+
+const getHighestSemesterFromCourses = (plan) => {
+  if (!Array.isArray(plan?.mata_kuliah)) return 0;
+
+  return plan.mata_kuliah.reduce((max, mk) => {
+    const candidate = parseSemesterNumber(mk?.semester ?? mk?.mata_kuliah?.semester);
+    return candidate && candidate > max ? candidate : max;
+  }, 0);
+};
+
+const getPlanReferenceDate = (plan) => {
+  const rawDate = pickFirstValue(plan, [
+    "target_semester_start",
+    "target_semester_date",
+    "target_semester_at",
+    "metadata.target_semester_start",
+    "metadata.target_semester_date",
+    "periode_mulai",
+    "periode",
+    "tanggal_pengajuan",
+    "created_at",
+    "approved_at",
+    "updated_at",
+  ]);
+
+  return parseDate(rawDate);
+};
+
+const getPlanSemesterNumber = (plan, fallbackSemester) => {
+  const candidate = pickFirstValue(plan, [
+    "target_semester_number",
+    "target_semester",
+    "metadata.target_semester",
+    "metadata.semester_number",
+    "semester_target",
+    "semester_tujuan",
+    "semester",
+    "kelas.semester",
+  ]);
+
+  return parseSemesterNumber(candidate) ?? (fallbackSemester || null);
+};
+
+const getPlanTermLabel = (plan, semesterNumber, referenceDate) => {
+  const candidate = pickFirstValue(plan, [
+    "target_semester_label",
+    "target_semester_name",
+    "metadata.target_semester_label",
+    "metadata.target_semester_name",
+    "metadata.semester_label",
+    "metadata.semester_name",
+    "semester_label",
+    "semester_name",
+    "kelas.semester",
+  ]);
+
+  const normalized = normalizeTermLabel(candidate);
+  if (normalized) {
+    if (typeof semesterNumber === "number") {
+      const parityLabel = semesterNumber % 2 === 1 ? "Ganjil" : "Genap";
+      if (normalized.toLowerCase() !== parityLabel.toLowerCase()) {
+        return parityLabel;
+      }
+    }
+    return normalized;
+  }
+
+  if (typeof semesterNumber === "number") {
+    return semesterNumber % 2 === 1 ? "Ganjil" : "Genap";
+  }
+
+  if (referenceDate) {
+    return referenceDate.getMonth() >= 6 ? "Ganjil" : "Genap";
+  }
+
+  return null;
+};
+
+const getPlanAcademicYear = (plan, referenceDate) => {
+  const candidate = pickFirstValue(plan, [
+    "target_tahun_ajaran",
+    "metadata.target_tahun_ajaran",
+    "tahun_ajaran_target",
+    "tahun_ajaran",
+  ]);
+
+  const formatted = formatAcademicYear(candidate);
+  if (formatted) return formatted;
+
+  if (referenceDate) {
+    const year = referenceDate.getFullYear();
+    if (Number.isFinite(year)) {
+      return referenceDate.getMonth() >= 6 ? `${year}/${year + 1}` : `${year - 1}/${year}`;
+    }
+  }
+
+  return null;
+};
+
+const getPlanAcademicMeta = (plan) => {
+  const highestCourseSemester = getHighestSemesterFromCourses(plan);
+  const referenceDate = getPlanReferenceDate(plan);
+  const semesterNumber = getPlanSemesterNumber(plan, highestCourseSemester);
+  const termLabel = getPlanTermLabel(plan, semesterNumber, referenceDate);
+  const academicYear = getPlanAcademicYear(plan, referenceDate);
+
+  return { semesterNumber, termLabel, academicYear, referenceDate };
+};
+
+const comparePlans = (planA, planB) => {
+  const metaA = getPlanAcademicMeta(planA);
+  const metaB = getPlanAcademicMeta(planB);
+
+  if (metaA.semesterNumber && metaB.semesterNumber && metaA.semesterNumber !== metaB.semesterNumber) {
+    return metaB.semesterNumber - metaA.semesterNumber;
+  }
+
+  const timeA = metaA.referenceDate ? metaA.referenceDate.getTime() : 0;
+  const timeB = metaB.referenceDate ? metaB.referenceDate.getTime() : 0;
+
+  if (timeA !== timeB) {
+    return timeB - timeA;
+  }
+
+  return (planB?.id || 0) - (planA?.id || 0);
+};
+
+const deriveStatusKey = (student, plan) => {
+  const rawStatus = plan?.status_rencana || student?.status;
+  if (!plan) return rawStatus || "default";
+
+  const activePlanId = student?.rencana_studi_id ? String(student.rencana_studi_id) : null;
+  const isActivePlan = activePlanId && String(plan.id) === activePlanId;
+
+  if (rawStatus === "Disetujui") {
+    return isActivePlan ? "Aktif" : "Riwayat";
+  }
+
+  return rawStatus || "default";
 };
 
 const formatDate = (value) => {
@@ -40,6 +259,13 @@ const formatDate = (value) => {
   }
 };
 
+const formatCurrentSemester = (value) => {
+  const semesterNumber = parseSemesterNumber(value);
+  if (!semesterNumber) return null;
+  const termLabel = semesterNumber % 2 === 1 ? "Ganjil" : "Genap";
+  return termLabel ? `Semester ${semesterNumber} (${termLabel})` : `Semester ${semesterNumber}`;
+};
+
 const getStatusInfo = (status) => STATUS_STYLES[status] ?? STATUS_STYLES.default;
 
 const calculateTotalSKS = (mataKuliah = []) =>
@@ -48,32 +274,42 @@ const calculateTotalSKS = (mataKuliah = []) =>
 const buildPlanLabel = (plan, index) => {
   if (!plan) return "Rencana Studi";
 
-  const semesterRaw = plan?.kelas?.semester;
-  const tahunAjaranRaw = plan?.kelas?.tahun_ajaran;
+  const { semesterNumber, termLabel, academicYear, referenceDate } = getPlanAcademicMeta(plan);
 
-  const semesterLabel = semesterRaw ? `Semester ${semesterRaw}` : null;
-  const tahunLabel = tahunAjaranRaw
-    ? tahunAjaranRaw.replace(/[\/]/g, (match) => (match === "/" ? "-" : match))
-    : null;
+  const parts = [];
 
-  if (semesterLabel && tahunLabel) {
-    return `${semesterLabel} ${tahunLabel}`;
+  if (semesterNumber) {
+    parts.push(`Semester ${semesterNumber}`);
   }
 
-  if (semesterLabel) {
-    return semesterLabel;
+  if (termLabel) {
+    parts.push(termLabel);
   }
 
-  if (tahunLabel) {
-    return `Tahun ${tahunLabel}`;
+  if (academicYear) {
+    parts.push(academicYear);
+  } else if (referenceDate) {
+    parts.push(MONTH_YEAR_FORMATTER.format(referenceDate));
   }
 
-  const formattedDate = formatDate(plan?.created_at || plan?.tanggal_pengajuan);
-  if (formattedDate !== "-") {
-    return `Pengajuan ${formattedDate}`;
+  let label = parts.join(" • ");
+
+  if (!label && plan?.catatan) {
+    label = plan.catatan;
   }
 
-  return `Rencana Studi ${index + 1}`;
+  if (!label) {
+    const formattedDate = formatDate(plan?.created_at || plan?.tanggal_pengajuan);
+    if (formattedDate !== "-") {
+      label = `Pengajuan ${formattedDate}`;
+    }
+  }
+
+  if (!label) {
+    label = `Rencana Studi ${index + 1}`;
+  }
+
+  return label;
 };
 
 export default function RencanaStudiDosen() {
@@ -138,7 +374,7 @@ export default function RencanaStudiDosen() {
 
         const plans = (groupedPlans[student.nim] || [])
           .slice()
-          .sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+          .sort(comparePlans);
 
         return {
           ...student,
@@ -149,8 +385,19 @@ export default function RencanaStudiDosen() {
 
       const initialSelection = {};
       mergedStudents.forEach((student) => {
-        if (student.plans.length > 0) {
-          const latestPlan = student.plans[student.plans.length - 1];
+        if (student.plans.length === 0) return;
+
+        const activePlan = student.plans.find(
+          (plan) => String(plan.id) === String(student.rencana_studi_id)
+        );
+
+        if (activePlan) {
+          initialSelection[student.nim] = String(activePlan.id);
+          return;
+        }
+
+        const latestPlan = student.plans[0];
+        if (latestPlan) {
           initialSelection[student.nim] = String(latestPlan.id);
         }
       });
@@ -433,11 +680,12 @@ export default function RencanaStudiDosen() {
   const renderStudentCard = (student) => {
     const selectedPlanId = selectedPlans[student.nim];
     const selectedPlan = student.plans.find((plan) => String(plan.id) === selectedPlanId);
-    const statusSource = selectedPlan?.status_rencana || student.status;
-    const statusInfo = getStatusInfo(statusSource);
+    const statusKey = deriveStatusKey(student, selectedPlan);
+    const statusInfo = getStatusInfo(statusKey);
     const totalSKS = calculateTotalSKS(selectedPlan?.mata_kuliah);
     const tanggalPengajuan = selectedPlan?.created_at || selectedPlan?.tanggal_pengajuan;
     const isExpanded = expandedStudents[student.nim] ?? false;
+    const currentSemesterLabel = formatCurrentSemester(student.semester_saat_ini);
 
     return (
       <div
@@ -449,6 +697,14 @@ export default function RencanaStudiDosen() {
             <p className="text-lg font-semibold text-slate-900 dark:text-white">{student.name}</p>
             <p className="text-sm text-slate-500 dark:text-slate-300">NIM {student.nim}</p>
             <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-slate-500 dark:text-slate-300">
+              {currentSemesterLabel ? (
+                <span className="inline-flex items-center gap-1 rounded-full border border-slate-200 px-3 py-1 dark:border-slate-600">
+                  <span className="text-slate-400">Semester sekarang:</span>
+                  <span className="font-medium text-slate-700 dark:text-slate-200">
+                    {currentSemesterLabel}
+                  </span>
+                </span>
+              ) : null}
               {student.interests?.length ? (
                 <span className="inline-flex items-center gap-1 rounded-full border border-slate-200 px-3 py-1 dark:border-slate-600">
                   <span className="text-slate-400">Minat:</span>

@@ -1,0 +1,1307 @@
+[2025-12-20 00:54:15] [0.06ms] Mengumpulkan paket dan mata kuliah eligible
+
+[2025-12-20 00:54:16] [1580.56ms] Menyiapkan konteks transkrip dan preferensi mahasiswa
+
+[2025-12-20 00:54:16] [1734.05ms] Meminta rekomendasi mata kuliah pilihan dari AI
+
+[2025-12-20 00:54:16] [1824.23ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 00:54:17] [1912.31ms] Prompt AI berhasil dibangun (6299 karakter)
+
+[2025-12-20 00:54:17] [2004.03ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 00:54:30] [15177.56ms] Response diterima dari OpenRouter AI
+
+[2025-12-20 00:54:31] [16265.88ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-20 00:54:32] [17356.97ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-20 00:54:32] [17445.51ms] Error: Gagal parse JSON - Syntax error
+
+[2025-12-20 00:54:32] [17535.07ms] AI gagal, menggunakan seleksi fallback otomatis
+
+[2025-12-20 00:54:32] [17629.78ms] Rekomendasi akhir berhasil disusun
+
+[2025-12-20 01:09:48] [0.04ms] Mengumpulkan paket dan mata kuliah eligible
+
+[2025-12-20 01:09:49] [670.13ms] Menyiapkan konteks transkrip dan preferensi mahasiswa
+
+[2025-12-20 01:09:49] [921.58ms] Meminta rekomendasi mata kuliah pilihan dari AI
+
+[2025-12-20 01:09:50] [1102ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 01:09:50] [1250.76ms] Prompt AI berhasil dibangun (6219 karakter)
+
+[2025-12-20 01:09:50] [1399.3ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 01:10:10] [21765.88ms] Mengulang koneksi ke OpenRouter...
+
+[2025-12-20 01:10:32] [43428.52ms] Koneksi ke OpenRouter gagal: cURL error 28: Operation timed out after 20011 milliseconds with 506 bytes received (see https://curl.haxx.se/libcurl/c/libcurl-errors.html) for https://openrouter.ai/api/v1/chat/completions
+
+[2025-12-20 01:10:32] [43514.59ms] AI gagal, menggunakan seleksi fallback otomatis
+
+[2025-12-20 01:10:32] [43601.71ms] Rekomendasi akhir berhasil disusun
+
+[2025-12-20 01:33:25] [0.04ms] Mengumpulkan paket dan mata kuliah eligible
+
+[2025-12-20 01:33:25] [351.41ms] Menyiapkan konteks transkrip dan preferensi mahasiswa
+
+[2025-12-20 01:33:25] [475.38ms] Meminta rekomendasi mata kuliah pilihan dari AI
+
+[2025-12-20 01:33:26] [563.43ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 01:33:26] [648.12ms] Prompt AI berhasil dibangun (6391 karakter)
+
+[2025-12-20 01:33:26] [730.96ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 01:33:40] [15176.61ms] Response diterima dari OpenRouter AI
+
+[2025-12-20 01:33:41] [16261.52ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-20 01:33:42] [17393.11ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-20 01:33:42] [17477.21ms] Rekomendasi berhasil diproses oleh AI
+
+[2025-12-20 01:33:44] [18577.5ms] Rekomendasi akhir berhasil disusun
+
+[2025-12-20 01:43:44] [0.05ms] Mengumpulkan paket dan mata kuliah eligible
+
+[2025-12-20 01:43:45] [364ms] Menggunakan paket wajib dan seleksi internal
+
+[2025-12-20 01:43:45] [451.49ms] Rekomendasi akhir berhasil disusun
+
+[2025-12-20 01:53:02] [0.05ms] Mengumpulkan paket dan mata kuliah eligible
+
+[2025-12-20 01:53:02] [380.46ms] Menyiapkan konteks transkrip dan preferensi mahasiswa
+
+[2025-12-20 01:53:02] [515.65ms] Meminta rekomendasi mata kuliah pilihan dari AI
+
+[2025-12-20 01:53:02] [606.58ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 01:53:03] [691.41ms] Prompt AI berhasil dibangun (6501 karakter)
+
+[2025-12-20 01:53:03] [783.11ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 01:53:23] [20926.67ms] Mengulang koneksi ke OpenRouter...
+
+[2025-12-20 01:53:44] [42552.03ms] Koneksi ke OpenRouter gagal: cURL error 28: Operation timed out after 20012 milliseconds with 506 bytes received (see https://curl.haxx.se/libcurl/c/libcurl-errors.html) for https://openrouter.ai/api/v1/chat/completions
+
+[2025-12-20 01:53:45] [42686.5ms] AI gagal, menggunakan seleksi fallback otomatis
+
+[2025-12-20 01:53:45] [42816.38ms] Rekomendasi akhir berhasil disusun
+
+[2025-12-20 02:06:22] [0.07ms] Mengumpulkan paket dan mata kuliah eligible
+
+[2025-12-20 02:06:22] [373.94ms] Menyiapkan konteks transkrip dan preferensi mahasiswa
+
+[2025-12-20 02:06:22] [500.41ms] Meminta rekomendasi mata kuliah pilihan dari AI
+
+[2025-12-20 02:06:22] [592.7ms] Menghubungi AI (percobaan 1 dari 3)
+
+[2025-12-20 02:06:22] [673.74ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 02:06:22] [757.04ms] Prompt AI berhasil dibangun (5864 karakter)
+
+[2025-12-20 02:06:22] [838.29ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 02:06:39] [17652.48ms] Response diterima dari OpenRouter AI
+
+[2025-12-20 02:06:40] [18755.81ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-20 02:06:41] [19852.41ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-20 02:06:42] [20001.67ms] Rekomendasi berhasil diproses oleh AI
+
+[2025-12-20 02:06:43] [21103.15ms] Rekomendasi akhir berhasil disusun
+
+[2025-12-20 02:13:59] [0.04ms] Mengumpulkan paket dan mata kuliah eligible
+
+[2025-12-20 02:14:00] [387.34ms] Menggunakan paket wajib dan seleksi internal
+
+[2025-12-20 02:14:00] [472.8ms] Rekomendasi akhir berhasil disusun
+
+[2025-12-20 02:18:55] [0.05ms] Mengumpulkan paket dan mata kuliah eligible
+
+[2025-12-20 02:18:56] [394.32ms] Menyiapkan konteks transkrip dan preferensi mahasiswa
+
+[2025-12-20 02:18:56] [522.78ms] Meminta rekomendasi mata kuliah pilihan dari AI
+
+[2025-12-20 02:18:56] [616.58ms] Menghubungi AI (percobaan 1 dari 3)
+
+[2025-12-20 02:18:56] [704.2ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 02:18:56] [788.28ms] Prompt AI berhasil dibangun (5864 karakter)
+
+[2025-12-20 02:18:56] [875.54ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 02:19:10] [14382.61ms] Response diterima dari OpenRouter AI
+
+[2025-12-20 02:19:11] [15483.01ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-20 02:19:12] [16586.63ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-20 02:19:12] [16674.14ms] Rekomendasi berhasil diproses oleh AI
+
+[2025-12-20 02:19:13] [17767.85ms] Rekomendasi akhir berhasil disusun
+
+[2025-12-20 02:36:23] [0.05ms] Mengumpulkan paket dan mata kuliah eligible
+
+[2025-12-20 02:36:25] [1928.43ms] Menyiapkan konteks transkrip dan preferensi mahasiswa
+
+[2025-12-20 02:36:25] [2081.21ms] Meminta rekomendasi mata kuliah pilihan dari AI
+
+[2025-12-20 02:36:26] [2168.58ms] Menghubungi AI (percobaan 1 dari 3)
+
+[2025-12-20 02:36:26] [2254.14ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 02:36:26] [2350.09ms] Prompt AI berhasil dibangun (6388 karakter)
+
+[2025-12-20 02:36:26] [2436.59ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 02:36:42] [19149.02ms] Response diterima dari OpenRouter AI
+
+[2025-12-20 02:36:44] [20248.56ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-20 02:36:45] [21345.45ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-20 02:36:45] [21434.33ms] Rekomendasi berhasil diproses oleh AI
+
+[2025-12-20 02:36:46] [22530.77ms] Rekomendasi akhir berhasil disusun
+
+[2025-12-20 02:51:50] [0.04ms] Mengumpulkan paket dan mata kuliah eligible
+
+[2025-12-20 02:51:50] [381.38ms] Menyiapkan konteks transkrip dan preferensi mahasiswa
+
+[2025-12-20 02:51:50] [510.24ms] Meminta rekomendasi mata kuliah pilihan dari AI
+
+[2025-12-20 02:51:50] [595.44ms] Menghubungi AI (percobaan 1 dari 3)
+
+[2025-12-20 02:51:50] [687.9ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 02:51:50] [772.14ms] Prompt AI berhasil dibangun (6302 karakter)
+
+[2025-12-20 02:51:51] [861.16ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 02:52:04] [14325.4ms] Response diterima dari OpenRouter AI
+
+[2025-12-20 02:52:05] [15412.81ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-20 02:52:06] [16517.3ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-20 02:52:06] [16606.37ms] Percobaan AI ke-1 gagal (preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 43), mencoba ulang...
+
+[2025-12-20 02:52:07] [17202.82ms] Menghubungi AI (percobaan 2 dari 3)
+
+[2025-12-20 02:52:07] [17286.76ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 02:52:07] [17373.77ms] Prompt AI berhasil dibangun (6302 karakter)
+
+[2025-12-20 02:52:07] [17459.07ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 02:52:21] [30911.65ms] Response diterima dari OpenRouter AI
+
+[2025-12-20 02:52:22] [32003.27ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-20 02:52:23] [33089.86ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-20 02:52:23] [33175.68ms] Percobaan AI ke-2 gagal (preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 43), mencoba ulang...
+
+[2025-12-20 02:52:23] [33774.62ms] Menghubungi AI (percobaan 3 dari 3)
+
+[2025-12-20 02:52:24] [33861.56ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 02:52:24] [33946.9ms] Prompt AI berhasil dibangun (6302 karakter)
+
+[2025-12-20 02:52:24] [34034.52ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 02:52:36] [46311.23ms] Response diterima dari OpenRouter AI
+
+[2025-12-20 02:52:37] [47405.71ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-20 02:52:38] [48511.69ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-20 02:52:38] [48606.48ms] AI gagal setelah beberapa percobaan, menggunakan seleksi fallback otomatis
+
+[2025-12-20 02:52:38] [48696.34ms] Rekomendasi akhir berhasil disusun
+
+[2025-12-20 09:13:55] [0.05ms] Mengumpulkan paket dan mata kuliah eligible
+
+[2025-12-20 09:13:55] [428.29ms] Menyiapkan konteks transkrip dan preferensi mahasiswa
+
+[2025-12-20 09:13:55] [560.77ms] Meminta rekomendasi mata kuliah pilihan dari AI
+
+[2025-12-20 09:13:55] [646.21ms] Menghubungi AI (percobaan 1 dari 3)
+
+[2025-12-20 09:13:55] [731.49ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 09:13:55] [825.62ms] Prompt AI berhasil dibangun (6304 karakter)
+
+[2025-12-20 09:13:56] [917.9ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 09:14:41] [46156.54ms] Mengulang koneksi ke OpenRouter...
+
+[2025-12-20 09:15:02] [0.04ms] Mengumpulkan paket dan mata kuliah eligible
+
+[2025-12-20 09:15:02] [360.78ms] Menyiapkan konteks transkrip dan preferensi mahasiswa
+
+[2025-12-20 09:15:02] [484.1ms] Meminta rekomendasi mata kuliah pilihan dari AI
+
+[2025-12-20 09:15:03] [568.63ms] Menghubungi AI (percobaan 1 dari 3)
+
+[2025-12-20 09:15:03] [651.75ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 09:15:03] [775.45ms] Prompt AI berhasil dibangun (6304 karakter)
+
+[2025-12-20 09:15:03] [916.5ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 09:15:19] [16929.77ms] Response diterima dari OpenRouter AI
+
+[2025-12-20 09:15:20] [18020.75ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-20 09:15:21] [19110.84ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-20 09:15:21] [19199.74ms] Percobaan AI ke-1 gagal (preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 43), mencoba ulang...
+
+[2025-12-20 09:15:22] [19846.53ms] Menghubungi AI (percobaan 2 dari 3)
+
+[2025-12-20 09:15:22] [19932.65ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 09:15:22] [20021.09ms] Prompt AI berhasil dibangun (6304 karakter)
+
+[2025-12-20 09:15:22] [20109.29ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 09:23:42] [0.14ms] Mengumpulkan paket dan mata kuliah eligible
+
+[2025-12-20 09:23:42] [376.4ms] Menyiapkan konteks transkrip dan preferensi mahasiswa
+
+[2025-12-20 09:23:42] [503.56ms] Meminta rekomendasi mata kuliah pilihan dari AI
+
+[2025-12-20 09:23:42] [586.61ms] Menghubungi AI (percobaan 1 dari 3)
+
+[2025-12-20 09:23:42] [669.59ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 09:23:42] [753.52ms] Prompt AI berhasil dibangun (6304 karakter)
+
+[2025-12-20 09:23:43] [837.1ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 09:23:57] [15471.93ms] Response diterima dari OpenRouter AI
+
+[2025-12-20 09:23:58] [16568.25ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-20 09:23:59] [17657.56ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-20 09:23:59] [17741.79ms] Percobaan AI ke-1 gagal (preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 44), mencoba ulang...
+
+[2025-12-20 09:24:00] [18327.89ms] Menghubungi AI (percobaan 2 dari 3)
+
+[2025-12-20 09:24:00] [18413.1ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 09:24:00] [18520.25ms] Prompt AI berhasil dibangun (6304 karakter)
+
+[2025-12-20 09:24:00] [18737.64ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 09:24:14] [32587.01ms] Response diterima dari OpenRouter AI
+
+[2025-12-20 09:24:15] [33689.09ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-20 09:24:17] [34780.05ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-20 09:24:17] [34900.05ms] Percobaan AI ke-2 gagal (preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 44), mencoba ulang...
+
+[2025-12-20 09:24:17] [35497.69ms] Menghubungi AI (percobaan 3 dari 3)
+
+[2025-12-20 09:24:17] [35583.18ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 09:24:17] [35671.51ms] Prompt AI berhasil dibangun (6304 karakter)
+
+[2025-12-20 09:24:17] [35757.95ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 09:24:31] [49285.77ms] Response diterima dari OpenRouter AI
+
+[2025-12-20 09:24:32] [50377.63ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-20 09:24:33] [51514.77ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-20 09:24:33] [51605.64ms] AI gagal setelah beberapa percobaan, menggunakan seleksi fallback otomatis
+
+[2025-12-20 09:24:33] [51696.84ms] Rekomendasi akhir berhasil disusun
+
+[2025-12-20 09:31:44] [0.06ms] Mengumpulkan paket dan mata kuliah eligible
+
+[2025-12-20 09:31:44] [369.33ms] Menggunakan paket wajib dan seleksi internal
+
+[2025-12-20 09:31:45] [455.42ms] Rekomendasi akhir berhasil disusun
+
+[2025-12-20 09:33:16] [0.06ms] Mengumpulkan paket dan mata kuliah eligible
+
+[2025-12-20 09:33:20] [0.07ms] Mengumpulkan paket dan mata kuliah eligible
+
+[2025-12-20 09:33:22] [0.04ms] Mengumpulkan paket dan mata kuliah eligible
+
+[2025-12-20 09:34:37] [0.06ms] Mengumpulkan paket dan mata kuliah eligible
+
+[2025-12-20 09:36:09] [0.05ms] Mengumpulkan paket dan mata kuliah eligible
+
+[2025-12-20 09:38:00] [0.07ms] Mengumpulkan paket dan mata kuliah eligible
+
+[2025-12-20 09:38:22] [0.06ms] Mengumpulkan paket dan mata kuliah eligible
+
+[2025-12-20 09:43:13] [0.1ms] Mengumpulkan paket dan mata kuliah eligible
+
+[2025-12-20 09:43:14] [402.58ms] Menyiapkan konteks transkrip dan preferensi mahasiswa
+
+[2025-12-20 09:43:14] [524.93ms] Meminta rekomendasi mata kuliah pilihan dari AI
+
+[2025-12-20 09:43:14] [609.38ms] Menghubungi AI (percobaan 1 dari 3)
+
+[2025-12-20 09:43:14] [691.98ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 09:43:14] [776.39ms] Prompt AI berhasil dibangun (6486 karakter)
+
+[2025-12-20 09:43:14] [858.77ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 09:43:33] [19441.75ms] Response diterima dari OpenRouter AI
+
+[2025-12-20 09:43:34] [20540.35ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-20 09:43:35] [21628.52ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-20 09:43:35] [21713.26ms] Percobaan AI ke-1 gagal (preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 44), mencoba ulang...
+
+[2025-12-20 09:43:36] [22298.9ms] Menghubungi AI (percobaan 2 dari 3)
+
+[2025-12-20 09:43:36] [22383.36ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 09:43:36] [22465.6ms] Prompt AI berhasil dibangun (6486 karakter)
+
+[2025-12-20 09:43:36] [22549.43ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 09:43:49] [36178.49ms] Response diterima dari OpenRouter AI
+
+[2025-12-20 09:43:51] [37265.75ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-20 09:43:52] [38355.14ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-20 09:43:52] [38439.95ms] Percobaan AI ke-2 gagal (preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 44), mencoba ulang...
+
+[2025-12-20 09:43:52] [39023.14ms] Menghubungi AI (percobaan 3 dari 3)
+
+[2025-12-20 09:43:52] [39107.7ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 09:43:52] [39191.19ms] Prompt AI berhasil dibangun (6486 karakter)
+
+[2025-12-20 09:43:53] [39278.42ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 09:44:10] [56789.63ms] Response diterima dari OpenRouter AI
+
+[2025-12-20 09:44:11] [57890.79ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-20 09:44:12] [58984.25ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-20 09:44:12] [59075.89ms] AI gagal setelah beberapa percobaan, menggunakan seleksi fallback otomatis
+
+[2025-12-20 09:44:12] [59161.31ms] Rekomendasi akhir berhasil disusun
+
+[2025-12-20 09:50:40] [0.05ms] Mengumpulkan paket dan mata kuliah eligible
+
+[2025-12-20 09:50:41] [365.32ms] Menyiapkan konteks transkrip dan preferensi mahasiswa
+
+[2025-12-20 09:50:41] [493.09ms] Meminta rekomendasi mata kuliah pilihan dari AI
+
+[2025-12-20 09:50:41] [579.3ms] Menghubungi AI (percobaan 1 dari 3)
+
+[2025-12-20 09:50:41] [665.84ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 09:50:41] [749.08ms] Prompt AI berhasil dibangun (5863 karakter)
+
+[2025-12-20 09:50:41] [835.87ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 09:51:02] [21525.25ms] Response diterima dari OpenRouter AI
+
+[2025-12-20 09:51:03] [22621.5ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-20 09:51:04] [23716.4ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-20 09:51:04] [23800.43ms] Percobaan AI ke-1 gagal (preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 44), mencoba ulang...
+
+[2025-12-20 09:51:05] [24390.14ms] Menghubungi AI (percobaan 2 dari 3)
+
+[2025-12-20 09:51:05] [24477.34ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 09:51:05] [24562.99ms] Prompt AI berhasil dibangun (5863 karakter)
+
+[2025-12-20 09:51:05] [24650.14ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 09:51:36] [55582.8ms] Response diterima dari OpenRouter AI
+
+[2025-12-20 09:51:37] [56680.38ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-20 09:51:38] [57773.14ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-20 09:51:38] [57858.71ms] Percobaan AI ke-2 gagal (preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 44), mencoba ulang...
+
+[2025-12-20 09:51:39] [58456.84ms] Menghubungi AI (percobaan 3 dari 3)
+
+[2025-12-20 09:51:39] [58552.36ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 09:51:39] [58637.96ms] Prompt AI berhasil dibangun (5863 karakter)
+
+[2025-12-20 09:51:39] [58722.05ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 09:52:07] [86391.51ms] Response diterima dari OpenRouter AI
+
+[2025-12-20 09:52:08] [87488.91ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-20 09:52:09] [88579.01ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-20 09:52:09] [88671.97ms] AI gagal setelah beberapa percobaan, menggunakan seleksi fallback otomatis
+
+[2025-12-20 09:52:09] [88762.82ms] Rekomendasi akhir berhasil disusun
+
+[2025-12-20 09:56:43] [0.07ms] Mengumpulkan paket dan mata kuliah eligible
+
+[2025-12-20 09:56:44] [349.77ms] Menyiapkan konteks transkrip dan preferensi mahasiswa
+
+[2025-12-20 09:56:44] [479.31ms] Meminta rekomendasi mata kuliah pilihan dari AI
+
+[2025-12-20 09:56:44] [563.29ms] Menghubungi AI (percobaan 1 dari 3)
+
+[2025-12-20 09:56:44] [645.04ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 09:56:44] [728.27ms] Prompt AI berhasil dibangun (6490 karakter)
+
+[2025-12-20 09:56:44] [813.09ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 09:56:52] [9094.2ms] Response diterima dari OpenRouter AI
+
+[2025-12-20 09:56:53] [10192.62ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-20 09:56:55] [11295.39ms] Error: Content kosong dari OpenRouter
+
+[2025-12-20 09:56:55] [11379.01ms] Percobaan AI ke-1 gagal (Response dari OpenRouter kosong atau tidak valid), mencoba ulang...
+
+[2025-12-20 09:56:55] [11965.32ms] Menghubungi AI (percobaan 2 dari 3)
+
+[2025-12-20 09:56:55] [12049.4ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 09:56:55] [12133.05ms] Prompt AI berhasil dibangun (6490 karakter)
+
+[2025-12-20 09:56:55] [12216.54ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 09:58:00] [76743.15ms] Response diterima dari OpenRouter AI
+
+[2025-12-20 09:58:01] [77839.5ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-20 09:58:02] [78932.75ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-20 09:58:02] [79018.08ms] Percobaan AI ke-2 gagal (preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 44), mencoba ulang...
+
+[2025-12-20 09:58:03] [79618.66ms] Menghubungi AI (percobaan 3 dari 3)
+
+[2025-12-20 09:58:03] [79703.25ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 09:58:03] [79787.59ms] Prompt AI berhasil dibangun (6490 karakter)
+
+[2025-12-20 09:58:03] [79873.98ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 09:58:52] [128538.1ms] Response diterima dari OpenRouter AI
+
+[2025-12-20 09:58:53] [129637.5ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-20 09:58:54] [130730.58ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-20 09:58:54] [130816.22ms] AI gagal setelah beberapa percobaan, menggunakan seleksi fallback otomatis
+
+[2025-12-20 09:58:54] [130905.35ms] Rekomendasi akhir berhasil disusun
+
+[2025-12-20 10:02:02] [0.04ms] Mengumpulkan paket dan mata kuliah eligible
+
+[2025-12-20 10:02:03] [353.18ms] Menyiapkan konteks transkrip dan preferensi mahasiswa
+
+[2025-12-20 10:02:03] [484.97ms] Meminta rekomendasi mata kuliah pilihan dari AI
+
+[2025-12-20 10:02:03] [572.32ms] Menghubungi AI (percobaan 1 dari 3)
+
+[2025-12-20 10:02:03] [656.84ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 10:02:03] [751.09ms] Prompt AI berhasil dibangun (6490 karakter)
+
+[2025-12-20 10:02:03] [835.29ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 10:02:23] [20881.77ms] Response diterima dari OpenRouter AI
+
+[2025-12-20 10:02:24] [21975.55ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-20 10:02:25] [23064.63ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-20 10:02:26] [23168.98ms] Percobaan AI ke-1 gagal (preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 44), mencoba ulang...
+
+[2025-12-20 10:02:26] [23766.49ms] Menghubungi AI (percobaan 2 dari 3)
+
+[2025-12-20 10:02:26] [23851.33ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 10:02:26] [23936.52ms] Prompt AI berhasil dibangun (6490 karakter)
+
+[2025-12-20 10:02:26] [24024.9ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 10:02:58] [55858.34ms] Response diterima dari OpenRouter AI
+
+[2025-12-20 10:02:59] [56959.01ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-20 10:03:00] [58050.08ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-20 10:03:01] [58150.88ms] Percobaan AI ke-2 gagal (preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 44), mencoba ulang...
+
+[2025-12-20 10:03:01] [58769.53ms] Menghubungi AI (percobaan 3 dari 3)
+
+[2025-12-20 10:03:01] [58857.45ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 10:03:01] [58945.44ms] Prompt AI berhasil dibangun (6490 karakter)
+
+[2025-12-20 10:03:01] [59032.05ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 10:03:27] [84583.95ms] Response diterima dari OpenRouter AI
+
+[2025-12-20 10:03:28] [85676.95ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-20 10:03:29] [86767.9ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-20 10:03:29] [86857.44ms] AI gagal setelah beberapa percobaan, menggunakan seleksi fallback otomatis
+
+[2025-12-20 10:03:29] [86947.27ms] Rekomendasi akhir berhasil disusun
+
+[2025-12-20 10:08:36] [0.06ms] Mengumpulkan paket dan mata kuliah eligible
+
+[2025-12-20 10:08:36] [369.57ms] Menyiapkan konteks transkrip dan preferensi mahasiswa
+
+[2025-12-20 10:08:37] [499.24ms] Meminta rekomendasi mata kuliah pilihan dari AI
+
+[2025-12-20 10:08:37] [584.41ms] Menghubungi AI (percobaan 1 dari 3)
+
+[2025-12-20 10:08:37] [669.43ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 10:08:37] [752.33ms] Prompt AI berhasil dibangun (6490 karakter)
+
+[2025-12-20 10:08:37] [834.71ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 10:08:55] [19109.59ms] Response diterima dari OpenRouter AI
+
+[2025-12-20 10:08:56] [20198.49ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-20 10:08:57] [21288.87ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-20 10:08:57] [21384.75ms] Percobaan AI ke-1 gagal (preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 39), mencoba ulang...
+
+[2025-12-20 10:08:58] [21991.22ms] Menghubungi AI (percobaan 2 dari 3)
+
+[2025-12-20 10:08:58] [22079.57ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 10:08:58] [22170.23ms] Prompt AI berhasil dibangun (6490 karakter)
+
+[2025-12-20 10:08:58] [22257.32ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 10:09:13] [36689.29ms] Response diterima dari OpenRouter AI
+
+[2025-12-20 10:09:14] [37779.17ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-20 10:09:15] [38869.44ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-20 10:09:15] [38957.44ms] Percobaan AI ke-2 gagal (preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 39), mencoba ulang...
+
+[2025-12-20 10:09:16] [39552.94ms] Menghubungi AI (percobaan 3 dari 3)
+
+[2025-12-20 10:09:16] [39648.69ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 10:09:16] [39741.87ms] Prompt AI berhasil dibangun (6490 karakter)
+
+[2025-12-20 10:09:16] [39830.38ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 10:09:22] [46421.08ms] Mengulang koneksi ke OpenRouter...
+
+[2025-12-20 10:09:44] [68322.98ms] Response diterima dari OpenRouter AI
+
+[2025-12-20 10:09:45] [69412.63ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-20 10:09:47] [70504.54ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-20 10:09:47] [70593.67ms] AI gagal setelah beberapa percobaan, menggunakan seleksi fallback otomatis
+
+[2025-12-20 10:09:47] [70687.75ms] Rekomendasi akhir berhasil disusun
+
+[2025-12-20 10:11:51] [0.04ms] Mengumpulkan paket dan mata kuliah eligible
+
+[2025-12-20 10:11:51] [394.52ms] Menyiapkan konteks transkrip dan preferensi mahasiswa
+
+[2025-12-20 10:11:51] [527.46ms] Meminta rekomendasi mata kuliah pilihan dari AI
+
+[2025-12-20 10:11:51] [615.84ms] Menghubungi AI (percobaan 1 dari 3)
+
+[2025-12-20 10:11:51] [704.52ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 10:11:52] [788.49ms] Prompt AI berhasil dibangun (6490 karakter)
+
+[2025-12-20 10:11:52] [879.02ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 10:12:13] [22339.48ms] Response diterima dari OpenRouter AI
+
+[2025-12-20 10:12:14] [23430.61ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-20 10:12:15] [24523.52ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-20 10:12:16] [24846.14ms] Percobaan AI ke-1 gagal (preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 39), mencoba ulang...
+
+[2025-12-20 10:12:16] [25444.52ms] Menghubungi AI (percobaan 2 dari 3)
+
+[2025-12-20 10:12:16] [25535.16ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 10:12:16] [25627.06ms] Prompt AI berhasil dibangun (6490 karakter)
+
+[2025-12-20 10:12:16] [25730.26ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 10:12:31] [40318.51ms] Response diterima dari OpenRouter AI
+
+[2025-12-20 10:12:32] [41405.64ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-20 10:12:33] [42501.05ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-20 10:12:33] [42588.6ms] Percobaan AI ke-2 gagal (preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 39), mencoba ulang...
+
+[2025-12-20 10:12:34] [43191.02ms] Menghubungi AI (percobaan 3 dari 3)
+
+[2025-12-20 10:12:34] [43278.49ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 10:12:34] [43363.53ms] Prompt AI berhasil dibangun (6490 karakter)
+
+[2025-12-20 10:12:34] [43451.5ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 10:12:53] [62496.48ms] Response diterima dari OpenRouter AI
+
+[2025-12-20 10:12:54] [63593.27ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-20 10:12:55] [64698.77ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-20 10:12:56] [64789.75ms] AI gagal setelah beberapa percobaan, menggunakan seleksi fallback otomatis
+
+[2025-12-20 10:12:56] [64890.55ms] Rekomendasi akhir berhasil disusun
+
+[2025-12-20 10:19:38] [0.07ms] Mengumpulkan paket dan mata kuliah eligible
+
+[2025-12-20 10:19:38] [376.56ms] Menyiapkan konteks transkrip dan preferensi mahasiswa
+
+[2025-12-20 10:19:38] [499.83ms] Meminta rekomendasi mata kuliah pilihan dari AI
+
+[2025-12-20 10:19:38] [588.46ms] Menghubungi AI (percobaan 1 dari 3)
+
+[2025-12-20 10:19:38] [675.11ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 10:19:38] [759.87ms] Prompt AI berhasil dibangun (6490 karakter)
+
+[2025-12-20 10:19:38] [857.5ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 10:19:53] [15894.87ms] Response diterima dari OpenRouter AI
+
+[2025-12-20 10:19:55] [16979.14ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-20 10:19:56] [18072.38ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-20 10:19:56] [18157.95ms] Percobaan AI ke-1 gagal (preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 39), mencoba ulang...
+
+[2025-12-20 10:19:56] [18754.06ms] Menghubungi AI (percobaan 2 dari 3)
+
+[2025-12-20 10:19:56] [18839.81ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 10:19:56] [18923.37ms] Prompt AI berhasil dibangun (6490 karakter)
+
+[2025-12-20 10:19:57] [19013.99ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 10:20:10] [32030.95ms] Response diterima dari OpenRouter AI
+
+[2025-12-20 10:20:11] [33135.66ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-20 10:20:12] [34231.51ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-20 10:20:12] [34315.9ms] Percobaan AI ke-2 gagal (preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 39), mencoba ulang...
+
+[2025-12-20 10:20:12] [34910.72ms] Menghubungi AI (percobaan 3 dari 3)
+
+[2025-12-20 10:20:13] [34995.5ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 10:20:13] [35086.54ms] Prompt AI berhasil dibangun (6490 karakter)
+
+[2025-12-20 10:20:13] [35176.38ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 10:20:31] [53629.59ms] Response diterima dari OpenRouter AI
+
+[2025-12-20 10:20:32] [54724.81ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-20 10:20:33] [55820.22ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-20 10:20:33] [55905.9ms] AI gagal setelah beberapa percobaan, menggunakan seleksi fallback otomatis
+
+[2025-12-20 10:20:34] [55996.73ms] Rekomendasi akhir berhasil disusun
+
+[2025-12-20 10:28:34] [0.05ms] Mengumpulkan paket dan mata kuliah eligible
+
+[2025-12-20 10:28:35] [402.75ms] Menyiapkan konteks transkrip dan preferensi mahasiswa
+
+[2025-12-20 10:28:35] [536.61ms] Meminta rekomendasi mata kuliah pilihan dari AI
+
+[2025-12-20 10:28:35] [623.58ms] Menghubungi AI (percobaan 1 dari 3)
+
+[2025-12-20 10:28:35] [706.67ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 10:28:35] [790.95ms] Prompt AI berhasil dibangun (6490 karakter)
+
+[2025-12-20 10:28:35] [876.65ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 10:28:49] [14669.31ms] Response diterima dari OpenRouter AI
+
+[2025-12-20 10:28:50] [15758.93ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-20 10:28:51] [16854.46ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-20 10:28:51] [16943.95ms] Percobaan AI ke-1 gagal (preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 39), mencoba ulang...
+
+[2025-12-20 10:28:52] [17548.74ms] Menghubungi AI (percobaan 2 dari 3)
+
+[2025-12-20 10:28:52] [17637.8ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 10:28:52] [17722.27ms] Prompt AI berhasil dibangun (6490 karakter)
+
+[2025-12-20 10:28:52] [17811.3ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 10:29:04] [29582.06ms] Response diterima dari OpenRouter AI
+
+[2025-12-20 10:29:05] [30685.02ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-20 10:29:06] [31782.45ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-20 10:29:06] [31868.18ms] Percobaan AI ke-2 gagal (preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 39), mencoba ulang...
+
+[2025-12-20 10:29:07] [32461ms] Menghubungi AI (percobaan 3 dari 3)
+
+[2025-12-20 10:29:07] [32549.34ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 10:29:07] [32638.53ms] Prompt AI berhasil dibangun (6490 karakter)
+
+[2025-12-20 10:29:07] [32729.91ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 10:29:26] [51290.71ms] Response diterima dari OpenRouter AI
+
+[2025-12-20 10:29:27] [52385.52ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-20 10:29:28] [53511.72ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-20 10:29:28] [53600.67ms] AI gagal setelah beberapa percobaan, menggunakan seleksi fallback otomatis
+
+[2025-12-20 10:29:28] [53691.11ms] Rekomendasi akhir berhasil disusun
+
+[2025-12-20 10:38:10] [0.05ms] Mengumpulkan paket dan mata kuliah eligible
+
+[2025-12-20 10:38:11] [363.67ms] Menyiapkan konteks transkrip dan preferensi mahasiswa
+
+[2025-12-20 10:38:11] [511.96ms] Meminta rekomendasi mata kuliah pilihan dari AI
+
+[2025-12-20 10:38:11] [595.59ms] Menghubungi AI (percobaan 1 dari 3)
+
+[2025-12-20 10:38:11] [686.29ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 10:38:11] [774.64ms] Prompt AI berhasil dibangun (6490 karakter)
+
+[2025-12-20 10:38:11] [856.57ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 10:38:27] [16746.14ms] Response diterima dari OpenRouter AI
+
+[2025-12-20 10:38:28] [17842.48ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-20 10:38:29] [18939.08ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-20 10:38:29] [19032.06ms] Percobaan AI ke-1 gagal (preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 39), mencoba ulang...
+
+[2025-12-20 10:38:30] [19620.21ms] Menghubungi AI (percobaan 2 dari 3)
+
+[2025-12-20 10:38:30] [19707.81ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 10:38:30] [19789.72ms] Prompt AI berhasil dibangun (6490 karakter)
+
+[2025-12-20 10:38:30] [19871.58ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 10:38:41] [30950.81ms] Response diterima dari OpenRouter AI
+
+[2025-12-20 10:38:42] [32043.73ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-20 10:38:44] [33138.02ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-20 10:38:44] [33223.39ms] Percobaan AI ke-2 gagal (preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 39), mencoba ulang...
+
+[2025-12-20 10:38:44] [33817.01ms] Menghubungi AI (percobaan 3 dari 3)
+
+[2025-12-20 10:38:44] [33904.22ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 10:38:44] [33999.94ms] Prompt AI berhasil dibangun (6490 karakter)
+
+[2025-12-20 10:38:44] [34086.46ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 10:38:58] [47274.25ms] Response diterima dari OpenRouter AI
+
+[2025-12-20 10:38:59] [48378ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-20 10:39:00] [49475.09ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-20 10:39:00] [49561.73ms] AI gagal setelah beberapa percobaan, menggunakan seleksi fallback otomatis
+
+[2025-12-20 10:39:00] [49653.35ms] Rekomendasi akhir berhasil disusun
+
+[2025-12-20 10:51:40] [0.05ms] Mengumpulkan paket dan mata kuliah eligible
+
+[2025-12-20 10:51:40] [387.63ms] Menyiapkan konteks transkrip dan preferensi mahasiswa
+
+[2025-12-20 10:51:41] [511.4ms] Meminta rekomendasi mata kuliah pilihan dari AI
+
+[2025-12-20 10:51:41] [597.2ms] Menghubungi AI (percobaan 1 dari 3)
+
+[2025-12-20 10:51:41] [684.06ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 10:51:41] [772.74ms] Prompt AI berhasil dibangun (6657 karakter)
+
+[2025-12-20 10:51:41] [855ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 10:52:02] [22121.89ms] Response diterima dari OpenRouter AI
+
+[2025-12-20 10:52:03] [23263.18ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-20 10:52:04] [24361.1ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-20 10:52:05] [24443.04ms] Percobaan AI ke-1 gagal (preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 39), mencoba ulang...
+
+[2025-12-20 10:52:05] [25040.92ms] Menghubungi AI (percobaan 2 dari 3)
+
+[2025-12-20 10:52:05] [25170.89ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 10:52:05] [25268.26ms] Prompt AI berhasil dibangun (6657 karakter)
+
+[2025-12-20 10:52:05] [25351.6ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 10:52:20] [39558.85ms] Response diterima dari OpenRouter AI
+
+[2025-12-20 10:52:21] [40657.02ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-20 10:52:22] [41751.41ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-20 10:52:22] [41840.88ms] Percobaan AI ke-2 gagal (preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 39), mencoba ulang...
+
+[2025-12-20 10:52:23] [42429.95ms] Menghubungi AI (percobaan 3 dari 3)
+
+[2025-12-20 10:52:23] [42513.37ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 10:52:23] [42597.77ms] Prompt AI berhasil dibangun (6657 karakter)
+
+[2025-12-20 10:52:23] [42682.61ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 10:52:38] [57580.9ms] Response diterima dari OpenRouter AI
+
+[2025-12-20 10:52:39] [58680.52ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-20 10:52:40] [59774.83ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-20 10:52:40] [59862.68ms] AI gagal setelah beberapa percobaan, menggunakan seleksi fallback otomatis
+
+[2025-12-20 10:52:40] [59953.39ms] Rekomendasi akhir berhasil disusun
+
+[2025-12-20 11:22:09] [0.09ms] Mengumpulkan paket dan mata kuliah eligible
+
+[2025-12-20 11:22:10] [409.92ms] Menyiapkan konteks transkrip dan preferensi mahasiswa
+
+[2025-12-20 11:22:10] [544.6ms] Meminta rekomendasi mata kuliah pilihan dari AI
+
+[2025-12-20 11:22:10] [631.11ms] Menghubungi AI (percobaan 1 dari 3)
+
+[2025-12-20 11:22:10] [721.87ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 11:22:10] [810.44ms] Prompt AI berhasil dibangun (6659 karakter)
+
+[2025-12-20 11:22:10] [895.98ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 11:22:12] [2512.99ms] Mengulang koneksi ke OpenRouter...
+
+[2025-12-20 11:22:15] [5281.65ms] Mengulang koneksi ke OpenRouter...
+
+[2025-12-20 11:22:15] [5370.15ms] Percobaan AI ke-1 gagal (HTTP request returned status code 429:
+{"error":{"message":"Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day (truncated...)
+), mencoba ulang...
+
+[2025-12-20 11:22:15] [5966.93ms] Menghubungi AI (percobaan 2 dari 3)
+
+[2025-12-20 11:22:16] [6051.06ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 11:22:16] [6141.97ms] Prompt AI berhasil dibangun (6659 karakter)
+
+[2025-12-20 11:22:16] [6229.62ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 11:22:17] [7477.7ms] Mengulang koneksi ke OpenRouter...
+
+[2025-12-20 11:22:20] [10216.01ms] Mengulang koneksi ke OpenRouter...
+
+[2025-12-20 11:22:20] [10306.73ms] Percobaan AI ke-2 gagal (HTTP request returned status code 429:
+{"error":{"message":"Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day (truncated...)
+), mencoba ulang...
+
+[2025-12-20 11:22:20] [10894.77ms] Menghubungi AI (percobaan 3 dari 3)
+
+[2025-12-20 11:22:20] [10979.55ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 11:22:21] [11067.45ms] Prompt AI berhasil dibangun (6659 karakter)
+
+[2025-12-20 11:22:21] [11152.05ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 11:22:22] [12259.55ms] Mengulang koneksi ke OpenRouter...
+
+[2025-12-20 11:22:25] [15081.96ms] Mengulang koneksi ke OpenRouter...
+
+[2025-12-20 11:22:25] [15166.87ms] AI gagal setelah beberapa percobaan, menggunakan seleksi fallback otomatis
+
+[2025-12-20 11:22:25] [15259.97ms] Rekomendasi akhir berhasil disusun
+
+[2025-12-20 11:22:25] [15347.22ms] Finalisasi rekomendasi dan menyiapkan penyimpanan
+
+[2025-12-20 11:22:25] [15822.23ms] Rekomendasi tersimpan dan siap direview dosen
+
+[2025-12-20 11:35:37] [0.11ms] Mengumpulkan paket dan mata kuliah eligible
+
+[2025-12-20 11:35:38] [380.52ms] Menyiapkan konteks transkrip dan preferensi mahasiswa
+
+[2025-12-20 11:35:38] [518.38ms] Meminta rekomendasi mata kuliah pilihan dari AI
+
+[2025-12-20 11:35:38] [618.16ms] Menghubungi AI (percobaan 1 dari 3)
+
+[2025-12-20 11:35:38] [708.3ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 11:35:38] [794.34ms] Prompt AI berhasil dibangun (6661 karakter)
+
+[2025-12-20 11:35:38] [880.28ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 11:35:50] [12316.24ms] Response diterima dari OpenRouter AI
+
+[2025-12-20 11:35:51] [13409.83ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-20 11:35:52] [14507.45ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-20 11:35:52] [14596.42ms] Rekomendasi berhasil diproses oleh AI
+
+[2025-12-20 11:35:53] [15695.76ms] Rekomendasi akhir berhasil disusun
+
+[2025-12-20 11:35:53] [15782.28ms] Finalisasi rekomendasi dan menyiapkan penyimpanan
+
+[2025-12-20 11:35:54] [16259.35ms] Rekomendasi tersimpan dan siap direview dosen
+
+[2025-12-20 11:43:29] [0.07ms] Mengumpulkan paket dan mata kuliah eligible
+
+[2025-12-20 11:43:29] [355.95ms] Menggunakan paket wajib dan seleksi internal
+
+[2025-12-20 11:43:29] [441.68ms] Rekomendasi akhir berhasil disusun
+
+[2025-12-20 11:43:29] [542.09ms] Finalisasi rekomendasi dan menyiapkan penyimpanan
+
+[2025-12-20 11:43:30] [989.95ms] Rekomendasi tersimpan dan siap direview dosen
+
+[2025-12-20 11:45:24] [0.04ms] Mengumpulkan paket dan mata kuliah eligible
+
+[2025-12-20 11:45:24] [365.32ms] Menyiapkan konteks transkrip dan preferensi mahasiswa
+
+[2025-12-20 11:45:24] [492.89ms] Meminta rekomendasi mata kuliah pilihan dari AI
+
+[2025-12-20 11:45:24] [578.36ms] Menghubungi AI (percobaan 1 dari 3)
+
+[2025-12-20 11:45:24] [663.24ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 11:45:24] [747.79ms] Prompt AI berhasil dibangun (6745 karakter)
+
+[2025-12-20 11:45:24] [833.99ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 11:45:47] [23818.54ms] Response diterima dari OpenRouter AI
+
+[2025-12-20 11:45:49] [24994.63ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-20 11:45:50] [26088.59ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-20 11:45:50] [26177.51ms] Rekomendasi berhasil diproses oleh AI
+
+[2025-12-20 11:45:51] [27274.96ms] Rekomendasi akhir berhasil disusun
+
+[2025-12-20 11:45:51] [27360.71ms] Finalisasi rekomendasi dan menyiapkan penyimpanan
+
+[2025-12-20 11:45:51] [27875.88ms] Rekomendasi tersimpan dan siap direview dosen
+
+[2025-12-20 11:47:33] [0.04ms] Mengumpulkan paket dan mata kuliah eligible
+
+[2025-12-20 11:47:33] [351.47ms] Menyiapkan konteks transkrip dan preferensi mahasiswa
+
+[2025-12-20 11:47:33] [495ms] Meminta rekomendasi mata kuliah pilihan dari AI
+
+[2025-12-20 11:47:33] [580.81ms] Menghubungi AI (percobaan 1 dari 3)
+
+[2025-12-20 11:47:33] [666.67ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 11:47:34] [751.76ms] Prompt AI berhasil dibangun (6635 karakter)
+
+[2025-12-20 11:47:34] [840.88ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 11:47:52] [19200.47ms] Response diterima dari OpenRouter AI
+
+[2025-12-20 11:47:53] [20296.13ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-20 11:47:54] [21395.22ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-20 11:47:54] [21482.75ms] Rekomendasi berhasil diproses oleh AI
+
+[2025-12-20 11:47:55] [22583.73ms] Rekomendasi akhir berhasil disusun
+
+[2025-12-20 11:47:55] [22670.37ms] Finalisasi rekomendasi dan menyiapkan penyimpanan
+
+[2025-12-20 11:47:56] [23209.83ms] Rekomendasi tersimpan dan siap direview dosen
+
+[2025-12-20 17:02:08] [0.05ms] Mengumpulkan paket dan mata kuliah eligible
+
+[2025-12-20 17:02:09] [830.57ms] Menggunakan paket wajib dan seleksi internal
+
+[2025-12-20 17:02:09] [937.35ms] Rekomendasi akhir berhasil disusun
+
+[2025-12-20 17:02:09] [1049.95ms] Finalisasi rekomendasi dan menyiapkan penyimpanan
+
+[2025-12-20 17:02:10] [1511.94ms] Rekomendasi tersimpan dan siap direview dosen
+
+[2025-12-20 17:06:01] [0.06ms] Mengumpulkan paket dan mata kuliah eligible
+
+[2025-12-20 17:06:02] [358.54ms] Menyiapkan konteks transkrip dan preferensi mahasiswa
+
+[2025-12-20 17:06:02] [480.62ms] Meminta rekomendasi mata kuliah pilihan dari AI
+
+[2025-12-20 17:06:02] [562.7ms] Menghubungi AI (percobaan 1 dari 3)
+
+[2025-12-20 17:06:02] [652.49ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 17:06:02] [735.08ms] Prompt AI berhasil dibangun (6562 karakter)
+
+[2025-12-20 17:06:02] [817.26ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 17:06:22] [20856.81ms] Response diterima dari OpenRouter AI
+
+[2025-12-20 17:06:23] [21940.49ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-20 17:06:24] [23022.88ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-20 17:06:24] [23112.64ms] Rekomendasi berhasil diproses oleh AI
+
+[2025-12-20 17:06:26] [24208.76ms] Rekomendasi akhir berhasil disusun
+
+[2025-12-20 17:06:26] [24291.08ms] Finalisasi rekomendasi dan menyiapkan penyimpanan
+
+[2025-12-20 17:06:26] [24697.63ms] Rekomendasi tersimpan dan siap direview dosen
+
+[2025-12-20 17:18:26] [0.07ms] Mengumpulkan paket dan mata kuliah eligible
+
+[2025-12-20 17:18:27] [349.82ms] Menyiapkan konteks transkrip dan preferensi mahasiswa
+
+[2025-12-20 17:18:27] [467.17ms] Meminta rekomendasi mata kuliah pilihan dari AI
+
+[2025-12-20 17:18:27] [546.96ms] Menghubungi AI (percobaan 1 dari 3)
+
+[2025-12-20 17:18:27] [626.2ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 17:18:27] [705.95ms] Prompt AI berhasil dibangun (6563 karakter)
+
+[2025-12-20 17:18:27] [787.71ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 17:19:01] [34559.28ms] Response diterima dari OpenRouter AI
+
+[2025-12-20 17:19:02] [35654.7ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-20 17:19:03] [36736.72ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-20 17:19:03] [36817.48ms] Rekomendasi berhasil diproses oleh AI
+
+[2025-12-20 17:19:04] [37913.86ms] Rekomendasi akhir berhasil disusun
+
+[2025-12-20 17:19:04] [37999.7ms] Finalisasi rekomendasi dan menyiapkan penyimpanan
+
+[2025-12-20 17:19:05] [38432.31ms] Rekomendasi tersimpan dan siap direview dosen
+
+[2025-12-20 17:27:36] [0.1ms] Mengumpulkan paket dan mata kuliah eligible
+
+[2025-12-20 17:27:37] [330.39ms] Menggunakan paket wajib dan seleksi internal
+
+[2025-12-20 17:27:37] [413.59ms] Rekomendasi akhir berhasil disusun
+
+[2025-12-20 17:27:37] [521.76ms] Finalisasi rekomendasi dan menyiapkan penyimpanan
+
+[2025-12-20 17:27:37] [984.18ms] Rekomendasi tersimpan dan siap direview dosen
+
+[2025-12-20 19:43:07] [0.12ms] Mengumpulkan paket dan mata kuliah eligible
+
+[2025-12-20 19:43:07] [365.61ms] Menyiapkan konteks transkrip dan preferensi mahasiswa
+
+[2025-12-20 19:43:07] [491.5ms] Meminta rekomendasi mata kuliah pilihan dari AI
+
+[2025-12-20 19:43:07] [574.71ms] Menghubungi AI (percobaan 1 dari 3)
+
+[2025-12-20 19:43:07] [654.24ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 19:43:08] [734.33ms] Prompt AI berhasil dibangun (6653 karakter)
+
+[2025-12-20 19:43:08] [814.5ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 19:43:26] [18928.2ms] Response diterima dari OpenRouter AI
+
+[2025-12-20 19:43:27] [20020.07ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-20 19:43:28] [21134.9ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-20 19:43:28] [21218.15ms] Rekomendasi berhasil diproses oleh AI
+
+[2025-12-20 19:43:29] [22318.03ms] Rekomendasi akhir berhasil disusun
+
+[2025-12-20 19:43:29] [22417.82ms] Finalisasi rekomendasi dan menyiapkan penyimpanan
+
+[2025-12-20 19:43:30] [23060.63ms] Rekomendasi tersimpan dan siap direview dosen
+
+[2025-12-20 19:47:09] [0.13ms] Mengumpulkan paket dan mata kuliah eligible
+
+[2025-12-20 19:47:09] [344.49ms] Menyiapkan konteks transkrip dan preferensi mahasiswa
+
+[2025-12-20 19:47:10] [464.74ms] Meminta rekomendasi mata kuliah pilihan dari AI
+
+[2025-12-20 19:47:10] [545.76ms] Menghubungi AI (percobaan 1 dari 3)
+
+[2025-12-20 19:47:10] [628.18ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 19:47:10] [711.07ms] Prompt AI berhasil dibangun (6560 karakter)
+
+[2025-12-20 19:47:10] [794.84ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 19:47:29] [19910.82ms] Response diterima dari OpenRouter AI
+
+[2025-12-20 19:47:30] [21001.8ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-20 19:47:31] [22091.01ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-20 19:47:31] [22173.91ms] Rekomendasi berhasil diproses oleh AI
+
+[2025-12-20 19:47:32] [23260.85ms] Rekomendasi akhir berhasil disusun
+
+[2025-12-20 19:47:32] [23344.08ms] Finalisasi rekomendasi dan menyiapkan penyimpanan
+
+[2025-12-20 19:47:33] [23755.81ms] Rekomendasi tersimpan dan siap direview dosen
+
+[2025-12-20 19:50:19] [0.04ms] Mengumpulkan paket dan mata kuliah eligible
+
+[2025-12-20 19:50:19] [357.07ms] Menyiapkan konteks transkrip dan preferensi mahasiswa
+
+[2025-12-20 19:50:19] [479.87ms] Meminta rekomendasi mata kuliah pilihan dari AI
+
+[2025-12-20 19:50:19] [561.18ms] Menghubungi AI (percobaan 1 dari 3)
+
+[2025-12-20 19:50:19] [642.1ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 19:50:19] [722.64ms] Prompt AI berhasil dibangun (6651 karakter)
+
+[2025-12-20 19:50:19] [803.83ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 19:50:39] [20258.32ms] Response diterima dari OpenRouter AI
+
+[2025-12-20 19:50:40] [21355.23ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-20 19:50:41] [22458.63ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-20 19:50:41] [22544.85ms] Rekomendasi berhasil diproses oleh AI
+
+[2025-12-20 19:50:42] [23644.03ms] Rekomendasi akhir berhasil disusun
+
+[2025-12-20 19:50:42] [23726.95ms] Finalisasi rekomendasi dan menyiapkan penyimpanan
+
+[2025-12-20 19:50:43] [24174.71ms] Rekomendasi tersimpan dan siap direview dosen
+
+[2025-12-20 19:58:19] [0.06ms] Mengumpulkan paket dan mata kuliah eligible
+
+[2025-12-20 19:58:20] [352.2ms] Menggunakan paket wajib dan seleksi internal
+
+[2025-12-20 19:58:20] [439.02ms] Rekomendasi akhir berhasil disusun
+
+[2025-12-20 19:58:20] [544.44ms] Finalisasi rekomendasi dan menyiapkan penyimpanan
+
+[2025-12-20 19:58:20] [1011.1ms] Rekomendasi tersimpan dan siap direview dosen
+
+[2025-12-20 20:06:48] [0.04ms] Mengumpulkan paket dan mata kuliah eligible
+
+[2025-12-20 20:06:48] [347.2ms] Menggunakan paket wajib dan seleksi internal
+
+[2025-12-20 20:06:48] [430.36ms] Rekomendasi akhir berhasil disusun
+
+[2025-12-20 20:06:48] [539.19ms] Finalisasi rekomendasi dan menyiapkan penyimpanan
+
+[2025-12-20 20:06:49] [986.72ms] Rekomendasi tersimpan dan siap direview dosen
+
+[2025-12-20 20:12:09] [0.04ms] Mengumpulkan paket dan mata kuliah eligible
+
+[2025-12-20 20:12:10] [450.45ms] Menyiapkan konteks transkrip dan preferensi mahasiswa
+
+[2025-12-20 20:12:10] [621.22ms] Meminta rekomendasi mata kuliah pilihan dari AI
+
+[2025-12-20 20:12:10] [735.24ms] Menghubungi AI (percobaan 1 dari 3)
+
+[2025-12-20 20:12:10] [845.15ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 20:12:10] [957.1ms] Prompt AI berhasil dibangun (6670 karakter)
+
+[2025-12-20 20:12:10] [1067.64ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 20:13:15] [66229.1ms] Response diterima dari OpenRouter AI
+
+[2025-12-20 20:13:17] [67347.25ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-20 20:13:18] [68468.55ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-20 20:13:18] [68584.74ms] Rekomendasi berhasil diproses oleh AI
+
+[2025-12-20 20:13:19] [69734.08ms] Rekomendasi akhir berhasil disusun
+
+[2025-12-20 20:13:19] [69846.98ms] Finalisasi rekomendasi dan menyiapkan penyimpanan
+
+[2025-12-20 20:13:20] [70455.57ms] Rekomendasi tersimpan dan siap direview dosen
+
+[2025-12-20 20:16:38] [0.06ms] Mengumpulkan paket dan mata kuliah eligible
+
+[2025-12-20 20:16:39] [395.75ms] Menggunakan paket wajib dan seleksi internal
+
+[2025-12-20 20:16:39] [478.2ms] Rekomendasi akhir berhasil disusun
+
+[2025-12-20 20:16:39] [602.35ms] Finalisasi rekomendasi dan menyiapkan penyimpanan
+
+[2025-12-20 20:16:40] [1150.28ms] Rekomendasi tersimpan dan siap direview dosen
+
+[2025-12-20 20:26:18] [0.05ms] Mengumpulkan paket dan mata kuliah eligible
+
+[2025-12-20 20:26:19] [375.37ms] Menyiapkan konteks transkrip dan preferensi mahasiswa
+
+[2025-12-20 20:26:19] [501.37ms] Meminta rekomendasi mata kuliah pilihan dari AI
+
+[2025-12-20 20:26:19] [589.9ms] Menghubungi AI (percobaan 1 dari 3)
+
+[2025-12-20 20:26:19] [675.18ms] Memvalidasi data mahasiswa dan mata kuliah tersedia
+
+[2025-12-20 20:26:19] [761.33ms] Prompt AI berhasil dibangun (6925 karakter)
+
+[2025-12-20 20:26:19] [844.88ms] Mengirim request ke OpenRouter API (model: meta-llama/llama-3.3-70b-instruct:free)
+
+[2025-12-20 20:26:40] [21581.44ms] Response diterima dari OpenRouter AI
+
+[2025-12-20 20:26:41] [22672.56ms] Memproses hasil rekomendasi dari AI
+
+[2025-12-20 20:26:42] [23762.1ms] Hasil AI berhasil diekstrak, mulai uraikan JSON...
+
+[2025-12-20 20:26:42] [23846.82ms] Rekomendasi berhasil diproses oleh AI
+
+[2025-12-20 20:26:43] [24946.24ms] Rekomendasi akhir berhasil disusun
+
+[2025-12-20 20:26:43] [25028.52ms] Finalisasi rekomendasi dan menyiapkan penyimpanan
+
+[2025-12-20 20:26:44] [25501.65ms] Rekomendasi tersimpan dan siap direview dosen

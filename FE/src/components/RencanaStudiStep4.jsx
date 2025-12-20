@@ -37,6 +37,18 @@ export default function RencanaStudiStep4() {
     campuran: "Campuran",
   };
 
+  const interestLabelMap = {
+    IoT: "IoT & Embedded Systems",
+    Robotics: "Robotika & Otomasi",
+    Programming: "Software Engineering & Programming",
+    Networking: "Telekomunikasi & Jaringan",
+    "Power System": "Sistem Tenaga & Energi",
+  };
+
+  const interestLabels = Array.isArray(interests)
+    ? interests.map((value) => interestLabelMap[value] || value)
+    : [];
+
   return (
     <main
       className="min-h-screen flex
@@ -179,7 +191,7 @@ export default function RencanaStudiStep4() {
               <li className="flex justify-between">
                 <span className="text-blue-100">Bidang Minat:</span>
                 <span className="font-semibold">
-                  {interests.length > 0 ? interests.join(", ") : "Belum dipilih"}
+                  {interestLabels.length > 0 ? interestLabels.join(", ") : "Belum dipilih"}
                 </span>
               </li>
               <li className="flex justify-between">
@@ -196,8 +208,6 @@ export default function RencanaStudiStep4() {
               </li>
             </ul>
           </div>
-
-          {/* Status info */}
           <div className="rounded-2xl bg-[#FACC15]/20 border border-[#FACC15]/40 p-4 w-full max-w-lg">
             <p className="text-xs md:text-sm text-center">
               <span className="font-semibold text-[#FACC15]">Status:</span>{" "}

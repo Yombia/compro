@@ -1,10 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { usePlanStore } from "../store/usePlanStore"; // Store Zustand untuk menyimpan data
+import { api } from "../api/api";
+import { useTheme } from "../hooks/useTheme";
 
 export default function RencanaStudiPage() {
   const navigate = useNavigate();
   const { setStep2Data } = usePlanStore(); // Menggunakan set untuk menyimpan data formulir
+  const { toggleTheme, theme } = useTheme();
   const [formData, setFormData] = useState({
     ipk: "",
     sks: "",
@@ -13,10 +16,59 @@ export default function RencanaStudiPage() {
     futureFocus: "",
     learningPreference: "",
   });
+  const [hasApprovedPlan, setHasApprovedPlan] = useState(false);
+  const [hasOpenPlan, setHasOpenPlan] = useState(false);
+  const [openPlanStatus, setOpenPlanStatus] = useState("");
+  const [loadingProfile, setLoadingProfile] = useState(true);
+  const [profileError, setProfileError] = useState("");
+
+  useEffect(() => {
+    let mounted = true;
+    const fetchProfile = async () => {
+      try {
+        const response = await api.mahasiswa.getProfile();
+        if (!mounted) return;
+
+        const mhs = response?.mahasiswa ?? {};
+        setFormData((prev) => ({
+          ...prev,
+          ipk: mhs.ipk ?? "",
+          sks: mhs.remaining_sks_semester ?? mhs.max_sks_semester ?? mhs.sks_semester_ini ?? "",
+          totalSks: mhs.total_sks ?? "",
+          interests: Array.isArray(mhs.interests) ? mhs.interests.slice(0, 2) : [],
+          futureFocus: mhs.future_focus ?? "",
+          learningPreference: mhs.learning_preference ?? "",
+        }));
+
+        setHasApprovedPlan(Boolean(mhs.has_approved_plan_current_semester));
+        setHasOpenPlan(Boolean(mhs.has_open_plan));
+        setOpenPlanStatus(mhs.open_plan_status ?? "");
+        setProfileError("");
+      } catch (err) {
+        if (!mounted) return;
+        setProfileError(err?.message || "Gagal memuat profil mahasiswa");
+      } finally {
+        if (mounted) setLoadingProfile(false);
+      }
+    };
+
+    fetchProfile();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   // Fungsi handle submit form 
   const handleFormSubmit = (e) => {
     e.preventDefault(); // Jangan biarkan form melakukan refresh
+    if (hasApprovedPlan || hasOpenPlan) {
+      const reason = hasApprovedPlan
+        ? "Rencana studi semester ini sudah disetujui."
+        : `Pengajuan sebelumnya masih ${openPlanStatus || "diproses"}. Tunggu sampai selesai sebelum ajukan lagi.`;
+      alert(reason);
+      return;
+    }
+
     setStep2Data(formData); // Simpan data ke store Zustand
     navigate("/rencana-studi/step-2"); // Arahkan ke step berikutnya
   };
@@ -119,10 +171,24 @@ export default function RencanaStudiPage() {
           <h1 className="text-2xl md:text-3xl font-extrabold leading-snug">
             Rencana Studi Mahasiswa
           </h1>
-          <p className="mt-2 text-sm md:text-base text-slate-700 dark:text-slate-300">
+            <p className="mt-2 text-sm md:text-base text-slate-700 dark:text-slate-300">
             Isi data berikut dengan benar untuk melanjutkan pengajuan rencana studi.
           </p>
         </header>
+
+        {profileError && (
+          <div className="mb-4 rounded-md border border-red-400/60 bg-red-500/10 px-4 py-3 text-sm text-red-100">
+            {profileError}
+          </div>
+        )}
+
+        {(hasApprovedPlan || hasOpenPlan) && (
+          <div className="mb-4 rounded-md border border-amber-400/60 bg-amber-100 px-4 py-3 text-sm text-amber-900">
+            {hasApprovedPlan
+              ? "Rencana studi semester ini sudah disetujui. Form dinonaktifkan."
+              : `Pengajuan sebelumnya masih ${openPlanStatus || "diproses"}. Tunggu sampai dosen menindaklanjuti.`}
+          </div>
+        )}
 
         {/* Formulir Pengajuan Rencana Studi */}
         <form onSubmit={handleFormSubmit} className="space-y-4">
@@ -135,6 +201,7 @@ export default function RencanaStudiPage() {
               onChange={handleChange}
               className="w-full p-2 rounded-md border border-gray-300"
               required
+              disabled={loadingProfile || hasApprovedPlan || hasOpenPlan}
             />
           </div>
           <div>
@@ -146,6 +213,7 @@ export default function RencanaStudiPage() {
               onChange={handleChange}
               className="w-full p-2 rounded-md border border-gray-300"
               required
+              disabled={loadingProfile || hasApprovedPlan || hasOpenPlan}
             />
           </div>
           <div>
@@ -157,6 +225,7 @@ export default function RencanaStudiPage() {
               onChange={handleChange}
               className="w-full p-2 rounded-md border border-gray-300"
               required
+              disabled={loadingProfile || hasApprovedPlan || hasOpenPlan}
             />
           </div>
           <div>
@@ -218,8 +287,20 @@ export default function RencanaStudiPage() {
             </select>
           </div>
           <div className="mt-4">
-            <button type="submit" className="w-full py-2 rounded-full bg-[#FACC15] text-[#2D3A67] hover:bg-[#F97316] transition">
-              Submit Rencana Studi
+            <button
+              type="submit"
+              disabled={hasApprovedPlan || hasOpenPlan}
+              className={`w-full py-2 rounded-full font-semibold transition ${
+                hasApprovedPlan || hasOpenPlan
+                  ? 'bg-slate-600 text-slate-200 cursor-not-allowed'
+                  : 'bg-[#FACC15] text-[#2D3A67] hover:bg-[#F97316]'
+              }`}
+            >
+              {hasApprovedPlan
+                ? 'Sudah Disetujui'
+                : hasOpenPlan
+                  ? (openPlanStatus === 'Tertunda' ? 'Sedang Ditinjau Dosen' : 'Menunggu Diproses')
+                  : 'Submit Rencana Studi'}
             </button>
           </div>
         </form>

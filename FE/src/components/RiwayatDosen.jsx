@@ -5,15 +5,99 @@ import { api } from "../api/api";
 import { pdf } from "@react-pdf/renderer";
 import RencanaStudiPDF from "./RencanaStudiPDF";
 
+const DEFAULT_INTEREST_OPTIONS = [
+  { value: "IoT", label: "IoT & Embedded Systems" },
+  { value: "Robotics", label: "Robotika & Otomasi" },
+  { value: "Programming", label: "Software Engineering & Programming" },
+  { value: "Networking", label: "Telekomunikasi & Jaringan" },
+  { value: "Power System", label: "Sistem Tenaga & Energi" },
+];
+
+const normalizeOptionList = (options) => {
+  if (!Array.isArray(options) || !options.length) {
+    return [];
+  }
+
+  return options
+    .map((item) => {
+      if (!item) return null;
+      if (typeof item === "string") {
+        return { value: item, label: item };
+      }
+
+      if (typeof item === "object") {
+        const value =
+          item.value ?? item.id ?? (typeof item.label === "string" ? item.label : "");
+        if (!value && value !== 0) {
+          return null;
+        }
+
+        const label = item.label ?? String(value);
+        return { value: String(value), label: typeof label === "string" ? label : String(value) };
+      }
+
+      return null;
+    })
+    .filter(Boolean);
+};
+
+const mapInterestValues = (values, dynamicOptions) => {
+  if (!Array.isArray(values) || !values.length) {
+    return [];
+  }
+
+  const lookup = new Map();
+
+  DEFAULT_INTEREST_OPTIONS.forEach(({ value, label }) => {
+    if (value || value === 0) {
+      lookup.set(String(value), label || String(value));
+    }
+  });
+
+  normalizeOptionList(dynamicOptions).forEach(({ value, label }) => {
+    if (value || value === 0) {
+      lookup.set(String(value), label || String(value));
+    }
+  });
+
+  return values
+    .map((value) => {
+      const key = value || value === 0 ? String(value) : "";
+      if (!key) return "";
+      return lookup.get(key) || key;
+    })
+    .filter(Boolean);
+};
+
+const prepareDetailForExport = (detail) => {
+  if (!detail) {
+    return detail;
+  }
+
+  const interests = mapInterestValues(
+    detail?.mahasiswa?.interests,
+    detail?.preference_options?.interests
+  );
+
+  return {
+    ...detail,
+    mahasiswa: {
+      ...detail?.mahasiswa,
+      interests,
+    },
+  };
+};
+
 const handleSaveAsPdf = async (detail) => {
   try {
-    const blob = await pdf(<RencanaStudiPDF data={detail} />).toBlob();
+    const preparedDetail = prepareDetailForExport(detail);
+    const blob = await pdf(<RencanaStudiPDF data={preparedDetail} />).toBlob();
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
 
     const timestamp = new Date().toISOString().slice(0, 10);
-    const mahasiswaNama = detail.mahasiswa?.nama ?? "Mahasiswa";
+    const mahasiswaNama = preparedDetail.mahasiswa?.nama ?? "Mahasiswa";
     const fileName = `Rencana_Studi_${mahasiswaNama}_${timestamp}.pdf`;
     link.download = fileName;
 
@@ -93,9 +177,10 @@ export default function RiwayatDosen() {
     return [...riwayat].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
   }, [riwayat]);
 
-  const getDominantInterestText = (interests) => {
-    if (!interests || interests.length === 0) return "-";
-    return interests.join(" & ");
+  const getDominantInterestText = (interests, options) => {
+    const labels = mapInterestValues(interests, options);
+    if (!labels.length) return "-";
+    return labels.join(" & ");
   };
 
   const getTotalRecommendedSKS = (mataKuliah = []) => {
@@ -105,7 +190,10 @@ export default function RiwayatDosen() {
   const DetailModal = ({ detail, onClose }) => {
     if (!detail) return null;
 
-    const dominantText = getDominantInterestText(detail.mahasiswa?.interests);
+    const dominantText = getDominantInterestText(
+      detail.mahasiswa?.interests,
+      detail.preference_options?.interests
+    );
     const mataKuliah = detail.mata_kuliah || [];
 
     const RenderApprovedContent = () => {
@@ -463,7 +551,11 @@ export default function RiwayatDosen() {
             <div className="space-y-4">
               {sortedRiwayat.map((entry) => {
                 const statusInfo = statusConfig[mapStatus(entry.status_rencana)] ?? statusConfig.pending;
-                const interestText = getDominantInterestText(entry.mahasiswa?.interests);
+                const interestLabels = mapInterestValues(
+                  entry.mahasiswa?.interests,
+                  entry.preference_options?.interests
+                );
+                const interestText = interestLabels.length ? interestLabels.join(", ") : "-";
                 const totalSKS = getTotalRecommendedSKS(entry.mata_kuliah);
                 const jumlahMK = entry.mata_kuliah ? entry.mata_kuliah.length : 0;
 

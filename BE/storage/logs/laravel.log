@@ -1318,3 +1318,325 @@
 [2025-12-19 12:55:17] local.INFO: Saving mata kuliah recommendation {"kode_mk":"ELK102","nama_mk":"Praktikum Elektronika","skor_rekomendasi":8,"alasan_rekomendasi":"Direkomendasikan karena sesuai dengan peminatan IoT danprogramming, serta dapat membantu mahasiswa mempraktekan konsep-konsep elektronika","all_keys":["kode_mk","nama_mk","tipe","skor_rekomendasi","alasan_rekomendasi"]} 
 [2025-12-19 12:55:18] local.INFO: Saving mata kuliah recommendation {"kode_mk":"MAT301","nama_mk":"Matriks dan Ruang Vektor","skor_rekomendasi":7.5,"alasan_rekomendasi":"Direkomendasikan karena dapat membantu mahasiswa memahami konsep-konsep matematika yang digunakan di bidang IoT dan programming","all_keys":["kode_mk","nama_mk","tipe","skor_rekomendasi","alasan_rekomendasi"]} 
 [2025-12-19 12:55:18] local.INFO: Saving mata kuliah recommendation {"kode_mk":"IF401","nama_mk":"Basis Data","skor_rekomendasi":7,"alasan_rekomendasi":"Direkomendasikan karena dapat membantu mahasiswa memahami dasar-dasar basis data yang digunakan di bidang IoT dan programming","all_keys":["kode_mk","nama_mk","tipe","skor_rekomendasi","alasan_rekomendasi"]} 
+[2025-12-19 20:49:25] local.ERROR: No arguments expected for "migrate" command, got "fresh". {"exception":"[object] (Symfony\\Component\\Console\\Exception\\RuntimeException(code: 0): No arguments expected for \"migrate\" command, got \"fresh\". at C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\vendor\\symfony\\console\\Input\\ArgvInput.php:199)
+[stacktrace]
+#0 C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\vendor\\symfony\\console\\Input\\ArgvInput.php(92): Symfony\\Component\\Console\\Input\\ArgvInput->parseArgument('fresh')
+#1 C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\vendor\\symfony\\console\\Input\\ArgvInput.php(77): Symfony\\Component\\Console\\Input\\ArgvInput->parseToken('fresh', true)
+#2 C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\vendor\\symfony\\console\\Input\\Input.php(53): Symfony\\Component\\Console\\Input\\ArgvInput->parse()
+#3 C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\vendor\\symfony\\console\\Command\\Command.php(295): Symfony\\Component\\Console\\Input\\Input->bind(Object(Symfony\\Component\\Console\\Input\\InputDefinition))
+#4 C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(182): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#5 C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\vendor\\symfony\\console\\Application.php(1102): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#6 C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\vendor\\symfony\\console\\Application.php(356): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Database\\Console\\Migrations\\MigrateCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#7 C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\vendor\\symfony\\console\\Application.php(195): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#8 C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(198): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#9 C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1235): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#10 C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\artisan(16): Illuminate\\Foundation\\Application->handleCommand(Object(Symfony\\Component\\Console\\Input\\ArgvInput))
+#11 {main}
+"} 
+[2025-12-19 20:50:10] local.ERROR: Undefined variable $mahasiswa {"exception":"[object] (ErrorException(code: 0): Undefined variable $mahasiswa at C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\database\\seeders\\DatabaseSeeder.php:363)
+[stacktrace]
+#0 C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\HandleExceptions.php(258): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(2, 'Undefined varia...', 'C:\\\\Users\\\\mirsy\\\\...', 363)
+#1 C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\database\\seeders\\DatabaseSeeder.php(363): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->Illuminate\\Foundation\\Bootstrap\\{closure}(2, 'Undefined varia...', 'C:\\\\Users\\\\mirsy\\\\...', 363)
+#2 C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): Database\\Seeders\\DatabaseSeeder->run()
+#3 C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(43): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#4 C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(95): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
+#5 C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
+#6 C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(696): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
+#7 C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Seeder.php(188): Illuminate\\Container\\Container->call(Array, Array)
+#8 C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Seeder.php(197): Illuminate\\Database\\Seeder->Illuminate\\Database\\{closure}()
+#9 C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Console\\Seeds\\SeedCommand.php(70): Illuminate\\Database\\Seeder->__invoke()
+#10 C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Eloquent\\Concerns\\GuardsAttributes.php(155): Illuminate\\Database\\Console\\Seeds\\SeedCommand->Illuminate\\Database\\Console\\Seeds\\{closure}()
+#11 C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Console\\Seeds\\SeedCommand.php(69): Illuminate\\Database\\Eloquent\\Model::unguarded(Object(Closure))
+#12 C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): Illuminate\\Database\\Console\\Seeds\\SeedCommand->handle()
+#13 C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(43): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#14 C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(95): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
+#15 C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
+#16 C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(696): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
+#17 C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(213): Illuminate\\Container\\Container->call(Array)
+#18 C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\vendor\\symfony\\console\\Command\\Command.php(341): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArrayInput), Object(Illuminate\\Console\\OutputStyle))
+#19 C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(182): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArrayInput), Object(Illuminate\\Console\\OutputStyle))
+#20 C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Concerns\\CallsCommands.php(68): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArrayInput), Object(Illuminate\\Console\\OutputStyle))
+#21 C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Concerns\\CallsCommands.php(29): Illuminate\\Console\\Command->runCommand('db:seed', Array, Object(Illuminate\\Console\\OutputStyle))
+#22 C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Console\\Migrations\\FreshCommand.php(122): Illuminate\\Console\\Command->call('db:seed', Array)
+#23 C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Console\\Migrations\\FreshCommand.php(98): Illuminate\\Database\\Console\\Migrations\\FreshCommand->runSeeder(NULL)
+#24 C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): Illuminate\\Database\\Console\\Migrations\\FreshCommand->handle()
+#25 C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(43): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#26 C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(95): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
+#27 C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
+#28 C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(696): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
+#29 C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(213): Illuminate\\Container\\Container->call(Array)
+#30 C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\vendor\\symfony\\console\\Command\\Command.php(341): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#31 C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(182): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#32 C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\vendor\\symfony\\console\\Application.php(1102): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#33 C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\vendor\\symfony\\console\\Application.php(356): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Database\\Console\\Migrations\\FreshCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#34 C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\vendor\\symfony\\console\\Application.php(195): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#35 C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(198): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#36 C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1235): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#37 C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\artisan(16): Illuminate\\Foundation\\Application->handleCommand(Object(Symfony\\Component\\Console\\Input\\ArgvInput))
+#38 {main}
+"} 
+[2025-12-20 00:54:17] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 00:54:31] local.INFO: Menerima response dari OpenRouter {"status_code":200,"response_size":2030} 
+[2025-12-20 00:54:32] local.WARNING: OpenRouter gagal, menggunakan fallback deterministik {"plan_id":46,"error":"Format response tidak valid (JSON error): Syntax error"} 
+[2025-12-20 01:09:50] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 01:10:10] local.WARNING: OpenRouter request retry triggered {"error":"cURL error 28: Operation timed out after 20006 milliseconds with 495 bytes received (see https://curl.haxx.se/libcurl/c/libcurl-errors.html) for https://openrouter.ai/api/v1/chat/completions"} 
+[2025-12-20 01:10:32] local.WARNING: OpenRouter gagal, menggunakan fallback deterministik {"plan_id":47,"error":"Tidak dapat terhubung ke layanan OpenRouter: cURL error 28: Operation timed out after 20011 milliseconds with 506 bytes received (see https://curl.haxx.se/libcurl/c/libcurl-errors.html) for https://openrouter.ai/api/v1/chat/completions"} 
+[2025-12-20 01:33:26] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 01:33:41] local.INFO: Menerima response dari OpenRouter {"status_code":200,"response_size":2455} 
+[2025-12-20 01:53:03] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 01:53:23] local.WARNING: OpenRouter request retry triggered {"error":"cURL error 28: Operation timed out after 20001 milliseconds with 506 bytes received (see https://curl.haxx.se/libcurl/c/libcurl-errors.html) for https://openrouter.ai/api/v1/chat/completions"} 
+[2025-12-20 01:53:45] local.WARNING: OpenRouter gagal, menggunakan fallback deterministik {"plan_id":50,"error":"Tidak dapat terhubung ke layanan OpenRouter: cURL error 28: Operation timed out after 20012 milliseconds with 506 bytes received (see https://curl.haxx.se/libcurl/c/libcurl-errors.html) for https://openrouter.ai/api/v1/chat/completions"} 
+[2025-12-20 02:06:23] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 02:06:40] local.INFO: Menerima response dari OpenRouter {"status_code":200,"response_size":2415} 
+[2025-12-20 02:18:56] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 02:19:11] local.INFO: Menerima response dari OpenRouter {"status_code":200,"response_size":2341} 
+[2025-12-20 02:36:27] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 02:36:44] local.INFO: Menerima response dari OpenRouter {"status_code":200,"response_size":2345} 
+[2025-12-20 02:51:51] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 02:52:05] local.INFO: Menerima response dari OpenRouter {"status_code":200,"response_size":2530} 
+[2025-12-20 02:52:06] local.WARNING: OpenRouter attempt failed {"plan_id":54,"attempt":1,"max_attempts":3,"error":"preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 43"} 
+[2025-12-20 02:52:07] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 02:52:22] local.INFO: Menerima response dari OpenRouter {"status_code":200,"response_size":2465} 
+[2025-12-20 02:52:23] local.WARNING: OpenRouter attempt failed {"plan_id":54,"attempt":2,"max_attempts":3,"error":"preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 43"} 
+[2025-12-20 02:52:24] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 02:52:37] local.INFO: Menerima response dari OpenRouter {"status_code":200,"response_size":2349} 
+[2025-12-20 02:52:38] local.WARNING: OpenRouter attempt failed {"plan_id":54,"attempt":3,"max_attempts":3,"error":"preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 43"} 
+[2025-12-20 09:13:56] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 09:14:41] local.WARNING: OpenRouter request retry triggered {"error":"cURL error 28: Operation timed out after 45011 milliseconds with 1155 bytes received (see https://curl.haxx.se/libcurl/c/libcurl-errors.html) for https://openrouter.ai/api/v1/chat/completions"} 
+[2025-12-20 09:14:55] local.ERROR: Maximum execution time of 60 seconds exceeded {"userId":1,"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Maximum execution time of 60 seconds exceeded at C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\vendor\\guzzlehttp\\guzzle\\src\\Handler\\CurlFactory.php:501)
+[stacktrace]
+#0 {main}
+"} 
+[2025-12-20 09:15:03] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 09:15:20] local.INFO: Menerima response dari OpenRouter {"status_code":200,"response_size":2448} 
+[2025-12-20 09:15:21] local.WARNING: OpenRouter attempt failed {"plan_id":55,"attempt":1,"max_attempts":3,"error":"preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 43"} 
+[2025-12-20 09:15:22] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 09:16:01] local.ERROR: Maximum execution time of 60 seconds exceeded {"userId":1,"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Maximum execution time of 60 seconds exceeded at C:\\Users\\mirsy\\Documents\\Compro\\compro\\BE\\vendor\\guzzlehttp\\guzzle\\src\\Handler\\CurlFactory.php:501)
+[stacktrace]
+#0 {main}
+"} 
+[2025-12-20 09:23:43] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 09:23:58] local.INFO: Menerima response dari OpenRouter {"status_code":200,"response_size":2295} 
+[2025-12-20 09:23:59] local.WARNING: OpenRouter attempt failed {"plan_id":55,"attempt":1,"max_attempts":3,"error":"preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 44"} 
+[2025-12-20 09:24:01] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 09:24:15] local.INFO: Menerima response dari OpenRouter {"status_code":200,"response_size":2284} 
+[2025-12-20 09:24:17] local.WARNING: OpenRouter attempt failed {"plan_id":55,"attempt":2,"max_attempts":3,"error":"preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 44"} 
+[2025-12-20 09:24:18] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 09:24:32] local.INFO: Menerima response dari OpenRouter {"status_code":200,"response_size":2273} 
+[2025-12-20 09:24:33] local.WARNING: OpenRouter attempt failed {"plan_id":55,"attempt":3,"max_attempts":3,"error":"preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 44"} 
+[2025-12-20 09:43:14] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 09:43:34] local.INFO: Menerima response dari OpenRouter {"status_code":200,"response_size":2461} 
+[2025-12-20 09:43:35] local.WARNING: OpenRouter attempt failed {"plan_id":46,"attempt":1,"max_attempts":3,"error":"preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 44"} 
+[2025-12-20 09:43:36] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 09:43:51] local.INFO: Menerima response dari OpenRouter {"status_code":200,"response_size":2443} 
+[2025-12-20 09:43:52] local.WARNING: OpenRouter attempt failed {"plan_id":46,"attempt":2,"max_attempts":3,"error":"preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 44"} 
+[2025-12-20 09:43:53] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 09:44:11] local.INFO: Menerima response dari OpenRouter {"status_code":200,"response_size":2442} 
+[2025-12-20 09:44:12] local.WARNING: OpenRouter attempt failed {"plan_id":46,"attempt":3,"max_attempts":3,"error":"preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 44"} 
+[2025-12-20 09:50:41] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 09:51:03] local.INFO: Menerima response dari OpenRouter {"status_code":200,"response_size":2598} 
+[2025-12-20 09:51:04] local.WARNING: OpenRouter attempt failed {"plan_id":47,"attempt":1,"max_attempts":3,"error":"preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 44"} 
+[2025-12-20 09:51:05] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 09:51:37] local.INFO: Menerima response dari OpenRouter {"status_code":200,"response_size":2936} 
+[2025-12-20 09:51:38] local.WARNING: OpenRouter attempt failed {"plan_id":47,"attempt":2,"max_attempts":3,"error":"preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 44"} 
+[2025-12-20 09:51:39] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 09:52:08] local.INFO: Menerima response dari OpenRouter {"status_code":200,"response_size":2690} 
+[2025-12-20 09:52:09] local.WARNING: OpenRouter attempt failed {"plan_id":47,"attempt":3,"max_attempts":3,"error":"preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 44"} 
+[2025-12-20 09:56:44] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 09:56:53] local.INFO: Menerima response dari OpenRouter {"status_code":200,"response_size":299} 
+[2025-12-20 09:56:55] local.WARNING: OpenRouter attempt failed {"plan_id":48,"attempt":1,"max_attempts":3,"error":"Response dari OpenRouter kosong atau tidak valid"} 
+[2025-12-20 09:56:56] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 09:58:01] local.INFO: Menerima response dari OpenRouter {"status_code":200,"response_size":3799} 
+[2025-12-20 09:58:02] local.WARNING: OpenRouter attempt failed {"plan_id":48,"attempt":2,"max_attempts":3,"error":"preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 44"} 
+[2025-12-20 09:58:03] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 09:58:53] local.INFO: Menerima response dari OpenRouter {"status_code":200,"response_size":3456} 
+[2025-12-20 09:58:54] local.WARNING: OpenRouter attempt failed {"plan_id":48,"attempt":3,"max_attempts":3,"error":"preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 44"} 
+[2025-12-20 10:02:03] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 10:02:24] local.INFO: Menerima response dari OpenRouter {"status_code":200,"response_size":2371} 
+[2025-12-20 10:02:26] local.WARNING: OpenRouter attempt failed {"plan_id":49,"attempt":1,"max_attempts":3,"error":"preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 44"} 
+[2025-12-20 10:02:27] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 10:02:59] local.INFO: Menerima response dari OpenRouter {"status_code":200,"response_size":2827} 
+[2025-12-20 10:03:01] local.WARNING: OpenRouter attempt failed {"plan_id":49,"attempt":2,"max_attempts":3,"error":"preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 44"} 
+[2025-12-20 10:03:02] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 10:03:28] local.INFO: Menerima response dari OpenRouter {"status_code":200,"response_size":2659} 
+[2025-12-20 10:03:29] local.WARNING: OpenRouter attempt failed {"plan_id":49,"attempt":3,"max_attempts":3,"error":"preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 44"} 
+[2025-12-20 10:08:37] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 10:08:56] local.INFO: Menerima response dari OpenRouter {"status_code":200,"response_size":2455} 
+[2025-12-20 10:08:57] local.WARNING: OpenRouter attempt failed {"plan_id":50,"attempt":1,"max_attempts":3,"error":"preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 39"} 
+[2025-12-20 10:08:58] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 10:09:14] local.INFO: Menerima response dari OpenRouter {"status_code":200,"response_size":2365} 
+[2025-12-20 10:09:15] local.WARNING: OpenRouter attempt failed {"plan_id":50,"attempt":2,"max_attempts":3,"error":"preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 39"} 
+[2025-12-20 10:09:16] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 10:09:22] local.WARNING: OpenRouter request retry triggered {"error":"cURL error 18: transfer closed with outstanding read data remaining (see https://curl.haxx.se/libcurl/c/libcurl-errors.html) for https://openrouter.ai/api/v1/chat/completions"} 
+[2025-12-20 10:09:45] local.INFO: Menerima response dari OpenRouter {"status_code":200,"response_size":2548} 
+[2025-12-20 10:09:47] local.WARNING: OpenRouter attempt failed {"plan_id":50,"attempt":3,"max_attempts":3,"error":"preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 39"} 
+[2025-12-20 10:11:52] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 10:12:14] local.INFO: Menerima response dari OpenRouter {"status_code":200,"response_size":2649} 
+[2025-12-20 10:12:16] local.WARNING: OpenRouter attempt failed {"plan_id":51,"attempt":1,"max_attempts":3,"error":"preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 39"} 
+[2025-12-20 10:12:17] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 10:12:32] local.INFO: Menerima response dari OpenRouter {"status_code":200,"response_size":2436} 
+[2025-12-20 10:12:33] local.WARNING: OpenRouter attempt failed {"plan_id":51,"attempt":2,"max_attempts":3,"error":"preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 39"} 
+[2025-12-20 10:12:34] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 10:12:54] local.INFO: Menerima response dari OpenRouter {"status_code":200,"response_size":2485} 
+[2025-12-20 10:12:56] local.WARNING: OpenRouter attempt failed {"plan_id":51,"attempt":3,"max_attempts":3,"error":"preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 39"} 
+[2025-12-20 10:19:39] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 10:19:55] local.INFO: Menerima response dari OpenRouter {"status_code":200,"response_size":2273} 
+[2025-12-20 10:19:56] local.WARNING: OpenRouter attempt failed {"plan_id":52,"attempt":1,"max_attempts":3,"error":"preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 39"} 
+[2025-12-20 10:19:57] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 10:20:11] local.INFO: Menerima response dari OpenRouter {"status_code":200,"response_size":2675} 
+[2025-12-20 10:20:12] local.WARNING: OpenRouter attempt failed {"plan_id":52,"attempt":2,"max_attempts":3,"error":"preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 39"} 
+[2025-12-20 10:20:13] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 10:20:32] local.INFO: Menerima response dari OpenRouter {"status_code":200,"response_size":2754} 
+[2025-12-20 10:20:33] local.WARNING: OpenRouter attempt failed {"plan_id":52,"attempt":3,"max_attempts":3,"error":"preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 39"} 
+[2025-12-20 10:28:35] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 10:28:50] local.INFO: Menerima response dari OpenRouter {"status_code":200,"response_size":2349} 
+[2025-12-20 10:28:51] local.WARNING: OpenRouter attempt failed {"plan_id":53,"attempt":1,"max_attempts":3,"error":"preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 39"} 
+[2025-12-20 10:28:52] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 10:29:05] local.INFO: Menerima response dari OpenRouter {"status_code":200,"response_size":2329} 
+[2025-12-20 10:29:06] local.WARNING: OpenRouter attempt failed {"plan_id":53,"attempt":2,"max_attempts":3,"error":"preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 39"} 
+[2025-12-20 10:29:07] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 10:29:27] local.INFO: Menerima response dari OpenRouter {"status_code":200,"response_size":2460} 
+[2025-12-20 10:29:28] local.WARNING: OpenRouter attempt failed {"plan_id":53,"attempt":3,"max_attempts":3,"error":"preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 39"} 
+[2025-12-20 10:38:11] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 10:38:28] local.INFO: Menerima response dari OpenRouter {"status_code":200,"response_size":2254} 
+[2025-12-20 10:38:29] local.WARNING: OpenRouter attempt failed {"plan_id":54,"attempt":1,"max_attempts":3,"error":"preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 39"} 
+[2025-12-20 10:38:30] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 10:38:42] local.INFO: Menerima response dari OpenRouter {"status_code":200,"response_size":2089} 
+[2025-12-20 10:38:44] local.WARNING: OpenRouter attempt failed {"plan_id":54,"attempt":2,"max_attempts":3,"error":"preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 39"} 
+[2025-12-20 10:38:45] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 10:38:59] local.INFO: Menerima response dari OpenRouter {"status_code":200,"response_size":2515} 
+[2025-12-20 10:39:00] local.WARNING: OpenRouter attempt failed {"plan_id":54,"attempt":3,"max_attempts":3,"error":"preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 39"} 
+[2025-12-20 10:51:41] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 10:52:03] local.INFO: Menerima response dari OpenRouter {"status_code":200,"response_size":2669} 
+[2025-12-20 10:52:05] local.WARNING: OpenRouter attempt failed {"plan_id":55,"attempt":1,"max_attempts":3,"error":"preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 39"} 
+[2025-12-20 10:52:06] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 10:52:21] local.INFO: Menerima response dari OpenRouter {"status_code":200,"response_size":2636} 
+[2025-12-20 10:52:22] local.WARNING: OpenRouter attempt failed {"plan_id":55,"attempt":2,"max_attempts":3,"error":"preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 39"} 
+[2025-12-20 10:52:23] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 10:52:39] local.INFO: Menerima response dari OpenRouter {"status_code":200,"response_size":2623} 
+[2025-12-20 10:52:40] local.WARNING: OpenRouter attempt failed {"plan_id":55,"attempt":3,"max_attempts":3,"error":"preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 39"} 
+[2025-12-20 11:22:10] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 11:22:12] local.WARNING: OpenRouter request retry triggered {"error":"HTTP request returned status code 429:
+{\"error\":{\"message\":\"Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day (truncated...)
+"} 
+[2025-12-20 11:22:15] local.WARNING: OpenRouter request retry triggered {"error":"HTTP request returned status code 429:
+{\"error\":{\"message\":\"Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day (truncated...)
+"} 
+[2025-12-20 11:22:15] local.WARNING: OpenRouter attempt failed {"plan_id":56,"attempt":1,"max_attempts":3,"error":"HTTP request returned status code 429:
+{\"error\":{\"message\":\"Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day (truncated...)
+"} 
+[2025-12-20 11:22:16] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 11:22:17] local.WARNING: OpenRouter request retry triggered {"error":"HTTP request returned status code 429:
+{\"error\":{\"message\":\"Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day (truncated...)
+"} 
+[2025-12-20 11:22:20] local.WARNING: OpenRouter request retry triggered {"error":"HTTP request returned status code 429:
+{\"error\":{\"message\":\"Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day (truncated...)
+"} 
+[2025-12-20 11:22:20] local.WARNING: OpenRouter attempt failed {"plan_id":56,"attempt":2,"max_attempts":3,"error":"HTTP request returned status code 429:
+{\"error\":{\"message\":\"Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day (truncated...)
+"} 
+[2025-12-20 11:22:21] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 11:22:22] local.WARNING: OpenRouter request retry triggered {"error":"HTTP request returned status code 429:
+{\"error\":{\"message\":\"Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day (truncated...)
+"} 
+[2025-12-20 11:22:25] local.WARNING: OpenRouter request retry triggered {"error":"HTTP request returned status code 429:
+{\"error\":{\"message\":\"Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day (truncated...)
+"} 
+[2025-12-20 11:22:25] local.WARNING: OpenRouter attempt failed {"plan_id":56,"attempt":3,"max_attempts":3,"error":"HTTP request returned status code 429:
+{\"error\":{\"message\":\"Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day (truncated...)
+"} 
+[2025-12-20 11:22:25] local.INFO: AI recommendation summary {"plan_id":56,"ai_failed":true,"ai_error":"HTTP request returned status code 429:
+{\"error\":{\"message\":\"Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day (truncated...)
+","ai_rekomendasi_count":0,"total_recommendations":9} 
+[2025-12-20 11:35:38] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 11:35:51] local.INFO: Menerima response dari OpenRouter {"status_code":200,"response_size":2313} 
+[2025-12-20 11:35:52] local.WARNING: convertSingleQuotedValues regex failed {"error":"preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 39","payload_preview":"{
+  \"ringkasan_analisis\": \"Mahasiswa memiliki kekuatan di bidang elektronika dan sistem, dengan IPK yang cukup tinggi. Namun, perlu peningkatan di bidang pengembangan aplikasi dan sistem tertanam.\",
+ "} 
+[2025-12-20 11:35:52] local.INFO: AI content parsed {"analysis_present":true,"recommendation_count":2,"preview":"{
+  \"ringkasan_analisis\": \"Mahasiswa memiliki kekuatan di bidang elektronika dan sistem, dengan IPK yang cukup tinggi. Namun, perlu peningkatan di bidang pengembangan aplikasi dan sistem tertanam.\",
+  \"daftar_rekomendasi\": [
+    {
+      \"kode_mk\": \"EL-ESB-08\",
+      \"nama_mk\": \"Metaverse & Digital T"} 
+[2025-12-20 11:35:53] local.INFO: AI recommendation summary {"plan_id":57,"ai_failed":false,"ai_error":null,"ai_rekomendasi_count":2,"total_recommendations":9} 
+[2025-12-20 11:43:29] local.INFO: AI recommendation summary {"plan_id":58,"ai_failed":false,"ai_error":null,"ai_rekomendasi_count":0,"total_recommendations":8} 
+[2025-12-20 11:45:25] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 11:45:49] local.INFO: Menerima response dari OpenRouter {"status_code":200,"response_size":3959} 
+[2025-12-20 11:45:50] local.WARNING: convertSingleQuotedValues regex failed {"error":"preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 39","payload_preview":"{
+  \"ringkasan_analisis\": \"Mahasiswa memiliki latar belakang yang kuat dalam bidang Teknik Elektro, dengan IPK yang memuaskan dan kemampuan analisis yang baik. Namun, perlu ditingkatkan kemampuan dala"} 
+[2025-12-20 11:45:50] local.INFO: AI content parsed {"analysis_present":true,"recommendation_count":5,"preview":"{
+  \"ringkasan_analisis\": \"Mahasiswa memiliki latar belakang yang kuat dalam bidang Teknik Elektro, dengan IPK yang memuaskan dan kemampuan analisis yang baik. Namun, perlu ditingkatkan kemampuan dalam menerapkan konsep teoritis ke dalam praktik nyata.\",
+  \"daftar_rekomendasi\": [
+    {
+      \"kode_m"} 
+[2025-12-20 11:45:51] local.INFO: AI recommendation summary {"plan_id":59,"ai_failed":false,"ai_error":null,"ai_rekomendasi_count":5,"total_recommendations":11} 
+[2025-12-20 11:47:34] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 11:47:53] local.INFO: Menerima response dari OpenRouter {"status_code":200,"response_size":3611} 
+[2025-12-20 11:47:54] local.WARNING: convertSingleQuotedValues regex failed {"error":"preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 39","payload_preview":"{
+  \"ringkasan_analisis\": \"Mahasiswa Orfevre memiliki kekuatan di bidang elektronik dan sistem, dengan mata kuliah wajib yang sudah diambil seperti Elektronika 2, Sinyal dan Sistem Waktu Diskret, dan "} 
+[2025-12-20 11:47:54] local.INFO: AI content parsed {"analysis_present":true,"recommendation_count":5,"preview":"{
+  \"ringkasan_analisis\": \"Mahasiswa Orfevre memiliki kekuatan di bidang elektronik dan sistem, dengan mata kuliah wajib yang sudah diambil seperti Elektronika 2, Sinyal dan Sistem Waktu Diskret, dan Otomatisasi Industri. Namun, kelemahan mahasiswa terletak pada kurangnya pengalaman di bidang networ"} 
+[2025-12-20 11:47:55] local.INFO: AI recommendation summary {"plan_id":60,"ai_failed":false,"ai_error":null,"ai_rekomendasi_count":5,"total_recommendations":9} 
+[2025-12-20 17:02:09] local.INFO: AI recommendation summary {"plan_id":62,"ai_failed":false,"ai_error":null,"ai_rekomendasi_count":0,"total_recommendations":8} 
+[2025-12-20 17:06:02] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 17:06:23] local.INFO: Menerima response dari OpenRouter {"status_code":200,"response_size":3794} 
+[2025-12-20 17:06:24] local.WARNING: convertSingleQuotedValues regex failed {"error":"preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 39","payload_preview":"{
+  \"ringkasan_analisis\": \"Mahasiswa Daiwa Scarlet memiliki kekuatan di bidang akademik dengan IPK yang baik dan telah menyelesaikan mata kuliah prasyarat yang relevan. Namun, perlu ditingkatkan kemam"} 
+[2025-12-20 17:06:24] local.INFO: AI content parsed {"analysis_present":true,"recommendation_count":5,"preview":"{
+  \"ringkasan_analisis\": \"Mahasiswa Daiwa Scarlet memiliki kekuatan di bidang akademik dengan IPK yang baik dan telah menyelesaikan mata kuliah prasyarat yang relevan. Namun, perlu ditingkatkan kemampuan di bidang IoT dan programming untuk mencapai tujuan karir di bidang riset.\",
+  \"daftar_rekomend"} 
+[2025-12-20 17:06:26] local.INFO: AI recommendation summary {"plan_id":63,"ai_failed":false,"ai_error":null,"ai_rekomendasi_count":5,"total_recommendations":8} 
+[2025-12-20 17:18:27] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 17:19:02] local.INFO: Menerima response dari OpenRouter {"status_code":200,"response_size":4513} 
+[2025-12-20 17:19:03] local.WARNING: convertSingleQuotedValues regex failed {"error":"preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 39","payload_preview":"{
+  \"ringkasan_analisis\": \"Mahasiswa memiliki latar belakang yang kuat di bidang Teknik Elektro, dengan fokus pada Programming dan IoT. Dengan IPK yang baik dan minat pada bidang tersebut, mahasiswa s"} 
+[2025-12-20 17:19:03] local.INFO: AI content parsed {"analysis_present":true,"recommendation_count":5,"preview":"{
+  \"ringkasan_analisis\": \"Mahasiswa memiliki latar belakang yang kuat di bidang Teknik Elektro, dengan fokus pada Programming dan IoT. Dengan IPK yang baik dan minat pada bidang tersebut, mahasiswa siap untuk mengambil mata kuliah pilihan yang relevan untuk meningkatkan kemampuan dan pengetahuannya"} 
+[2025-12-20 17:19:04] local.INFO: AI recommendation summary {"plan_id":65,"ai_failed":false,"ai_error":null,"ai_rekomendasi_count":5,"total_recommendations":8} 
+[2025-12-20 17:27:37] local.INFO: AI recommendation summary {"plan_id":64,"ai_failed":false,"ai_error":null,"ai_rekomendasi_count":0,"total_recommendations":8} 
+[2025-12-20 19:43:08] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 19:43:27] local.INFO: Menerima response dari OpenRouter {"status_code":200,"response_size":3626} 
+[2025-12-20 19:43:28] local.WARNING: convertSingleQuotedValues regex failed {"error":"preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 39","payload_preview":"{
+  \"ringkasan_analisis\": \"Mahasiswa memiliki kekuatan di bidang IoT dan programming, dengan fokus karir di industri. Mereka lebih suka mata kuliah teoritis dan memiliki IPK yang baik.\",
+  \"daftar_rek"} 
+[2025-12-20 19:43:28] local.INFO: AI content parsed {"analysis_present":true,"recommendation_count":5,"preview":"{
+  \"ringkasan_analisis\": \"Mahasiswa memiliki kekuatan di bidang IoT dan programming, dengan fokus karir di industri. Mereka lebih suka mata kuliah teoritis dan memiliki IPK yang baik.\",
+  \"daftar_rekomendasi\": [
+    {
+      \"kode_mk\": \"EL-ESB-08\",
+      \"nama_mk\": \"Metaverse & Digital Twin\",
+      "} 
+[2025-12-20 19:43:29] local.INFO: AI recommendation summary {"plan_id":46,"ai_failed":false,"ai_error":null,"ai_rekomendasi_count":5,"total_recommendations":9} 
+[2025-12-20 19:47:10] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 19:47:30] local.INFO: Menerima response dari OpenRouter {"status_code":200,"response_size":3878} 
+[2025-12-20 19:47:31] local.WARNING: convertSingleQuotedValues regex failed {"error":"preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 39","payload_preview":"{
+  \"ringkasan_analisis\": \"Mahasiswa Symboli Rudolf memiliki kekuatan di bidang akademik dengan IPK yang baik dan telah menyelesaikan mata kuliah prasyarat yang relevan. Namun, perlu ditingkatkan kema"} 
+[2025-12-20 19:47:31] local.INFO: AI content parsed {"analysis_present":true,"recommendation_count":5,"preview":"{
+  \"ringkasan_analisis\": \"Mahasiswa Symboli Rudolf memiliki kekuatan di bidang akademik dengan IPK yang baik dan telah menyelesaikan mata kuliah prasyarat yang relevan. Namun, perlu ditingkatkan kemampuan di bidang aplikasi praktis dan penelitian untuk mencapai tujuan melanjutkan S2/Riset.\",
+  \"daf"} 
+[2025-12-20 19:47:32] local.INFO: AI recommendation summary {"plan_id":47,"ai_failed":false,"ai_error":null,"ai_rekomendasi_count":5,"total_recommendations":8} 
+[2025-12-20 19:50:20] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 19:50:40] local.INFO: Menerima response dari OpenRouter {"status_code":200,"response_size":3836} 
+[2025-12-20 19:50:41] local.WARNING: convertSingleQuotedValues regex failed {"error":"preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 39","payload_preview":"{
+  \"ringkasan_analisis\": \"Mahasiswa Hishi Amazon memiliki kekuatan di bidang elektronika dan sistem, dengan mata kuliah wajib yang sudah diambil seperti Elektronika 2, Sinyal dan Sistem Waktu Diskret"} 
+[2025-12-20 19:50:41] local.INFO: AI content parsed {"analysis_present":true,"recommendation_count":5,"preview":"{
+  \"ringkasan_analisis\": \"Mahasiswa Hishi Amazon memiliki kekuatan di bidang elektronika dan sistem, dengan mata kuliah wajib yang sudah diambil seperti Elektronika 2, Sinyal dan Sistem Waktu Diskret, dan Otomatisasi Industri. Namun, kelemahan mahasiswa terletak pada kurangnya pengalaman di bidang "} 
+[2025-12-20 19:50:42] local.INFO: AI recommendation summary {"plan_id":48,"ai_failed":false,"ai_error":null,"ai_rekomendasi_count":5,"total_recommendations":9} 
+[2025-12-20 19:58:20] local.INFO: AI recommendation summary {"plan_id":49,"ai_failed":false,"ai_error":null,"ai_rekomendasi_count":0,"total_recommendations":8} 
+[2025-12-20 20:06:48] local.INFO: AI recommendation summary {"plan_id":50,"ai_failed":false,"ai_error":null,"ai_rekomendasi_count":0,"total_recommendations":8} 
+[2025-12-20 20:12:10] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 20:13:17] local.INFO: Menerima response dari OpenRouter {"status_code":200,"response_size":5126} 
+[2025-12-20 20:13:18] local.WARNING: convertSingleQuotedValues regex failed {"error":"preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 39","payload_preview":"{
+  \"ringkasan_analisis\": \"Mahasiswa Rice Shower memiliki kekuatan di bidang matematika dan dasar-dasar teknik elektro, tetapi belum menunjukkan minat spesifik pada bidang tertentu. Dengan preferensi "} 
+[2025-12-20 20:13:18] local.INFO: AI content parsed {"analysis_present":true,"recommendation_count":5,"preview":"{
+  \"ringkasan_analisis\": \"Mahasiswa Rice Shower memiliki kekuatan di bidang matematika dan dasar-dasar teknik elektro, tetapi belum menunjukkan minat spesifik pada bidang tertentu. Dengan preferensi bidang minat di Networking dan fokus pada melanjutkan S2/Riset, perlu dipilih mata kuliah yang relev"} 
+[2025-12-20 20:13:19] local.INFO: AI recommendation summary {"plan_id":51,"ai_failed":false,"ai_error":null,"ai_rekomendasi_count":5,"total_recommendations":9} 
+[2025-12-20 20:16:39] local.INFO: AI recommendation summary {"plan_id":52,"ai_failed":false,"ai_error":null,"ai_rekomendasi_count":0,"total_recommendations":8} 
+[2025-12-20 20:26:19] local.INFO: Mengirim request ke OpenRouter API {"model":"meta-llama/llama-3.3-70b-instruct:free"} 
+[2025-12-20 20:26:41] local.INFO: Menerima response dari OpenRouter {"status_code":200,"response_size":3971} 
+[2025-12-20 20:26:42] local.WARNING: convertSingleQuotedValues regex failed {"error":"preg_replace_callback(): Compilation failed: missing terminating ] for character class at offset 39","payload_preview":"{
+  \"ringkasan_analisis\": \"Mahasiswa Rice Shower memiliki kekuatan di bidang matematika dan dasar-dasar teknik elektro, namun belum menunjukkan spesialisasi yang jelas. Dengan IPK yang cukup baik dan "} 
+[2025-12-20 20:26:42] local.INFO: AI content parsed {"analysis_present":true,"recommendation_count":5,"preview":"{
+  \"ringkasan_analisis\": \"Mahasiswa Rice Shower memiliki kekuatan di bidang matematika dan dasar-dasar teknik elektro, namun belum menunjukkan spesialisasi yang jelas. Dengan IPK yang cukup baik dan minat di bidang Networking, mahasiswa ini berpotensi untuk mengembangkan karir di bidang tersebut.\","} 
+[2025-12-20 20:26:43] local.INFO: AI recommendation summary {"plan_id":53,"ai_failed":false,"ai_error":null,"ai_rekomendasi_count":5,"total_recommendations":9} 

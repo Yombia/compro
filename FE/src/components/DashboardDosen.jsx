@@ -74,6 +74,36 @@ export default function DashboardDosen() {
   const [allMataKuliah, setAllMataKuliah] = useState([]);
   const [reviewCatatan, setReviewCatatan] = useState('');
   const [selectedMKToAdd, setSelectedMKToAdd] = useState('');
+  const [suggestedElectives, setSuggestedElectives] = useState([]);
+  const [maxSksLimit, setMaxSksLimit] = useState(null);
+  const suggestedElectivesRef = useRef([]);
+  const suggestedElectivesCacheRef = useRef({}); // cache per rencana_studi_id agar tidak hilang saat keluar masuk
+  const lastGeneratedMaxSksRef = useRef(null);
+
+  const SUGGESTED_CACHE_KEY = 'ai_suggested_cache';
+
+  useEffect(() => {
+    try {
+      const cachedJson = localStorage.getItem(SUGGESTED_CACHE_KEY);
+      if (cachedJson) {
+        const parsed = JSON.parse(cachedJson);
+        if (parsed && typeof parsed === 'object') {
+          suggestedElectivesCacheRef.current = parsed;
+        }
+      }
+    } catch (err) {
+      console.error('Gagal memuat cache saran AI:', err);
+    }
+  }, []);
+
+  const persistSuggestedCache = () => {
+    try {
+      localStorage.setItem(SUGGESTED_CACHE_KEY, JSON.stringify(suggestedElectivesCacheRef.current));
+    } catch (err) {
+      console.error('Gagal menyimpan cache saran AI:', err);
+    }
+  };
+  const maxSksRef = useRef(null);
   
   // detail popup catatan state
   const [editingCatatan, setEditingCatatan] = useState(false);
@@ -108,6 +138,7 @@ export default function DashboardDosen() {
   const logAnimationTimeoutRef = useRef(null);
   const finalizeTimeoutRef = useRef(null);
   const generationCompletedRef = useRef(false);
+  const uiFinalizedRef = useRef(false);
 
   function updateLoadingProgress(value) {
     const clamped = Math.max(0, Math.min(100, Math.round(value)));
@@ -140,6 +171,8 @@ export default function DashboardDosen() {
     animationQueueRef.current = [];
     processedLogsRef.current = [];
     generationCompletedRef.current = false;
+    uiFinalizedRef.current = false;
+    maxSksRef.current = null;
     currentStepRef.current = -1;
     if (resetTransitionFlag) {
       isTransitioningRef.current = false;
@@ -153,6 +186,10 @@ export default function DashboardDosen() {
 
     if (resetLogs) {
       setStatusLogs([]);
+    }
+
+    if (resetSteps || resetLogs) {
+      setMaxSksLimit(null);
     }
   }
 
@@ -185,35 +222,121 @@ export default function DashboardDosen() {
     }, 40);
   }
 
+  function deriveMaxSksLimit({ summary, studentProfile, detailResponse } = {}) {
+    const fromSummary = Number(summary?.max_sks ?? summary?.maxSks);
+    if (Number.isFinite(fromSummary) && fromSummary > 0) {
+      return fromSummary;
+    }
+
+    const fromDetail = Number(detailResponse?.rencana_studi?.max_sks ?? detailResponse?.max_sks);
+    if (Number.isFinite(fromDetail) && fromDetail > 0) {
+      return fromDetail;
+    }
+
+    const pkg = Number(detailResponse?.rencana_studi?.package_sks ?? detailResponse?.package_sks);
+    const additional = Number(detailResponse?.rencana_studi?.max_additional_sks ?? detailResponse?.max_additional_sks);
+    if (Number.isFinite(pkg) && pkg >= 0 && Number.isFinite(additional) && additional >= 0) {
+      const computed = pkg + additional;
+      if (computed > 0) return computed;
+    }
+
+    const fromLastGeneration = Number(lastGeneratedMaxSksRef.current);
+    if (Number.isFinite(fromLastGeneration) && fromLastGeneration > 0) {
+      return fromLastGeneration;
+    }
+
+    const ipkCandidate = Number(
+      studentProfile?.ipk ??
+      detailResponse?.rencana_studi?.mahasiswa?.ipk ??
+      reviewStudent?.ipk ??
+      reviewStudent?.mahasiswa?.ipk
+    );
+
+    if (Number.isFinite(ipkCandidate)) {
+      return ipkCandidate >= 3 ? 24 : 20;
+    }
+
+    return null;
+  }
+
+  function computeTotalSks(list = []) {
+    return list.reduce((sum, mk) => sum + (Number(mk.sks) || 0), 0);
+  }
+
+  function willExceedMax(nextList = []) {
+    if (!Number.isFinite(maxSksRef.current) && !Number.isFinite(maxSksLimit)) {
+      return false;
+    }
+
+    const limit = Number.isFinite(maxSksLimit) ? maxSksLimit : maxSksRef.current;
+    if (!Number.isFinite(limit)) return false;
+
+    return computeTotalSks(nextList) > limit;
+  }
+
+  function completeSteps(student, { progressDuration = 500, finalizeDelay = 900 } = {}) {
+    if (uiFinalizedRef.current) {
+      return;
+    }
+
+    uiFinalizedRef.current = true;
+    generationCompletedRef.current = true;
+
+    if (pollingIntervalRef.current) {
+      clearInterval(pollingIntervalRef.current);
+      pollingIntervalRef.current = null;
+    }
+    if (logAnimationTimeoutRef.current) {
+      clearTimeout(logAnimationTimeoutRef.current);
+      logAnimationTimeoutRef.current = null;
+    }
+
+    animationQueueRef.current = [];
+    processedLogsRef.current = [];
+
+    const stepsCount = initialSteps.length;
+    currentStepRef.current = stepsCount;
+    setCurrentStepIndex(stepsCount);
+    setSteps(initialSteps.map((s) => ({ ...s, state: "success", subtitle: "Selesai" })));
+    animateProgressTo(100, progressDuration);
+
+    if (!finalizeTimeoutRef.current) {
+      finalizeTimeoutRef.current = setTimeout(() => {
+        transitionToReview(student);
+      }, finalizeDelay);
+    }
+  }
+
   function applyLogEntry(logEntry, student) {
     const stepsCount = initialSteps.length;
+    const messageText = (logEntry?.message || "").toLowerCase();
+    const isFinalMessage = messageText.includes("tersimpan")
+      || messageText.includes("siap direview")
+      || messageText.includes("selesai");
     const numericStep = Number(logEntry?.step);
     const hasNumericStep = Number.isFinite(numericStep);
 
     let activeIndex;
 
     if (hasNumericStep) {
-      if (numericStep >= stepsCount) {
-        activeIndex = stepsCount;
-      } else {
-        activeIndex = Math.max(0, numericStep);
-      }
+      // Log step diasumsikan mulai dari 1 untuk langkah pertama
+      activeIndex = Math.max(0, Math.min(stepsCount, numericStep - 1));
     } else {
       activeIndex = Math.min(currentStepRef.current + 1, stepsCount);
     }
 
-    if (activeIndex >= stepsCount) {
-      currentStepRef.current = stepsCount;
-      setCurrentStepIndex(stepsCount);
-      setSteps(initialSteps.map((s) => ({ ...s, state: "success", subtitle: "Selesai" })));
-      animateProgressTo(100, 500);
+    const previousIndex = Math.max(-1, currentStepRef.current);
+    if (activeIndex < previousIndex) {
+      activeIndex = previousIndex;
+    }
 
-      if (!finalizeTimeoutRef.current) {
-        finalizeTimeoutRef.current = setTimeout(() => {
-          transitionToReview(student);
-        }, 900);
-      }
+    // Jangan lompat lebih dari satu langkah
+    if (activeIndex > previousIndex + 1) {
+      activeIndex = previousIndex + 1;
+    }
 
+    if (activeIndex >= stepsCount || isFinalMessage) {
+      completeSteps(student);
       return;
     }
 
@@ -236,8 +359,10 @@ export default function DashboardDosen() {
 
     setSteps(updatedSteps);
 
-    const baseProgress = Math.round((activeIndex / stepsCount) * 100);
-    animateProgressTo(Math.max(baseProgress, loadingProgressRef.current), 600);
+    const clampedIndex = Math.min(activeIndex, stepsCount - 1);
+    const baseProgress = Math.round(((clampedIndex + 1) / stepsCount) * 100);
+    const targetProgress = Math.max(baseProgress, loadingProgressRef.current);
+    animateProgressTo(targetProgress, 600);
   }
 
   async function handleViewDetails(nim) {
@@ -262,6 +387,8 @@ export default function DashboardDosen() {
         rencana: detail.mata_kuliah,
         note: "Informasi ini membantu sistem merekomendasikan rencana studi terbaik.",
         rencana_studi_id: st.rencana_studi_id,
+        targetSemester: detail.target_semester ? `Semester ${detail.target_semester}` : '-',
+        target_semester: detail.target_semester ?? st.target_semester ?? null,
       });
       console.log('Detail mata kuliah:', detail.mata_kuliah);
       console.log('Tingkat kecocokan check:', detail.mata_kuliah?.map(mk => ({ nama: mk.nama, tingkat: mk.tingkat_kecocokan })));
@@ -320,6 +447,8 @@ export default function DashboardDosen() {
         rencana: detail.mata_kuliah,
         note: "Informasi ini membantu sistem merekomendasikan rencana studi terbaik.",
         rencana_studi_id: st.rencana_studi_id,
+        targetSemester: detail.target_semester ? `Semester ${detail.target_semester}` : '-',
+        target_semester: detail.target_semester ?? st.target_semester ?? null,
       });
       console.log('Detail mata kuliah:', detail.mata_kuliah);
       console.log('Tingkat kecocokan check:', detail.mata_kuliah?.map(mk => ({ nama: mk.nama, tingkat: mk.tingkat_kecocokan })));
@@ -395,17 +524,30 @@ export default function DashboardDosen() {
       const allMKResponse = await api.dosen.getAllMataKuliah();
       
       // Show review form
-      setReviewStudent(student);
+      setReviewStudent({
+        ...student,
+        target_semester: detailResponse.rencana_studi.target_semester ?? student.target_semester ?? null,
+      });
       setReviewMataKuliah(mataKuliahHasil.map(mk => ({
         kode_mk: mk.kode_mk || '',
         nama: mk.nama,
         sks: mk.sks,
         alasan: mk.alasan || '',
-        tingkat_kecocokan: mk.tingkat_kecocokan || null
+        tingkat_kecocokan: mk.tingkat_kecocokan || null,
+        bidang_minat: mk.bidang_minat || null,
+        semester: mk.semester || null,
       })));
       setAllMataKuliah(allMKResponse.mata_kuliah || []);
+      // Jangan prefill catatan dosen agar input selalu kosong saat review
       setReviewCatatan('');
       setShowReviewForm(true);
+
+      const cached = suggestedElectivesCacheRef.current[student.rencana_studi_id] || [];
+      suggestedElectivesRef.current = cached;
+      setSuggestedElectives(cached);
+      const derivedMax = deriveMaxSksLimit({ detailResponse, studentProfile: student });
+      setMaxSksLimit(derivedMax);
+      maxSksRef.current = derivedMax;
       
       console.log("Review form displayed for Tertunda status");
     } catch (error) {
@@ -434,17 +576,30 @@ export default function DashboardDosen() {
       setSteps(initialSteps.map((s) => ({ ...s, state: "pending", subtitle: "Menunggu" })));
       setCurrentStepIndex(-1);
 
-      setReviewStudent(student);
+      setReviewStudent({
+        ...student,
+        target_semester: detailResponse.rencana_studi.target_semester ?? student.target_semester ?? null,
+      });
       setReviewMataKuliah(mataKuliahHasil.map((mk) => ({
         kode_mk: mk.kode_mk || '',
         nama: mk.nama,
         sks: mk.sks,
         alasan: mk.alasan || '',
         tingkat_kecocokan: mk.tingkat_kecocokan || null,
+        bidang_minat: mk.bidang_minat || null,
+        semester: mk.semester || null,
       })));
       setAllMataKuliah(allMKResponse.mata_kuliah || []);
+      // Jangan prefill catatan dosen agar input selalu kosong saat review
       setReviewCatatan('');
       setShowReviewForm(true);
+      // Pakai cache jika ada untuk rencana_studi ini
+      const cached = suggestedElectivesCacheRef.current[student.rencana_studi_id] || suggestedElectivesRef.current || [];
+      suggestedElectivesRef.current = cached;
+      setSuggestedElectives(cached);
+      const derivedMax = deriveMaxSksLimit({ summary: detailResponse?.rencana_studi, studentProfile: student });
+      setMaxSksLimit(derivedMax);
+      maxSksRef.current = derivedMax;
 
       console.log("Review form displayed");
     } catch (error) {
@@ -453,6 +608,8 @@ export default function DashboardDosen() {
       setProcessingActive(false);
       setProcessingStudent(null);
       setProcessingAction(null);
+      suggestedElectivesRef.current = [];
+      setSuggestedElectives([]);
     } finally {
       clearAllTimers();
       resetAnimationState({ resetSteps: true, resetLogs: true });
@@ -511,15 +668,73 @@ export default function DashboardDosen() {
       }
     };
 
+    const failGeneration = (message) => {
+      const fallbackMessage = 'Gagal menghasilkan rekomendasi AI. Periksa koneksi atau coba lagi beberapa saat lagi.';
+      const finalMessage = message || fallbackMessage;
+
+      clearAllTimers();
+      resetAnimationState({ resetSteps: false, resetLogs: true });
+      suggestedElectivesRef.current = [];
+      setSuggestedElectives([]);
+
+      setProcessingError(finalMessage);
+      setProcessingActive(true);
+      setProcessingAction("generate");
+
+      setSteps(initialSteps.map((step, index) => (
+        index === 0
+          ? { ...step, state: "error", subtitle: finalMessage }
+          : { ...step, state: "pending", subtitle: "Menunggu" }
+      )));
+      setCurrentStepIndex(-1);
+    };
+
     try {
       const response = await api.dosen.generateRekomendasi(student.rencana_studi_id);
       const sessionId = response.session_id;
+      const summary = response.summary || {};
+      const aiFailed = Boolean(response.ai_fallback) || Boolean(response.ai_error);
+
+      if (!sessionId) {
+        failGeneration('Sesi rekomendasi tidak tersedia. AI tidak berjalan.');
+        return;
+      }
+
+      if (aiFailed) {
+        failGeneration(response.ai_error || 'AI tidak mengembalikan rekomendasi.');
+        return;
+      }
+
+      const suggestions = summary.suggested_electives || summary.highlighted_electives || [];
+      suggestedElectivesRef.current = suggestions;
+      suggestedElectivesCacheRef.current[student.rencana_studi_id] = suggestions;
+      persistSuggestedCache();
+      setSuggestedElectives(suggestions);
+      const derivedMax = deriveMaxSksLimit({ summary, studentProfile: student });
+      setMaxSksLimit(derivedMax);
+      maxSksRef.current = derivedMax;
+      if (Number.isFinite(derivedMax)) {
+        lastGeneratedMaxSksRef.current = derivedMax;
+      }
 
       console.log("Generate started, Session ID:", sessionId);
 
       const initialLogs = Array.isArray(response.status_logs) ? response.status_logs : [];
       setStatusLogs(initialLogs);
       enqueueLogs(initialLogs);
+
+      // Jika summary sudah ada tapi tidak ada log completion, paksa selesaikan animasi.
+      const stepsCount = initialSteps.length;
+      const hasResult = Array.isArray(summary.recommendations) && summary.recommendations.length > 0;
+      const hasCompletionLog = initialLogs.some((entry) => {
+        const msg = (entry?.message || '').toLowerCase();
+        return msg.includes('rekomendasi akhir berhasil disusun') || Number(entry?.step) >= stepsCount;
+      });
+
+      if (hasResult && !hasCompletionLog) {
+        completeSteps(student, { progressDuration: 400, finalizeDelay: 600 });
+        return;
+      }
 
       generationCompletedRef.current = initialLogs.some((entry) => Number(entry?.step) >= stepsCount);
 
@@ -531,15 +746,36 @@ export default function DashboardDosen() {
           try {
             const statusResponse = await api.dosen.getRecommendationStatus(sessionId);
             const logs = statusResponse.logs || [];
+            const summary = statusResponse.summary || {};
+            const hasResultFromSummary = Array.isArray(summary.recommendations) && summary.recommendations.length > 0;
+
+            if (hasResultFromSummary) {
+              const suggestionsFromSummary = summary.suggested_electives || summary.highlighted_electives || [];
+              suggestedElectivesRef.current = suggestionsFromSummary;
+              suggestedElectivesCacheRef.current[student.rencana_studi_id] = suggestionsFromSummary;
+              persistSuggestedCache();
+              setSuggestedElectives(suggestionsFromSummary);
+              const derivedMax = deriveMaxSksLimit({ summary, studentProfile: student });
+              setMaxSksLimit(derivedMax);
+              maxSksRef.current = derivedMax;
+              if (Number.isFinite(derivedMax)) {
+                lastGeneratedMaxSksRef.current = derivedMax;
+              }
+            }
 
             pollCount += 1;
             const hasFinalLog = logs.some((entry) => Number(entry?.step) >= stepsCount);
-            generationCompletedRef.current = Boolean(statusResponse.completed) || hasFinalLog;
+            const completedFlag = Boolean(statusResponse.completed) || hasFinalLog || hasResultFromSummary;
+            generationCompletedRef.current = completedFlag;
 
             console.log("Polling response:", { logs, completed: statusResponse.completed });
 
             setStatusLogs(logs);
             enqueueLogs(logs);
+
+            if (completedFlag && !uiFinalizedRef.current) {
+              completeSteps(student, { progressDuration: 500, finalizeDelay: 700 });
+            }
 
             if (generationCompletedRef.current && pollingIntervalRef.current) {
               clearInterval(pollingIntervalRef.current);
@@ -552,34 +788,18 @@ export default function DashboardDosen() {
                 pollingIntervalRef.current = null;
               }
               console.error("Polling timeout");
-              clearAllTimers();
-              setProcessingActive(false);
-              setProcessingStudent(null);
-              setProcessingAction(null);
-              resetAnimationState({ resetSteps: true, resetLogs: true });
+              failGeneration('Proses AI tidak selesai dalam waktu wajar. Coba lagi nanti.');
             }
           } catch (pollError) {
             console.error("Polling error:", pollError);
+            failGeneration('Gagal memeriksa status AI. Coba lagi beberapa saat lagi.');
           }
         }, 1000);
       }
     } catch (error) {
       console.error("Generate AI error:", error);
-      clearAllTimers();
-      resetAnimationState({ resetSteps: false, resetLogs: true });
-
-      const fallbackMessage = 'Gagal menghasilkan rekomendasi AI. Periksa koneksi atau coba lagi beberapa saat lagi.';
-      const message = error?.message ? `Gagal menghasilkan rekomendasi: ${error.message}` : fallbackMessage;
-      setProcessingError(message);
-      setProcessingActive(true);
-      setProcessingAction("generate");
-
-      setSteps(initialSteps.map((step, index) => (
-        index === 0
-          ? { ...step, state: "error", subtitle: message }
-          : { ...step, state: "pending", subtitle: "Menunggu" }
-      )));
-      setCurrentStepIndex(-1);
+      const message = error?.message ? `Gagal menghasilkan rekomendasi: ${error.message}` : null;
+      failGeneration(message);
     }
   }
 
@@ -709,14 +929,52 @@ export default function DashboardDosen() {
       return;
     }
     
-    setReviewMataKuliah(prev => [...prev, {
+    const nextList = [...reviewMataKuliah, {
       kode_mk: mkToAdd.kode_mk,
       nama: mkToAdd.nama_mk,
       sks: mkToAdd.sks,
       alasan: null,
-      tingkat_kecocokan: null
-    }]);
+      tingkat_kecocokan: null,
+      bidang_minat: mkToAdd.bidang_minat || null,
+      semester: mkToAdd.semester || null,
+    }];
+
+    if (willExceedMax(nextList)) {
+      const limit = maxSksLimit ?? maxSksRef.current;
+      alert(`Total SKS melebihi batas maksimum (${limit} SKS). Kurangi mata kuliah sebelum menambah yang baru.`);
+      return;
+    }
+
+    setReviewMataKuliah(nextList);
     setSelectedMKToAdd('');
+  }
+
+  function handleAddRecommended(mk) {
+    if (!mk) return;
+
+    const alreadyExists = reviewMataKuliah.some(item => item.kode_mk === mk.kode_mk);
+    if (alreadyExists) {
+      alert('Mata kuliah sudah ada di daftar review');
+      return;
+    }
+
+    const nextList = [...reviewMataKuliah, {
+      kode_mk: mk.kode_mk,
+      nama: mk.nama_mk,
+      sks: mk.sks,
+      alasan: mk.alasan || null,
+      tingkat_kecocokan: mk.score ?? null,
+      bidang_minat: mk.bidang_minat || null,
+      semester: mk.semester ?? null,
+    }];
+
+    if (willExceedMax(nextList)) {
+      const limit = maxSksLimit ?? maxSksRef.current;
+      alert(`Total SKS melebihi batas maksimum (${limit} SKS). Kurangi mata kuliah sebelum menambah yang baru.`);
+      return;
+    }
+
+    setReviewMataKuliah(nextList);
   }
 
   function handleUpdateTingkatKecocokan(index, value) {
@@ -743,6 +1001,19 @@ export default function DashboardDosen() {
       return;
     }
 
+    if (willExceedMax(reviewMataKuliah)) {
+      const limit = maxSksLimit ?? maxSksRef.current;
+      alert(`Total SKS melebihi batas maksimum (${limit} SKS). Kurangi mata kuliah sebelum menyimpan.`);
+      return;
+    }
+
+    const total = computeTotalSks(reviewMataKuliah);
+    const electiveCount = reviewMataKuliah.filter((mk) => (mk.bidang_minat || '').toLowerCase() !== 'wajib').length;
+    const baseMessage = `Setujui rencana studi ini? (${total} SKS, ${reviewMataKuliah.length} mata kuliah)`;
+    const warning = electiveCount === 0 ? '\nCatatan: Anda belum memilih mata kuliah pilihan.' : '';
+    const ok = window.confirm(baseMessage + warning);
+    if (!ok) return;
+
     try {
       // Update mata kuliah
       await api.dosen.updateMataKuliah(
@@ -763,6 +1034,10 @@ export default function DashboardDosen() {
       setReviewMataKuliah([]);
       setReviewCatatan('');
       setAllMataKuliah([]);
+      setSuggestedElectives([]);
+      suggestedElectivesRef.current = [];
+      delete suggestedElectivesCacheRef.current[reviewStudent?.rencana_studi_id];
+      persistSuggestedCache();
 
       console.log('Rencana studi berhasil disimpan dan disetujui');
     } catch (error) {
@@ -771,27 +1046,40 @@ export default function DashboardDosen() {
     }
   }
 
+  function handleExitReview() {
+    const confirm = window.confirm('Keluar dari review? Status tetap Tertunda dan perubahan yang belum disimpan tidak akan tersimpan.');
+    if (!confirm) return;
+
+    setShowReviewForm(false);
+    setReviewStudent(null);
+    setReviewMataKuliah([]);
+    setReviewCatatan('');
+    setAllMataKuliah([]);
+    // Simpan cache saran AI, jangan dihapus agar bisa dilanjutkan nanti
+  }
+
   async function handleCancelReview() {
-    // Konfirmasi sebelum cancel
-    const confirm = window.confirm('Apakah Anda yakin ingin membatalkan review ini? Status akan berubah menjadi Ditolak.');
-    
+    const confirm = window.confirm('Apakah Anda yakin ingin membatalkan? Status rencana studi akan berubah menjadi Ditolak.');
     if (!confirm) return;
 
     try {
-      // Cancel di backend
-      if (reviewStudent && reviewStudent.rencanaStudiId) {
-        await api.dosen.cancelRencanaStudi(reviewStudent.rencanaStudiId);
-        console.log('Rencana studi berhasil dibatalkan');
+      const planId = reviewStudent?.rencana_studi_id;
+      if (planId) {
+        await api.dosen.tolakRencanaStudi(planId, reviewCatatan || 'Dibatalkan oleh dosen');
       }
 
-      // Reset state
       setShowReviewForm(false);
       setReviewStudent(null);
       setReviewMataKuliah([]);
       setReviewCatatan('');
       setAllMataKuliah([]);
+      setSuggestedElectives([]);
+      suggestedElectivesRef.current = [];
+      if (planId) {
+        delete suggestedElectivesCacheRef.current[planId];
+        persistSuggestedCache();
+      }
 
-      // Refresh data mahasiswa
       await fetchMahasiswaData(true);
     } catch (error) {
       console.error('Error canceling review:', error);
@@ -801,16 +1089,24 @@ export default function DashboardDosen() {
 
   // Review form screen (setelah AI generate selesai)
   if (showReviewForm && reviewStudent) {
-    const totalSKS = reviewMataKuliah.reduce((sum, mk) => sum + mk.sks, 0);
+    const totalSKS = computeTotalSks(reviewMataKuliah);
+    const limit = Number.isFinite(maxSksLimit) ? maxSksLimit : maxSksRef.current;
+    const remainingSks = Number.isFinite(limit) ? Math.max(0, limit - totalSKS) : null;
+    const overLimit = Number.isFinite(limit) && totalSKS > limit;
+    const suggestedElectiveCodes = new Set((suggestedElectives || []).map((mk) => mk.kode_mk));
+    const mandatoryCourses = reviewMataKuliah.filter((mk) => (mk.bidang_minat || '').toLowerCase() === 'wajib');
+    const selectedElectives = reviewMataKuliah.filter((mk) => (mk.bidang_minat || '').toLowerCase() !== 'wajib');
+    const mandatorySks = mandatoryCourses.reduce((sum, mk) => sum + (mk.sks || 0), 0);
+    const electiveSks = selectedElectives.reduce((sum, mk) => sum + (mk.sks || 0), 0);
 
     return (
       <div className="min-h-screen w-full flex flex-col items-start justify-start bg-gradient-to-b from-[#07102a] to-[#071a3a] text-white p-8">
         <button
-          onClick={handleCancelReview}
+          onClick={handleExitReview}
           className="mb-6 flex items-center gap-2 text-blue-200 hover:text-white transition"
         >
           <span className="text-xl">←</span>
-          <span className="text-sm">Kembali</span>
+          <span className="text-sm">Kembali ke beranda</span>
         </button>
 
         <div className="w-full max-w-[1000px] mx-auto">
@@ -823,6 +1119,11 @@ export default function DashboardDosen() {
           </div>
 
           <div className="bg-[#0F2A55] rounded-2xl p-6 shadow-inner space-y-6">
+            {overLimit && (
+              <div className="rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-100">
+                Total SKS ({totalSKS}) melebihi batas maksimum {limit} SKS. Hapus mata kuliah sebelum menambah atau menyimpan.
+              </div>
+            )}
             {/* Info mahasiswa */}
             <div className="grid grid-cols-3 gap-4 pb-4 border-b border-white/10">
               <div>
@@ -837,68 +1138,210 @@ export default function DashboardDosen() {
                 <p className="text-xs text-blue-200/70">Jumlah MK</p>
                 <p className="font-semibold text-yellow-400">{reviewMataKuliah.length} Mata Kuliah</p>
               </div>
+              {Number.isFinite(limit) && (
+                <div>
+                  <p className="text-xs text-blue-200/70">Batas Maksimum SKS</p>
+                  <p className="font-semibold text-emerald-300">{limit} SKS</p>
+                </div>
+              )}
+              {Number.isFinite(limit) && (
+                <div>
+                  <p className="text-xs text-blue-200/70">Sisa Kuota SKS</p>
+                  <p className={`font-semibold ${remainingSks === 0 ? 'text-red-300' : 'text-emerald-300'}`}>
+                    {remainingSks} SKS tersisa
+                  </p>
+                </div>
+              )}
+              <div>
+                <p className="text-xs text-blue-200/70">Semester Target</p>
+                <p className="font-semibold">{reviewStudent.target_semester ? `Semester ${reviewStudent.target_semester}` : '-'}</p>
+              </div>
             </div>
 
-            {/* List mata kuliah hasil AI */}
-            <div>
-              <h3 className="font-semibold mb-3">Mata Kuliah Terpilih</h3>
-              <div className="space-y-2">
-                {reviewMataKuliah.length === 0 ? (
-                  <p className="text-sm text-blue-200/60 italic">Belum ada mata kuliah. Tambahkan dari dropdown di bawah.</p>
-                ) : (
-                  reviewMataKuliah.map((mk, idx) => (
-                    <div key={idx} className="bg-white/5 rounded-lg p-4 hover:bg-white/10 transition">
-                      <div className="flex items-start justify-between mb-3">
-                        <div className="flex-1">
-                          <p className="font-medium text-base">{mk.nama}</p>
-                          <p className="text-xs text-blue-200/70 mt-1">{mk.kode_mk} • {mk.sks} SKS</p>
-                        </div>
-                        <button
-                          onClick={() => handleRemoveMK(idx)}
-                          className="ml-4 px-3 py-1.5 bg-red-500/20 hover:bg-red-500/40 text-red-300 rounded-lg text-sm transition flex-shrink-0"
-                        >
-                          Hapus
-                        </button>
-                      </div>
-                      
-                      {/* AI Notes and Match Percentage */}
-                      <div className="space-y-2 mt-3 pt-3 border-t border-white/10">
-                        <div className="flex flex-col gap-1">
-                          <span className="text-xs font-semibold text-blue-300">Tingkat Kecocokan (%)</span>
-                          <div className="flex items-center gap-3">
-                            <input
-                              type="number"
-                              min="0"
-                              max="100"
-                              value={mk.tingkat_kecocokan ?? ''}
-                              onChange={(e) => handleUpdateTingkatKecocokan(idx, e.target.value)}
-                              placeholder="-"
-                              className="w-24 rounded-lg bg-white/10 px-3 py-2 text-sm text-white placeholder-blue-200/40 border border-white/20 focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400/30"
-                            />
-                            {mk.tingkat_kecocokan !== null && mk.tingkat_kecocokan !== undefined ? (
-                              <span className={`px-2.5 py-1 rounded-full text-xs font-bold ${
-                                mk.tingkat_kecocokan >= 80 ? 'bg-green-500/20 text-green-300 border border-green-500/30' :
-                                mk.tingkat_kecocokan >= 60 ? 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/30' :
-                                'bg-blue-500/20 text-blue-300 border border-blue-500/30'
-                              }`}>
-                                {mk.tingkat_kecocokan}%
-                              </span>
-                            ) : (
-                              <span className="text-xs text-blue-200/50">Tidak diatur</span>
-                            )}
+            {/* Suggested electives from AI */}
+            {suggestedElectives.length > 0 && (
+              <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+                <div className="flex items-start justify-between mb-3">
+                  <div>
+                    <h3 className="font-semibold text-blue-100">Opsi Mata Kuliah Pilihan dari AI</h3>
+                    <p className="text-xs text-blue-200/70 mt-1">
+                      AI menyiapkan daftar mata kuliah pilihan dengan skor kecocokan dan alasan terperinci. Tambahkan yang paling sesuai sebelum finalisasi.
+                    </p>
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  {suggestedElectives.map((mk) => {
+                    const alreadyExists = reviewMataKuliah.some((item) => item.kode_mk === mk.kode_mk);
+                    return (
+                      <div key={mk.kode_mk} className="bg-slate-900/40 border border-slate-500/30 rounded-lg px-4 py-3 flex flex-col gap-2">
+                        <div className="flex items-start justify-between gap-4">
+                          <div className="flex-1">
+                            <p className="font-semibold text-sm">{mk.nama_mk}</p>
+                            <p className="text-xs text-blue-200/60 mt-0.5">
+                              {mk.kode_mk} • {mk.sks} SKS{mk.semester ? ` • Semester ${mk.semester}` : ''}
+                              {(mk.bidang_minat && mk.bidang_minat !== 'Wajib') ? ` • ${mk.bidang_minat}` : ''}
+                            </p>
                           </div>
-                          <span className="text-[11px] text-blue-200/60">Kosongkan untuk menampilkan tanda '-'. Nilai otomatis dibulatkan 0-100.</span>
+                          <div className="flex items-center gap-2">
+                            {typeof mk.score === 'number' && (
+                              <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide ${
+                                mk.score >= 80 ? 'bg-green-500/20 text-green-200 border border-green-500/30' :
+                                mk.score >= 60 ? 'bg-yellow-500/20 text-yellow-200 border border-yellow-500/30' :
+                                'bg-blue-500/20 text-blue-100 border border-blue-500/30'
+                              }`}>
+                                Kecocokan AI {mk.score}%
+                              </span>
+                            )}
+                            <button
+                              onClick={() => handleAddRecommended(mk)}
+                              disabled={alreadyExists || overLimit}
+                              className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-500/20 hover:bg-emerald-500/30 disabled:bg-slate-600/40 disabled:text-slate-400 transition"
+                            >
+                              {alreadyExists ? 'Sudah Ditambahkan' : (overLimit ? 'Batas SKS Penuh' : 'Tambah ke Rencana')}
+                            </button>
+                          </div>
                         </div>
-                        <div className="flex items-start gap-2">
-                          <span className="text-xs font-semibold text-blue-300 min-w-[120px]">Alasan AI:</span>
-                          <p className="text-xs text-blue-200/80 flex-1">
-                            {mk.alasan || '-'}
+                        <p className="text-xs text-blue-200/70 leading-relaxed">
+                          {mk.alasan || 'Tidak ada alasan khusus yang diberikan AI.'}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* Selected plan overview */}
+            <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+              <div className="flex items-start justify-between">
+                <div>
+                  <h3 className="font-semibold text-blue-100">Rencana Studi yang Akan Diajukan</h3>
+                  <p className="text-xs text-blue-200/70 mt-1">
+                    Paket wajib dan mata kuliah pilihan yang dipilih akan dikirim ke mahasiswa.
+                  </p>
+                </div>
+                <div className="text-right text-xs text-blue-200/70">
+                  <p>Total SKS: <span className="font-semibold text-yellow-300">{totalSKS}</span></p>
+                  <p>Total Mata Kuliah: <span className="font-semibold text-yellow-300">{reviewMataKuliah.length}</span></p>
+                </div>
+              </div>
+
+              <div className="space-y-5 mt-4">
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <h4 className="text-sm font-semibold text-blue-100 uppercase tracking-wide">Paket Wajib</h4>
+                    <span className="text-xs text-blue-200/70">{mandatoryCourses.length} MK • {mandatorySks} SKS</span>
+                  </div>
+                  {mandatoryCourses.length > 0 ? (
+                    <div className="space-y-2">
+                      {mandatoryCourses.map((mk, idx) => (
+                        <div key={`wajib-${idx}`} className="bg-blue-900/60 border border-blue-400/40 rounded-lg p-4">
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1">
+                              <p className="font-medium text-base text-blue-50">{mk.nama}</p>
+                              <p className="text-xs text-blue-200/70 mt-1">
+                                {mk.kode_mk} • {mk.sks} SKS{mk.semester ? ` • Semester ${mk.semester}` : ''}
+                              </p>
+                            </div>
+                            <span className="px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide rounded-full bg-blue-600/30 text-blue-100 border border-blue-400/40">
+                              Paket Wajib
+                            </span>
+                          </div>
+                          <p className="mt-3 text-xs text-blue-200/80">
+                            {mk.alasan || 'Mata kuliah paket wajib untuk semester ini.'}
                           </p>
                         </div>
-                      </div>
+                      ))}
                     </div>
-                  ))
-                )}
+                  ) : (
+                    <p className="text-xs text-blue-200/60 italic">Tidak ada paket wajib pada rencana ini.</p>
+                  )}
+                </div>
+
+                <div className="pt-2 border-t border-white/10">
+                  <div className="flex items-center justify-between mb-2">
+                    <h4 className="text-sm font-semibold text-blue-100 uppercase tracking-wide">Mata Kuliah Pilihan Terpilih</h4>
+                    <span className="text-xs text-blue-200/70">{selectedElectives.length} MK • {electiveSks} SKS</span>
+                  </div>
+                  {selectedElectives.length > 0 ? (
+                    <div className="space-y-2">
+                      {selectedElectives.map((mk) => {
+                        const originalIndex = reviewMataKuliah.indexOf(mk);
+                        const isSuggested = suggestedElectiveCodes.has(mk.kode_mk);
+                        return (
+                          <div
+                            key={`pilihan-${mk.kode_mk}`}
+                            className={`bg-white/5 border border-white/10 rounded-lg p-4 transition ${isSuggested ? 'ring-1 ring-emerald-400/60 bg-emerald-500/10 hover:bg-emerald-500/20' : 'hover:bg-white/10'}`}
+                          >
+                            <div className="flex items-start justify-between mb-3">
+                              <div className="flex-1">
+                                <p className="font-medium text-base">{mk.nama}</p>
+                                <p className="text-xs text-blue-200/70 mt-1">
+                                  {mk.kode_mk} • {mk.sks} SKS{mk.semester ? ` • Semester ${mk.semester}` : ''}
+                                </p>
+                              </div>
+                              <div className="flex flex-col items-end gap-2">
+                                <div className="flex items-center gap-2">
+                                  <span className="px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide rounded-full bg-slate-500/20 text-slate-100 border border-slate-400/30">
+                                    Mata Kuliah Pilihan
+                                  </span>
+                                  {isSuggested && (
+                                    <span className="px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide rounded-full bg-emerald-500/20 text-emerald-100 border border-emerald-400/40">
+                                      Dipilih dari AI
+                                    </span>
+                                  )}
+                                </div>
+                                <button
+                                  onClick={() => originalIndex >= 0 && handleRemoveMK(originalIndex)}
+                                  className="px-3 py-1.5 bg-red-500/20 hover:bg-red-500/40 text-red-300 rounded-lg text-sm transition"
+                                >
+                                  Hapus
+                                </button>
+                              </div>
+                            </div>
+
+                            <div className="space-y-2 mt-3 pt-3 border-t border-white/10">
+                              <div className="flex flex-col gap-1">
+                                <span className="text-xs font-semibold text-blue-300">Tingkat Kecocokan (%)</span>
+                                <div className="flex items-center gap-3">
+                                  <input
+                                    type="number"
+                                    min="0"
+                                    max="100"
+                                    value={mk.tingkat_kecocokan ?? ''}
+                                    onChange={(e) => originalIndex >= 0 && handleUpdateTingkatKecocokan(originalIndex, e.target.value)}
+                                    placeholder="-"
+                                    className="w-24 rounded-lg bg-white/10 px-3 py-2 text-sm text-white placeholder-blue-200/40 border border-white/20 focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400/30"
+                                  />
+                                  {mk.tingkat_kecocokan !== null && mk.tingkat_kecocokan !== undefined ? (
+                                    <span className={`px-2.5 py-1 rounded-full text-xs font-bold ${
+                                      mk.tingkat_kecocokan >= 80 ? 'bg-green-500/20 text-green-300 border border-green-500/30' :
+                                      mk.tingkat_kecocokan >= 60 ? 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/30' :
+                                      'bg-blue-500/20 text-blue-300 border border-blue-500/30'
+                                    }`}>
+                                      {mk.tingkat_kecocokan}%
+                                    </span>
+                                  ) : (
+                                    <span className="text-xs text-blue-200/50">Tidak diatur</span>
+                                  )}
+                                </div>
+                                <span className="text-[11px] text-blue-200/60">Kosongkan untuk menampilkan tanda '-'. Nilai otomatis dibulatkan 0-100.</span>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <span className="text-xs font-semibold text-blue-300 min-w-[120px]">Alasan AI:</span>
+                                <p className="text-xs text-blue-200/80 flex-1">
+                                  {mk.alasan || '-'}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <p className="text-xs text-blue-200/60 italic">Belum ada mata kuliah pilihan terpilih. Gunakan saran AI atau tambah manual.</p>
+                  )}
+                </div>
               </div>
             </div>
 
@@ -914,16 +1357,16 @@ export default function DashboardDosen() {
                   <option value="">-- Pilih Mata Kuliah --</option>
                   {allMataKuliah.map((mk) => (
                     <option key={mk.id} value={mk.id} className="bg-slate-800 text-white">
-                      {mk.nama_mk} ({mk.kode_mk}) - {mk.sks} SKS
+                      {mk.nama_mk} ({mk.kode_mk}) - {mk.sks} SKS {mk.bidang_minat ? `• ${mk.bidang_minat}` : ''}
                     </option>
                   ))}
                 </select>
                 <button
                   onClick={handleAddMK}
-                  disabled={!selectedMKToAdd}
+                  disabled={!selectedMKToAdd || overLimit}
                   className="px-6 py-2.5 bg-blue-500/80 hover:bg-blue-500 disabled:bg-slate-600 disabled:cursor-not-allowed rounded-lg font-medium transition shadow-lg"
                 >
-                  + Tambah
+                  {overLimit ? 'Batas SKS Penuh' : '+ Tambah'}
                 </button>
               </div>
             </div>
@@ -1217,6 +1660,7 @@ export default function DashboardDosen() {
                       <th className="px-4 py-2">Nama</th>
                       <th className="px-4 py-2">NIM</th>
                       <th className="px-4 py-2">Tanggal Pengajuan</th>
+                      <th className="px-4 py-2">Semester Target</th>
                       <th className="px-4 py-2">Status</th>
                       <th className="px-4 py-2">Actions</th>
                     </tr>
@@ -1224,7 +1668,7 @@ export default function DashboardDosen() {
                   <tbody>
                     {students.length === 0 ? (
                       <tr>
-                        <td colSpan="5" className="px-4 py-8 text-center text-slate-500">
+                        <td colSpan="6" className="px-4 py-8 text-center text-slate-500">
                           Tidak ada mahasiswa yang mengajukan rencana studi
                         </td>
                       </tr>
@@ -1234,6 +1678,7 @@ export default function DashboardDosen() {
                           <td className="px-4 py-2">{student.name}</td>
                           <td className="px-4 py-2">{student.nim}</td>
                           <td className="px-4 py-2">{student.submissionDate}</td>
+                          <td className="px-4 py-2">{student.target_semester ? `Semester ${student.target_semester}` : '-'}</td>
                           <td className="px-4 py-2">
                             <span className={`px-3 py-1 rounded-full text-sm ${getStatusClass(student.status)}`}>{student.status}</span>
                           </td>
@@ -1299,6 +1744,10 @@ export default function DashboardDosen() {
                     <div>
                       <p className="text-sm text-blue-100">Jumlah MK</p>
                       <p className="font-semibold">{selectedStudent.jumlahMK}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-blue-100">Semester Target</p>
+                      <p className="font-semibold">{selectedStudent.targetSemester || '-'}</p>
                     </div>
                   </div>
                 </div>
@@ -1395,6 +1844,7 @@ export default function DashboardDosen() {
                             <p className="font-semibold">{mk.nama}</p>
                             <p className="text-xs text-blue-200/70 mt-1">
                               {mk.kode_mk} • {mk.sks} SKS
+                              {mk.semester ? <span> • Semester {mk.semester}</span> : null}
                               {mk.bidang_minat && <span> • {mk.bidang_minat}</span>}
                             </p>
                           </div>
